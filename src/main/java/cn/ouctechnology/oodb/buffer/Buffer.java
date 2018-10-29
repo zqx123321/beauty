@@ -155,7 +155,7 @@ public class Buffer {
         RandomAccessFile raf = null;
         try {
             //raf会自动创建父级目录
-            raf = new RandomAccessFile(DB_PATH + filename + RECORD_SUFFIX, "rw");
+            raf = new RandomAccessFile(DB_PATH + filename + RECORD_SUFFIX, "r");
             //读取内容，检查是否越界
             if (raf.length() >= offset * BLOCK_SIZE + BLOCK_SIZE) {
                 raf.seek(offset * BLOCK_SIZE);
