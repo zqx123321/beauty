@@ -1,6 +1,6 @@
 package cn.ouctechnology.oodb.util.compartor;
 
-import cn.ouctechnology.oodb.explain.where.Operator;
+import cn.ouctechnology.oodb.util.where.Op;
 
 /**
  * @program: db
@@ -10,7 +10,7 @@ import cn.ouctechnology.oodb.explain.where.Operator;
  **/
 public class ComparatorFactory {
 
-    public static Comparator getComparator(Operator operator) {
+    public static Comparator getComparator(Op operator) {
 
         switch (operator) {
             case Equality:

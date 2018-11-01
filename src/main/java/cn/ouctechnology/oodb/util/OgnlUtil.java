@@ -1,5 +1,9 @@
 package cn.ouctechnology.oodb.util;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 /**
  * @program: oodb
  * @author: ZQX
@@ -16,6 +20,26 @@ public class OgnlUtil {
     public static String getField(String ognl, int index) {
         String[] split = ognl.split("\\.");
         return split[index];
+    }
+
+    public static String getLeftField(String ognl) {
+        return ognl.substring(ognl.indexOf(".") + 1);
+    }
+
+    public static Object eval(String expr) {
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("js");
+        Object result = null;
+        try {
+            result = engine.eval(expr);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+        if (result instanceof Double) {
+            double doubleValue = (double) result;
+            return (float) doubleValue;
+        }
+        return result;
     }
 
 }

@@ -43,8 +43,8 @@ public class Catalog {
     /**
      * 显示Catalog信息
      */
-    public static void showCatalog() {
-        showTableCatalog();
+    public static String showCatalog() {
+        return showTableCatalog();
     }
 
     /**
@@ -163,28 +163,30 @@ public class Catalog {
     /**
      * 显示表信息
      */
-    private static void showTableCatalog() {
-        System.out.println("There are " + tables.size() + " tables in the database: ");
+    private static String showTableCatalog() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("There are ").append(tables.size()).append(" tables in the database: ").append('\n');
         Set<Map.Entry<String, Table>> entries = tables.entrySet();
         int count = 1;
         for (Map.Entry<String, Table> entry : entries) {
             Table v = entry.getValue();
-            System.out.println("\nTable " + count++);
-            System.out.println("Table name: " + v.tableName);
-            System.out.println("Length of tuple: " + v.tupleLength);
-            System.out.println("Primary key: " + v.primaryKeys);
-            System.out.println("Number of tuples: " + v.tupleNum);
-            System.out.println("Attributes: " + v.attributes.size());
+            sb.append("\nTable ").append(count++).append('\n');
+            sb.append("Table name: ").append(v.tableName).append('\n');
+            sb.append("Length of tuple: ").append(v.tupleLength).append('\n');
+            sb.append("Primary key: ").append(v.primaryKeys).append('\n');
+            sb.append("Number of tuples: ").append(v.tupleNum).append('\n');
+            sb.append("Attributes: ").append(v.attributes.size()).append('\n');
             //格式化打印属性组，使用Jackson
             ObjectMapper mapper = new ObjectMapper();
             try {
-                System.out.println(mapper
+                sb.append(mapper
                         .writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(v.attributes));
+                        .writeValueAsString(v.attributes)).append('\n');
             } catch (JsonProcessingException e) {
                 logger.error("Print attribute error:" + e.getMessage());
             }
         }
+        return sb.toString();
     }
 
     /**

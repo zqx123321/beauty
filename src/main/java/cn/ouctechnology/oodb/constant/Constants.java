@@ -11,6 +11,7 @@ public class Constants {
     public static final String DB_PATH = "db/";
     //目录文件后缀
     public static final String CATALOG_SUFFIX = ".catalog";
+    public static final String NO_GROUPING = "NO_GROUPING";
     //存放模式信息的文件
     public static String TABLE_FILE_NAME = "table";
     //在CRUD过程中操作失败返回FAIL
@@ -31,4 +32,6 @@ public class Constants {
     public static final int SINGLE_AFFECTED = 1;
     //元组有效标志位
     public static final int TUPLE_AVAILABLE = -1;
+    //返回受影响
+    public static final String ROWS_AFFECTED = " ROWS AFFECTED";
 }

@@ -24,7 +24,7 @@ public class RecordTest {
     @Before
     public void init() throws IOException {
         Buffer.init();
-//        Catalog.initialCatalog();
+        Catalog.initialCatalog();
 //        Record.create("person");
     }
 
@@ -50,16 +50,19 @@ public class RecordTest {
 
     @Test
     public void insert() throws IOException {
-        Catalog.initialCatalog();
-        for (int i = 0; i < 1000; i++) {
-           // Record.insert("person", Arrays.asList(i, "a" + i));
+        //Catalog.initialCatalog();
+        for (int i = 0; i < 10; i++) {
+            Tuple tuple = new Tuple();
+            tuple.add("id", i);
+            tuple.add("sex", i % 2 == 0 ? "男" : "女");
+            Record.insert("test", tuple);
         }
     }
 
     @Test
     public void select() throws IOException {
-        Catalog.initialCatalog();
-       // System.out.println(Record.select("person"));
+        Catalog.showCatalog();
+        // System.out.println(Record.select("person"));
     }
 
     @Test
@@ -73,7 +76,7 @@ public class RecordTest {
         teacher.add("张三2");
         teacher.add(dept);
         //System.out.println(Record.insert("teacher", teacher));
-       // System.out.println(Record.select("teacher"));
+        // System.out.println(Record.select("teacher"));
     }
 
     @Test

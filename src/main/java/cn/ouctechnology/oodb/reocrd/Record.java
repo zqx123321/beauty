@@ -4,9 +4,9 @@ import cn.ouctechnology.oodb.buffer.Block;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
-import cn.ouctechnology.oodb.explain.where.WhereNode;
 import cn.ouctechnology.oodb.util.JudgeUtil;
 import cn.ouctechnology.oodb.util.WhereClauseUtil;
+import cn.ouctechnology.oodb.util.where.WhereNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class Record {
      * @param tuple     更新后的值
      * @param whereTree 选择条件
      */
-    public static int update(String tableName, Tuple tuple, WhereNode whereTree) {
+    public static int update(String tableName, String tableAlias, Tuple tuple, WhereNode whereTree) {
         List<String> whereFieldList = new ArrayList<>();
         if (whereTree != null) {
             WhereClauseUtil.getWhereFieldList(whereTree, whereFieldList);
@@ -91,7 +91,7 @@ public class Record {
             int isAvailable = block.readInt();
             int dataOffset = block.getDataOffset();
             if (isAvailable == TUPLE_AVAILABLE) {
-                Tuple whereTuple = Record.readTuple(block, tableName, whereFieldList);
+                Tuple whereTuple = Record.readTuple(block, tableName, tableAlias, whereFieldList);
                 //恢复位置
                 block.setDataOffset(dataOffset);
                 //判断where
@@ -141,7 +141,7 @@ public class Record {
     /**
      * 有条件式删除
      */
-    public static int delete(String tableName, WhereNode whereTree) {
+    public static int delete(String tableName, String tableAlias, WhereNode whereTree) {
         List<String> whereFieldList = new ArrayList<>();
         WhereClauseUtil.getWhereFieldList(whereTree, whereFieldList);
         whereFieldList = whereFieldList.stream().map(s -> s.substring(s.indexOf(".") + 1)).distinct().collect(Collectors.toList());
@@ -156,7 +156,7 @@ public class Record {
             int isAvailable = block.readInt();
             int dataOffset = block.getDataOffset();
             if (isAvailable == TUPLE_AVAILABLE) {
-                Tuple whereTuple = Record.readTuple(block, tableName, whereFieldList);
+                Tuple whereTuple = Record.readTuple(block, tableName, tableAlias, whereFieldList);
                 //恢复位置
                 block.setDataOffset(dataOffset);
                 //判断where
@@ -187,84 +187,16 @@ public class Record {
 
 
     /**
-     * 单表查询
-     */
-    public static List<Tuple> select(String tableName, WhereNode whereTree, List<String> selectFieldList, boolean flag) {
-        List<String> whereFieldList = new ArrayList<>();
-        WhereClauseUtil.getWhereFieldList(whereTree, whereFieldList);
-        whereFieldList = whereFieldList.stream().map(s -> s.substring(s.indexOf(".") + 1)).distinct().collect(Collectors.toList());
-
-        List<Tuple> res = new ArrayList<>();
-        int tupleNum = Catalog.getTupleNum(tableName);
-        int tupleOffset = 0;
-        int tupleScan = 0;
-        int tupleLength = Catalog.getTupleLength(tableName);
-        while (tupleScan < tupleNum) {
-            Block block = Record.getBlock(tableName, tupleOffset);
-            int isAvailable = block.readInt();
-            int dataOffset = block.getDataOffset();
-            if (isAvailable == TUPLE_AVAILABLE) {
-                Tuple whereTuple = Record.readTuple(block, tableName, whereFieldList);
-                //恢复位置
-                block.setDataOffset(dataOffset);
-                //判断where
-                if (JudgeUtil.whereJudge(whereTuple, whereTree)) {
-                    Tuple tuple;
-                    if (!flag)
-                        tuple = Record.readTuple(block, tableName, selectFieldList);
-                    else
-                        tuple = Record.readTuple(block, tableName);
-                    res.add(tuple);
-                }
-                tupleScan++;
-            }
-
-            tupleOffset++;
-            block.setDataOffset(dataOffset + tupleLength);
-        }
-        return res;
-    }
-
-    /**
-     * 单表查询
-     */
-    public static List<Tuple> select(String tableName, List<String> selectFieldList, boolean flag) {
-        List<Tuple> res = new ArrayList<>();
-        int tupleNum = Catalog.getTupleNum(tableName);
-        int tupleOffset = 0;
-        int tupleScan = 0;
-        int tupleLength = Catalog.getTupleLength(tableName);
-        while (tupleScan < tupleNum) {
-            Block block = Record.getBlock(tableName, tupleOffset);
-            int isAvailable = block.readInt();
-            int dataOffset = block.getDataOffset();
-            if (isAvailable == TUPLE_AVAILABLE) {
-                Tuple tuple;
-                if (!flag)
-                    tuple = Record.readTuple(block, tableName, selectFieldList);
-                else
-                    tuple = Record.readTuple(block, tableName);
-                res.add(tuple);
-                tupleScan++;
-            }
-
-            tupleOffset++;
-            block.setDataOffset(dataOffset + tupleLength);
-        }
-        return res;
-    }
-
-    /**
      * 从block中读取一个tuple
      *
      * @param block
      * @param tableName
      */
-    private static Tuple readTuple(Block block, String tableName) {
+    public static Tuple readTuple(Block block, String tableName, String tableAlias) {
         Tuple tuple = new Tuple();
         List<Attribute> attributes = Catalog.getAttributes(tableName);
         for (Attribute attribute : attributes) {
-            tuple.add(attribute.getName(), attribute.read(block));
+            tuple.add(tableAlias + "." + attribute.getName(), attribute.read(block));
         }
         return tuple;
     }
@@ -275,7 +207,7 @@ public class Record {
      * @param block
      * @param tableName
      */
-    private static Tuple readTuple(Block block, String tableName, List<String> fieldList) {
+    private static Tuple readTuple(Block block, String tableName, String tableAlias, List<String> fieldList) {
         Tuple tuple = new Tuple();
         int dataOffset = block.getDataOffset();
         for (String field : fieldList) {
@@ -283,7 +215,7 @@ public class Record {
             //重新归位
             block.setDataOffset(dataOffset + attributeOffset);
             Attribute attribute = Catalog.getAttribute(tableName, field);
-            tuple.add(field, attribute.read(block));
+            tuple.add(tableAlias + "." + attribute.getName(), attribute.read(block));
         }
         return tuple;
     }
@@ -322,7 +254,7 @@ public class Record {
      * @param tableName
      * @param tupleOffset
      */
-    private static Block getBlock(String tableName, int tupleOffset) {
+    public static Block getBlock(String tableName, int tupleOffset) {
         int tupleLength = Catalog.getTupleLength(tableName);
         //每个block最多容纳多少个tuple
         int tupleInABlock = BLOCK_SIZE / (tupleLength + SIZE_INT);

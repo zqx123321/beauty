@@ -1,9 +1,10 @@
 package cn.ouctechnology.oodb.util;
 
-import cn.ouctechnology.oodb.explain.where.InnerNode;
-import cn.ouctechnology.oodb.explain.where.LeafNode;
-import cn.ouctechnology.oodb.explain.where.Operator;
-import cn.ouctechnology.oodb.explain.where.WhereNode;
+import cn.ouctechnology.oodb.util.where.InnerNode;
+import cn.ouctechnology.oodb.util.where.LeafNode;
+import cn.ouctechnology.oodb.util.where.Op;
+import cn.ouctechnology.oodb.util.where.WhereNode;
+import cn.ouctechnology.oodb.reocrd.Field;
 import cn.ouctechnology.oodb.reocrd.Tuple;
 import cn.ouctechnology.oodb.util.compartor.ComparatorFactory;
 
@@ -28,22 +29,31 @@ public class JudgeUtil {
         WhereNode right = whereTree.getRight();
         //如果到达为叶节点,执行单条件判断
         if (left instanceof LeafNode) {
-            Operator operator = ((InnerNode) whereTree).getOperator();
-            String name = (String) ((LeafNode) left).getValue();
-            Comparable value = ((LeafNode) right).getValue();
-            return singleJudge(obj, operator, name, value);
+            Op operator = ((InnerNode) whereTree).getOperator();
+            Object leftObj = ((LeafNode) left).getValue();
+            Object rightObj = ((LeafNode) right).getValue();
+            if (leftObj instanceof Field && rightObj instanceof Field)
+                return singleJudge(obj, operator, (Field) leftObj, (Field) rightObj);
+            if (leftObj instanceof Field && rightObj instanceof Comparable)
+                return singleJudge(obj, operator, (Field) leftObj, (Comparable) rightObj);
+            if (leftObj instanceof Comparable && rightObj instanceof Field)
+                return singleJudge(obj, operator, (Comparable) leftObj, (Field) rightObj);
+            if (leftObj instanceof Comparable && rightObj instanceof Comparable)
+                return singleJudge(operator, (Comparable) leftObj, (Comparable) rightObj);
+            return false;
+
         }
         //后续遍历左子树
         boolean isLeft = whereJudge(obj, left);
-        Operator operator = ((InnerNode) whereTree).getOperator();
+        Op operator = ((InnerNode) whereTree).getOperator();
         //或运算,短路效应
-        if (Operator.OR.getName().equals(operator.getName().toUpperCase())) {
+        if (Op.OR.getName().equals(operator.getName().toUpperCase())) {
             if (isLeft) return true;
             //后续遍历右子树
             return whereJudge(obj, right);
         }
         //与运算，短路效应
-        if (Operator.AND.getName().equals(operator.getName().toUpperCase())) {
+        if (Op.AND.getName().equals(operator.getName().toUpperCase())) {
             if (!isLeft) return false;
             //后续遍历右子树
             return whereJudge(obj, right);
@@ -61,13 +71,49 @@ public class JudgeUtil {
      * @param value    右值
      * @return 判断结果
      */
-    @SuppressWarnings("unchecked")
-    private static boolean singleJudge(Tuple obj, Operator operator, String name, Comparable value) {
-        if (!name.contains(".")) throw new UnsupportedOperationException("the attribute is not valid");
-        name = name.substring(name.indexOf(".") + 1);
-        Object fieldValue = obj.get(name);
+    @SuppressWarnings("all")
+    private static boolean singleJudge(Tuple obj, Op operator, Field field, Comparable value) {
+        Object fieldValue = getValue(obj, field);
         if (fieldValue == null) return false;
         return ComparatorFactory.getComparator(operator).compare((Comparable) fieldValue, value);
+    }
+
+    @SuppressWarnings("all")
+    private static boolean singleJudge(Tuple obj, Op operator, Comparable value, Field field) {
+        Object fieldValue = getValue(obj, field);
+        if (fieldValue == null) return false;
+        return ComparatorFactory.getComparator(operator).compare(value, (Comparable) fieldValue);
+    }
+
+    @SuppressWarnings("all")
+    private static boolean singleJudge(Tuple obj, Op operator, Field field1, Field field2) {
+        Object fieldValue1 = getValue(obj, field1);
+        if (fieldValue1 == null) return false;
+        Object fieldValue2 = getValue(obj, field2);
+        if (fieldValue2 == null) return false;
+        return ComparatorFactory.getComparator(operator).compare((Comparable) fieldValue1, (Comparable) fieldValue2);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean singleJudge(Op operator, Comparable fieldValue1, Comparable fieldValue2) {
+        return ComparatorFactory.getComparator(operator).compare(fieldValue1, fieldValue2);
+    }
+
+    @SuppressWarnings("all")
+    public static boolean singleJudge(Tuple obj1, Tuple obj2, Op operator, Field field1, Field field2) {
+        Object fieldValue1 = getValue(obj1, field1);
+        if (fieldValue1 == null) return false;
+        Object fieldValue2 = getValue(obj2, field2);
+        if (fieldValue2 == null) return false;
+        if (fieldValue2 == null) return false;
+        return ComparatorFactory.getComparator(operator).compare((Comparable) fieldValue1, (Comparable) fieldValue2);
+    }
+
+    private static Object getValue(Tuple tuple, Field field) {
+        String name = field.getName();
+        if (!name.contains(".")) throw new UnsupportedOperationException("the attribute is not valid");
+        Object fieldValue = tuple.get(name);
+        return fieldValue;
     }
 
 }

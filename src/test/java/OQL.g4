@@ -8,6 +8,7 @@ oqlStat
     | updateStat   #updateStatement
     | deleteStat   #deleteStatement
     | dropStat     #dropStatement
+    | showStat     #showStatement
     ;
 
 selectStat
@@ -15,14 +16,12 @@ selectStat
     ;
 
 selectClause
-    :  (DISTINCT)? selectExpr (COMMA selectExpr)*
+    :  selectExpr (COMMA selectExpr)*
     ;
 
 selectExpr
     : pathExpr    #selectPathExpr
     | aggregateExpr   #selectAggregateExpr
-    | OBJECT  LBRACKET id RBRACKET  #selectObjectExpr
-    | constructorExpr #selectConstructorExpr
     ;
 
 fromClause
@@ -30,16 +29,12 @@ fromClause
     ;
 
 fromItem
-    : schemaName (AS)? id join?
+    : schemaName (AS)? id join*
     ;
 
 join
-    : joinType pathExpr (AS id)?
+    : JOIN schemaName (AS)? id  ON conditionalExpr
    ;
-
-joinType
-    :((LEFT|RIGHT) (OUTER)? | INNER )? JOIN
-    ;
 
 pathExpr
     :  id  (DOT field)*
@@ -49,16 +44,8 @@ limitClause
     :LIMIT INTNUMERAL (COMMA INTNUMERAL)?
     ;
 
-constructorExpr
-    : NEW constructorName LBRACKET constructorItem (COMMA constructorItem)* RBRACKET;
-
-constructorItem
-    : pathExpr #conPathExpr
-    | aggregateExpr #conAggregateExpr
-    ;
-
 aggregateExpr
-    : aggregateExprFunctionName LBRACKET (DISTINCT)? pathExpr RBRACKET
+    : aggregateExprFunctionName LBRACKET  pathExpr RBRACKET
     ;
 
 aggregateExprFunctionName
@@ -69,7 +56,7 @@ whereClause
     ;
 
 groupByClause
-    : GROUP BY pathExpr (COMMA pathExpr)*
+    : GROUP BY pathExpr
     ;
 
 havingClause
@@ -80,11 +67,7 @@ orderByClause
     ;
 
 orderByItem
-    : pathExpr  (ASC)? | DESC
-    ;
-
-subQuery
-    : LBRACKET selectClause RBRACKET
+    : pathExpr  ((ASC)? | DESC)
     ;
 
 conditionalExpr
@@ -94,7 +77,7 @@ conditionalTerm
     : (conditionalFactor) (AND conditionalFactor)*;
 
 conditionalFactor
-    : (NOT)? simpleCondExpr #conditionalFactorSimpleCondExpr
+    : simpleCondExpr #conditionalFactorSimpleCondExpr
     | LBRACKET conditionalExpr RBRACKET #conditionalFactorExpr
     ;
 
@@ -103,10 +86,6 @@ simpleCondExpr
     | betweenExpr #simpleBetweenExpr
     | likeExpr    #simpleLikeExpr
     | inExpr  #simpleInExpr
-    | nullComparisonExpr  #simpleNullComparisonExpr
-    | emptyCollectionComparisonExpr   #simpleEmptyCollectionExpr
-    | collectionMemberExpr    #simpleCollectionMemberExpr
-    | existsExpr  # simpleExistsExpr
     ;
 
 betweenExpr
@@ -119,7 +98,6 @@ inExpr
 
 inExprRightPart
     : LBRACKET inItem (COMMA inItem)* RBRACKET  #inExprItem
-    | subQuery  #inExprsubQuery
     ;
 
 inItem
@@ -128,22 +106,10 @@ inItem
 likeExpr
     : stringExpr (NOT)? LIKE patternValue;
 
-nullComparisonExpr
-    : pathExpr IS (NOT)? NULL;
-
-emptyCollectionComparisonExpr
-    : pathExpr IS (NOT)? EMPTY;
-
-collectionMemberExpr
-    : entityExpr (NOT)? MEMBER (OF)? pathExpr;
-
-existsExpr
-    : (NOT)? EXISTS subQuery;
-
 comparisonExpr
     : stringExpr comparisonOperator stringExpr  #comparisonStringExpr
-    | entityExpr (EQ | NE)  entityExpr  #comparisonEntityExpr
     | arithmeticExpr comparisonOperator arithmeticExpr  #comparisonArithmeticExpr
+    | aggregateExpr comparisonOperator arithmeticExpr #comparisonAggregateExpr
     ;
 
 comparisonOperator
@@ -171,31 +137,19 @@ arithmeticFactor
 arithmeticPrimary
     : numericLiteral    #ariPriNumericLiteral
     | LBRACKET simpleArithmeticExpr RBRACKET    #ariPriSimpleArithmeticExpr
-    | aggregateExpr #ariPriAggregateExpr
     ;
 
 stringExpr
     : stringPrimary #stringPri
-    | subQuery  #stringSubQuery
     ;
 
 stringPrimary
     : pathExpr  #stringPathExpr
     | stringLiteralExpr #stringLiteral
-    | aggregateExpr #stringAggregateExpr
     ;
 
 stringLiteralExpr
     :STRINGLITERAL
-    ;
-
-entityExpr
-    : pathExpr  #entityPathExpr
-    | simpleEntityExpr  #entitySimpleEntityExpr
-    ;
-
-simpleEntityExpr
-    : WORD
     ;
 
 schemaName
@@ -211,9 +165,6 @@ numericLiteral
     ;
 
 literal
-    : WORD;
-
-constructorName
     : WORD;
 
 field
@@ -313,6 +264,11 @@ dropStat
     ;
 
 
+showStat
+    : SHOW DATABASES
+    ;
+
+
 fragment A:('A'|'a');
 fragment B:('B'|'b');
 fragment C:('C'|'c');
@@ -400,6 +356,9 @@ UNIQUE:U N I Q U E;
 LIMIT:L I M I T;
 DROP:D R O P;
 CASCADE:C A S C A D E;
+ON:O N;
+SHOW:S H O W;
+DATABASES: D A T A B A S E S;
 
 MUL:                                '*';
 DIV:                                '/';

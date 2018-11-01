@@ -1,9 +1,6 @@
 package cn.ouctechnology.oodb.catalog;
 
-import cn.ouctechnology.oodb.catalog.attribute.Attribute;
-import cn.ouctechnology.oodb.catalog.attribute.CharAttribute;
-import cn.ouctechnology.oodb.catalog.attribute.IntAttribute;
-import cn.ouctechnology.oodb.catalog.attribute.ObjectAttribute;
+import cn.ouctechnology.oodb.catalog.attribute.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -51,7 +48,7 @@ public class CatalogTest {
 
     @Test
     public void testCreateTablePerson() throws IOException {
-        //Catalog.initialCatalog();
+        Catalog.initialCatalog();
         Table table = new Table(
                 "person",
                 Arrays.asList("id"),
