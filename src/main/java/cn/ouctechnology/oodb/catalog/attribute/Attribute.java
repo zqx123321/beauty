@@ -6,6 +6,8 @@ import cn.ouctechnology.oodb.dbenum.Type;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import static cn.ouctechnology.oodb.constant.Constants.NOT_FOUND;
+
 /**
  * @program: oodb
  * @author: ZQX
@@ -44,8 +46,8 @@ public abstract class Attribute {
      * 将属性信息写入文件，此类在ObjectAttribute中被覆写
      */
     public void writeAttribute(DataOutputStream dos) throws IOException {
-        dos.writeUTF(name);
         dos.writeInt(type.ordinal());
+        dos.writeUTF(name);
         dos.writeInt(length);
     }
 
@@ -63,4 +65,14 @@ public abstract class Attribute {
      * @param block
      */
     public abstract Object read(Block block);
+
+    public int getOffset(String attributeName, int offset) {
+        if (name.equals(attributeName)) return offset;
+        return NOT_FOUND;
+    }
+
+    public Attribute getAttribute(String attributeName) {
+        if (name.equals(attributeName)) return this;
+        return null;
+    }
 }

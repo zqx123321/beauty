@@ -33,13 +33,12 @@ public class OqlEngineTest extends BaseTest {
             try {
                 System.out.println(OqlEngine.execute(line));
             } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println(e.getCause());
+                e.printStackTrace();
             }
             System.out.print("OODB>");
         }
         Buffer.close();
-        Catalog.showCatalog();
+        Catalog.storeCatalog();
     }
 
 

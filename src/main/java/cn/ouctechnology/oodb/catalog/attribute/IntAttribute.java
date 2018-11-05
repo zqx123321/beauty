@@ -18,7 +18,7 @@ public class IntAttribute extends Attribute {
 
     @Override
     public void writeValue(Block block, Object value) {
-        block.writeInt((Integer) value);
+        block.writeInt(Integer.parseInt(value.toString()));
     }
 
     @Override

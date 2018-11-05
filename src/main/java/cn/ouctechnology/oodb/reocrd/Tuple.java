@@ -3,14 +3,15 @@ package cn.ouctechnology.oodb.reocrd;
 import cn.ouctechnology.oodb.buffer.Block;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+import cn.ouctechnology.oodb.exception.DbException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static cn.ouctechnology.oodb.constant.Constants.NOT_FOUND;
 
 /**
  * @program: oodb
@@ -30,22 +31,43 @@ public class Tuple {
      * 获取值，先尝试直接获取，失败后再用OGNL方式获取
      */
     public Object get(String name) {
-        Object value = values.get(name);
-        if (value == null && name.contains(".")) return getByOgnl(name);
-        return value;
+        try {
+            return get(values, name);
+        } catch (Exception e) {
+            throw new DbException("get value by name error", e);
+        }
     }
 
-    /**
-     * OGNL对象导航语言获取值，可以直接调用tuple.get("dept.id")获取对象内部的值
-     */
-    public Object getByOgnl(String name) {
-        if (name == null) return null;
-        String[] partitions = name.trim().split("\\.");
-        Object res = values.get(partitions[0]);
-        for (int i = 1; i < partitions.length; i++) {
-            res = ((Map) res).get(partitions[i]);
+    public Object get(Object object, String name) {
+        if (object instanceof Map) return getFromMap((Map<String, Object>) object, name);
+        if (object instanceof List) return getFromList((List) object, name);
+        return object;
+    }
+
+    private Object getFromList(List object, String name) {
+        if (!name.contains(".")) return object.get(Integer.parseInt(name));
+        String indexStr = name.substring(0, name.indexOf("."));
+        if (!indexStr.matches("^[0-9]*[1-9][0-9]*$")) return null;
+        Integer index = Integer.parseInt(indexStr);
+        Object value = object.get(index);
+        String suffix = name.substring(name.indexOf(".") + 1);
+        return get(value, suffix);
+    }
+
+    private Object getFromMap(Map<String, Object> values, String name) {
+        Object value = values.get(name);
+        if (value != null) return value;
+        for (Map.Entry<String, Object> tupleEntity : this.values.entrySet()) {
+            String key = tupleEntity.getKey();
+            int index = name.indexOf(key);
+            if (index != NOT_FOUND) {
+                value = tupleEntity.getValue();
+                String suffix = name.substring(index + key.length() + 1);
+                Object res = get(value, suffix);
+                if (res != null) return res;
+            }
         }
-        return res;
+        return null;
     }
 
     /**
@@ -63,6 +85,8 @@ public class Tuple {
             block.setDataOffset(dataOffset + attributeOffset);
             attribute.writeValue(block, value);
         }
+        //设置block偏移量
+        block.setDataOffset(dataOffset + Catalog.getTupleLength(tableName));
     }
 
     @Override
@@ -78,5 +102,18 @@ public class Tuple {
 
     public Map<String, Object> getValues() {
         return values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tuple tuple = (Tuple) o;
+        return Objects.equals(values, tuple.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(values);
     }
 }

@@ -42,9 +42,9 @@ public class Record {
 
     public static void drop(String tableName) {
         File file = new File(DB_PATH + tableName + RECORD_SUFFIX);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("The table:" + tableName + " is already exited in the database!");
-        }
+//        if (!file.exists()) {
+//            throw new IllegalArgumentException("The table:" + tableName + " is already exited in the database!");
+//        }
         file.delete();
     }
 

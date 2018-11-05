@@ -1,8 +1,6 @@
 package cn.ouctechnology.oodb.catalog;
 
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
-import cn.ouctechnology.oodb.catalog.attribute.AttributeFactory;
-import cn.ouctechnology.oodb.catalog.attribute.ObjectAttribute;
 import cn.ouctechnology.oodb.dbenum.Type;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -89,16 +87,9 @@ public class Catalog {
         int attributesNum = dis.readInt();
         List<Attribute> attributes = new ArrayList<>();
         for (int i = 0; i < attributesNum; i++) {
-            String name = dis.readUTF();
+            //读取操作交给多态
             Type type = Type.values()[dis.readInt()];
-            int length = dis.readInt();
-            //如果是object类型，则递归读数据
-            List<Attribute> innerAttributes = null;
-            if (type == Type.OBJECT) {
-                innerAttributes = readAttributes(dis);
-            }
-            //工厂创建类型Attribute
-            attributes.add(AttributeFactory.createAttribute(type.name(), name, length, innerAttributes));
+            attributes.add(type.readAttribute(dis));
         }
         return attributes;
     }
@@ -221,11 +212,8 @@ public class Catalog {
 
     public static Attribute getAttribute(List<Attribute> attributes, String name) {
         for (Attribute attribute : attributes) {
-            if (attribute.getName().equals(name)) return attribute;
-            if (attribute.getType() == Type.OBJECT) {
-                List<Attribute> innerAttributes = ((ObjectAttribute) attribute).getInnerAttributes();
-                return getAttribute(innerAttributes, name.substring(name.indexOf(".") + 1));
-            }
+            Attribute res = attribute.getAttribute(name);
+            if (res != null) return res;
         }
         throw new IllegalArgumentException("type of:" + name + " not found");
     }
@@ -235,19 +223,14 @@ public class Catalog {
      */
     public static int getAttributeOffset(String tableName, String attributeName) {
         Table table = getTable(tableName);
-        return getAttributeOffset(table.getAttributes(), attributeName, 0);
+        return getAttributeOffset(table.getAttributes(), attributeName);
     }
 
-    private static int getAttributeOffset(List<Attribute> attributes, String attributeName, int deep) {
+    private static int getAttributeOffset(List<Attribute> attributes, String attributeName) {
         int offset = 0;
         for (Attribute attribute : attributes) {
-            if (attribute.getName().equals(attributeName)) {
-                return offset;
-            }
-            if (attribute.getType() == Type.OBJECT) {
-                List<Attribute> innerAttributes = ((ObjectAttribute) attribute).getInnerAttributes();
-                return offset + getAttributeOffset(innerAttributes, attributeName.substring(attributeName.indexOf(".") + 1), deep + 1);
-            }
+            int res = attribute.getOffset(attributeName, offset);
+            if (res != NOT_FOUND) return res;
             offset += attribute.getLength();
         }
         throw new IllegalArgumentException("type of:" + attributeName + " not found");

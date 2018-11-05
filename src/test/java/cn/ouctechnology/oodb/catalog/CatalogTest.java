@@ -17,7 +17,7 @@ public class CatalogTest {
     @Test
     public void initialCatalog() throws IOException {
         Catalog.initialCatalog();
-        Catalog.showCatalog();
+        System.out.println(Catalog.showCatalog());
     }
 
     @Test
@@ -30,6 +30,7 @@ public class CatalogTest {
 
     @Test
     public void testCreateTable() throws IOException {
+        Catalog.initialCatalog();
         Attribute objectAttribute = new ObjectAttribute(
                 "dept",
                 30,

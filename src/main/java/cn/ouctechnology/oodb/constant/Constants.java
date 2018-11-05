@@ -15,7 +15,9 @@ public class Constants {
     //存放模式信息的文件
     public static String TABLE_FILE_NAME = "table";
     //在CRUD过程中操作失败返回FAIL
-    public static final int FAIL = 0;
+    public static final int FAIL = -1;
+    //在获取偏移量的时候没找到
+    public static final int NOT_FOUND = -1;
     //一个缓冲区块的大小
     public static final int BLOCK_SIZE = 8 * 1024;
     //缓冲区中可容纳的最大区块数量

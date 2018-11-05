@@ -4,16 +4,20 @@ import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.catalog.Table;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.catalog.attribute.AttributeFactory;
-import cn.ouctechnology.oodb.constant.Constants;
+import cn.ouctechnology.oodb.catalog.attribute.ListAttribute;
+import cn.ouctechnology.oodb.catalog.attribute.ObjectAttribute;
 import cn.ouctechnology.oodb.exception.ExplainException;
 import cn.ouctechnology.oodb.reocrd.Record;
 import lombok.Builder;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static cn.ouctechnology.oodb.constant.Constants.ROWS_AFFECTED;
+import static cn.ouctechnology.oodb.constant.Constants.SINGLE_AFFECTED;
 import static cn.ouctechnology.oodb.parser.OQLParser.*;
 
 /**
@@ -53,16 +57,31 @@ public class CreateExplain {
                 .build();
     }
 
-    public int doCreate() {
+    public String doCreate() {
         table = new Table();
         table.setTableName(tableName);
         table.setTupleNum(0);
         dealWithExtendsTable();
-        dealWithColumnDefinition();
+        List<Attribute> attributeList = dealWithColumnDefinition(columnDefinitionContext);
+        if (attributeList != null) {
+            int length = 0;
+            for (Attribute attribute : attributeList) {
+                table.addAttribute(attribute);
+                length += attribute.getLength();
+            }
+            table.setTupleLength(length);
+        }
         dealWithTableConstraint();
-        Catalog.createTable(table);
-        Record.create(tableName);
-        return Constants.SINGLE_AFFECTED;
+        try {
+            Catalog.createTable(table);
+            Record.create(tableName);
+        } catch (Exception e) {
+            //出错后回滚，保证一致性
+            Catalog.dropTable(tableName);
+            Record.drop(tableName);
+            throw e;
+        }
+        return SINGLE_AFFECTED + ROWS_AFFECTED;
     }
 
     private void dealWithExtendsTable() {
@@ -77,9 +96,10 @@ public class CreateExplain {
         }
     }
 
-    private void dealWithColumnDefinition() {
-        if (columnDefinitionContext != null) {
-            List<ColumnDefinitionItemContext> itemContexts = columnDefinitionContext.getChildren(ColumnDefinitionItemContext.class);
+    private List<Attribute> dealWithColumnDefinition(ColumnDefinitionContext columnDefinition) {
+        if (columnDefinition != null) {
+            List<Attribute> attributeList = new ArrayList<>();
+            List<ColumnDefinitionItemContext> itemContexts = columnDefinition.getChildren(ColumnDefinitionItemContext.class);
             for (ColumnDefinitionItemContext itemContext : itemContexts) {
                 Attribute attribute = dealWithItemContext(itemContext);
                 if (dealWithColumnConstraint(itemContext)) {
@@ -87,32 +107,51 @@ public class CreateExplain {
                     table.addPrimaryKey(attribute.getName());
                     primary = true;
                 }
-                table.addAttribute(attribute);
+                attributeList.add(attribute);
             }
+            return attributeList;
         }
+        return null;
     }
 
     private Attribute dealWithItemContext(ColumnDefinitionItemContext itemContext) {
         String name = itemContext.getToken(WORD, 0).getText();
         ColumnTypeContext columnTypeContext = itemContext.getChild(ColumnTypeContext.class);
+        return columnTypeToAttribute(name, columnTypeContext);
+    }
+
+    private Attribute columnTypeToAttribute(String name, ColumnTypeContext columnTypeContext) {
         int length = 0;
         String type;
+        if (columnTypeContext.columnDefinition() != null) {
+            ColumnDefinitionContext columnDefinitionContext = columnTypeContext.columnDefinition();
+            List<Attribute> attributeList = dealWithColumnDefinition(columnDefinitionContext);
+            for (Attribute attribute : attributeList) {
+                length += attribute.getLength();
+            }
+            return new ObjectAttribute(name, length, attributeList);
+        }
+        if (columnTypeContext.columnType() != null) {
+            int size = Integer.parseInt(columnTypeContext.INTNUMERAL().getText());
+            ColumnTypeContext newColumnType = columnTypeContext.columnType();
+            Attribute listAttribute = columnTypeToAttribute(name, newColumnType);
+            return new ListAttribute(name, size * listAttribute.getLength(), listAttribute);
+        }
         TerminalNode num = columnTypeContext.getToken(INTNUMERAL, 0);
         if (num != null) {
             length = Integer.parseInt(num.getText());
             type = columnTypeContext.getToken(CHAR, 0).getText();
-            return AttributeFactory.createAttribute(type, name, length, null);
+            return AttributeFactory.createAttribute(type, name, length);
         }
         TerminalNode word = columnTypeContext.getToken(WORD, 0);
         if (word != null) {
             String refTable = word.getText();
             length = Catalog.getTupleLength(refTable);
-            type = "OBJECT";//TODO 去除魔法值
             List<Attribute> innerAttributes = Catalog.getAttributes(refTable);
-            return AttributeFactory.createAttribute(type, name, length, innerAttributes);
+            return new ObjectAttribute(name, length, innerAttributes);
         }
         type = columnTypeContext.getChild(0).getText();
-        return AttributeFactory.createAttribute(type, name, length, null);
+        return AttributeFactory.createAttribute(type, name, length);
     }
 
     private boolean dealWithColumnConstraint(ColumnDefinitionItemContext itemContext) {

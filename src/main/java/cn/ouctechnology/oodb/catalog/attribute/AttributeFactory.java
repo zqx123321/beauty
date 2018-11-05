@@ -13,7 +13,7 @@ import static cn.ouctechnology.oodb.constant.Constants.SIZE_INT;
  **/
 public class AttributeFactory {
 
-    public static Attribute createAttribute(String type, String name, int length, List<Attribute> innerAttributes) {
+    public static Attribute createAttribute(String type, String name, int length) {
         type = type.toLowerCase();
         switch (type) {
             case "int": {
@@ -24,9 +24,6 @@ public class AttributeFactory {
             }
             case "char": {
                 return new CharAttribute(name, length);
-            }
-            case "object": {
-                return new ObjectAttribute(name, length, innerAttributes);
             }
             default:
                 throw new IllegalArgumentException("the type:" + type + "is incorrect!");

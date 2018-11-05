@@ -12,7 +12,7 @@ oqlStat
     ;
 
 selectStat
-    : SELECT selectClause fromClause (whereClause)? (groupByClause)? (havingClause)? (orderByClause)? (limitClause)?
+    : SELECT (DISTINCT)? selectClause fromClause (whereClause)? (groupByClause)? (orderByClause)? (limitClause)?
     ;
 
 selectClause
@@ -56,7 +56,7 @@ whereClause
     ;
 
 groupByClause
-    : GROUP BY pathExpr
+    : GROUP BY pathExpr (havingClause)?
     ;
 
 havingClause
@@ -110,6 +110,8 @@ comparisonExpr
     : stringExpr comparisonOperator stringExpr  #comparisonStringExpr
     | arithmeticExpr comparisonOperator arithmeticExpr  #comparisonArithmeticExpr
     | aggregateExpr comparisonOperator arithmeticExpr #comparisonAggregateExpr
+    | entityExpr comparisonOperator entityExpr  #comparisonEntityExpr
+    | listExpr comparisonOperator listExpr  #comparisonListExpr
     ;
 
 comparisonOperator
@@ -148,6 +150,18 @@ stringPrimary
     | stringLiteralExpr #stringLiteral
     ;
 
+
+entityExpr
+    : pathExpr   #entityPathExpr
+    | insertEntityExpr  #entityValueExpr
+    ;
+
+
+listExpr
+    : pathExpr   #listPathExpr
+    | insertListExpr  #listValueExpr
+    ;
+
 stringLiteralExpr
     :STRINGLITERAL
     ;
@@ -168,7 +182,8 @@ literal
     : WORD;
 
 field
-    : WORD;
+    : WORD
+    | INTNUMERAL;
 
 id
     : WORD;
@@ -193,14 +208,16 @@ columnType
 	: INT
 	| FLOAT
 	| CHAR LBRACKET INTNUMERAL RBRACKET
-	| SETOF LBRACKET columnType RBRACKET
+	| LISTOF LBRACKET columnType COMMA INTNUMERAL RBRACKET
 	| REF LBRACKET WORD RBRACKET
+	| OBJECT columnDefinition
 	;
 
 columnConstraint
     : AUTO_INCREMENT
     | PRIMARY KEY
     | UNIQUE KEY
+    | FINAL
     ;
 
 extendsTable
@@ -227,8 +244,18 @@ newValue
    : simpleArithmeticExpr   #newSimpleArithmeticExpr
    | stringPrimary  #newStringPrimary
    | insertEntityExpr   #newSimpleEntityExpr
+   | insertListExpr     #newSimpleListExpr
    | NULL   #newNull
    ;
+
+insertListExpr
+    :LFRACKET insertListItem (COMMA insertListItem)* RFRACKET
+    ;
+
+insertListItem
+     :INTNUMERAL COLON newValue
+     |newValue
+     ;
 
 insertEntityExpr
     :LBRACKET insertEntityItem (COMMA insertEntityItem)* RBRACKET
@@ -236,6 +263,7 @@ insertEntityExpr
 
 insertEntityItem
     :pathExpr COLON newValue
+    |newValue
     ;
 
 deleteStat
@@ -324,6 +352,7 @@ HAVING:H A V I N G;
 DESC:D E S C;
 ASC:A S C;
 NOT:N O T;
+SET:S E T;
 BETWEEN:B E T W E E N;
 IS:I S;
 NULL: N U L L;
@@ -336,7 +365,7 @@ INTO:I N T O;
 VALUES:V A L U E S;
 PRIMARY:P R I M A R Y;
 KEY:K E Y;
-SET:S E T;
+LISTOF:L I S T O F;
 EXTENDS:E X T E N D S;
 EMPTY:E M P T Y;
 MEMBER:M E M B E R;
@@ -359,6 +388,7 @@ CASCADE:C A S C A D E;
 ON:O N;
 SHOW:S H O W;
 DATABASES: D A T A B A S E S;
+FINAL:F I N A L;
 
 MUL:                                '*';
 DIV:                                '/';
@@ -377,6 +407,8 @@ NE:                                 '<>'|'!=';
 DOT:                                 '.';
 LBRACKET:                            '(';
 RBRACKET:                            ')';
+LFRACKET:                            '[';
+RFRACKET:                            ']';
 COMMA:                               ',';
 SEMI:                                ';';
 COLON:                               ':';

@@ -33,4 +33,6 @@ public class CharAttribute extends Attribute {
     public int getLength() {
         return length * 2;
     }
+
+
 }

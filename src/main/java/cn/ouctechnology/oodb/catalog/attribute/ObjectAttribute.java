@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cn.ouctechnology.oodb.constant.Constants.NOT_FOUND;
+
 /**
  * @program: oodb
  * @author: ZQX
@@ -31,7 +33,7 @@ public class ObjectAttribute extends Attribute {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public void writeValue(Block block, Object value) {
         if (value instanceof List) {
             List<Object> valueList = (List<Object>) value;
@@ -91,5 +93,31 @@ public class ObjectAttribute extends Attribute {
             length += innerAttribute.getLength();
         }
         return length;
+    }
+
+    //覆写获取偏移量
+    @Override
+    public int getOffset(String attributeName, int offset) {
+        int superOffset = super.getOffset(attributeName, offset);
+        if (superOffset != NOT_FOUND) return superOffset;
+        for (Attribute innerAttribute : innerAttributes) {
+            int res = innerAttribute.getOffset(attributeName.substring(attributeName.indexOf(".") + 1), offset);
+            if (res != NOT_FOUND) return res;
+            offset += innerAttribute.getLength();
+        }
+        return NOT_FOUND;
+    }
+
+
+    //覆写获取偏移量
+    @Override
+    public Attribute getAttribute(String attributeName) {
+        Attribute superAttribute = super.getAttribute(attributeName);
+        if (superAttribute != null) return superAttribute;
+        for (Attribute innerAttribute : innerAttributes) {
+            Attribute resAttribute = innerAttribute.getAttribute(attributeName.substring(attributeName.indexOf(".") + 1));
+            if (resAttribute != null) return resAttribute;
+        }
+        return null;
     }
 }

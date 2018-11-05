@@ -35,6 +35,7 @@ public class LogicalPlan {
     private LogicalProjectNode projectNode;
     private LogicalLimitNode logicalLimitNode;
     private List<LogicalOrderNode> logicalOrderNode;
+    private boolean distinct;
 
     public LogicalPlan(
             LogicalTableNode tableNode,
@@ -42,13 +43,15 @@ public class LogicalPlan {
             LogicalFilterNode filterNode,
             LogicalProjectNode projectNode,
             LogicalLimitNode logicalLimitNode,
-            List<LogicalOrderNode> logicalOrderNode) {
+            List<LogicalOrderNode> logicalOrderNode,
+            boolean distinct) {
         this.tableNode = tableNode;
         this.aggregateNode = aggregateNode;
         this.filterNode = filterNode;
         this.projectNode = projectNode;
         this.logicalLimitNode = logicalLimitNode;
         this.logicalOrderNode = logicalOrderNode;
+        this.distinct = distinct;
     }
 
     public LogicalTableNode getTableNode() {
@@ -75,6 +78,10 @@ public class LogicalPlan {
         return logicalOrderNode;
     }
 
+    public boolean isDistinct() {
+        return distinct;
+    }
+
     public static LogicalPlan getLogicalPlan(OQLParser.SelectStatContext selectStatContext) {
         OQLParser.WhereClauseContext whereClauseContext = selectStatContext.whereClause();
         WhereNode whereTree = WhereClauseUtil.getWhereTree(whereClauseContext);
@@ -83,6 +90,8 @@ public class LogicalPlan {
         LogicalLimitNode limitNode = null;
         List<LogicalOrderNode> orderNode = null;
         LogicalTableNode logicalTableNode = new LogicalTableNode();
+        boolean distinct = false;
+        if (selectStatContext.DISTINCT() != null) distinct = true;
         OQLParser.FromClauseContext fromClauseContext = selectStatContext.fromClause();
         List<OQLParser.FromItemContext> fromItemContextList = fromClauseContext.fromItem();
         for (OQLParser.FromItemContext fromItemContext : fromItemContextList) {
@@ -170,7 +179,8 @@ public class LogicalPlan {
                 , new LogicalFilterNode(whereTree)
                 , projectNode
                 , limitNode
-                , orderNode);
+                , orderNode
+                , distinct);
     }
 
     private static void getSelectField(LogicalProjectNode projectNode, LogicalTableNode logicalTableNode, String tableAlias) {
@@ -208,7 +218,7 @@ public class LogicalPlan {
         LogicalProjectNode projectNode = logicalPlan.getProjectNode();
         Set<String> fieldList = projectNode.getFieldList();
         //检查是否符合group要求
-        if (aggregateNode != null && !aggregateNode.getGroupField().equals(NO_GROUPING) && aggregateNode.getOp()!=null) {
+        if (aggregateNode != null && !aggregateNode.getGroupField().equals(NO_GROUPING) && aggregateNode.getOp() != null) {
             if (fieldList.size() == 1) {
                 String next = fieldList.iterator().next();
                 if (!next.equals(aggregateNode.getAField()) && !next.equals(aggregateNode.getGroupField()))
@@ -316,6 +326,9 @@ public class LogicalPlan {
         if (logicalLimitNode != null) {
             physicalPlan = new Limit(physicalPlan, logicalLimitNode.getStart(), logicalLimitNode.getSize());
         }
+        if (distinct) {
+            physicalPlan = new Distinct(physicalPlan);
+        }
         return physicalPlan;
     }
 
@@ -361,7 +374,7 @@ public class LogicalPlan {
                 if (indexSet.size() == 1) {
                     Integer next = indexIterator.next();
                     DbIterator dbIterator = iteratorMap.get(next);
-                    dbIterator = new Filter(dbIterator, whereNode);
+                    dbIterator  = new Filter(dbIterator, whereNode);
                     iteratorMap.put(next, dbIterator);
                 } else {
                     //涉及多个组，做Join操作
@@ -383,7 +396,6 @@ public class LogicalPlan {
                     join.setWhereTree(whereNode);
                     iteratorMap.put(first, join);
                 }
-
             }
         }
         //如果最后就剩一个表了，直接返回
