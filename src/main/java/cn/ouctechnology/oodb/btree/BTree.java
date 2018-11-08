@@ -1,21 +1,132 @@
 package cn.ouctechnology.oodb.btree;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import cn.ouctechnology.oodb.buffer.Block;
+import cn.ouctechnology.oodb.buffer.Buffer;
+import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static cn.ouctechnology.oodb.constant.Constants.MAX_NUM_OF_NODE;
 
 /**
- * @param <TKey>   必须是Comparable的子类，方便代用compare方法
- * @param <TValue>
+ * @param <TKey> 必须是Comparable的子类，方便代用compare方法
  * @program: db
  * @description: B+树数据结构，采用类似MyIsam的非聚簇索引解决方案
  * @author: ZQX
  * @create: 2018-09-06 09:24
  **/
-public class BTree<TKey extends Comparable<TKey>, TValue> {
-    private BTreeNode<TKey> root;
+public class BTree<TKey extends Comparable<TKey>> {
+    private int root;
+    private String fileName;
+    private Attribute attribute;
+    private int lastBlockNo;
+    private int current;
+    private BTreeNode<TKey> head;
+    private BTreeNode<TKey> tail;
+    private Map<Integer, BTreeNode<TKey>> bTreeNodeMap;
 
-    public BTree() {
-        this.root = new BTreeLeafNode<TKey, TValue>();
+
+    public BTree(String fileName, Attribute attribute, int lastBlockNo, int root) {
+        this.fileName = fileName;
+        this.lastBlockNo = lastBlockNo;
+        this.attribute = attribute;
+        this.current = 0;
+        head = new BTreeLeafNode<>(this, -1);
+        tail = new BTreeLeafNode<>(this, -1);
+        head.next = tail;
+        head.pre = null;
+        tail.next = null;
+        tail.pre = head;
+        bTreeNodeMap = new HashMap<>(MAX_NUM_OF_NODE);
+        this.root = root;
+        if (lastBlockNo == 0) createLeafNode();
+    }
+
+
+    public BTreeNode<TKey> getNode(int blockNo) {
+        if (current >= MAX_NUM_OF_NODE) {
+            deleteBlock(head.next);
+        }
+        BTreeNode<TKey> bTreeNode = bTreeNodeMap.get(blockNo);
+        if (bTreeNode != null) {
+            moveToTail(bTreeNode);
+            return bTreeNode;
+        }
+//        System.out.println("GET FROM BUFFER:" + blockNo);
+        //一级缓存中没有，去二级缓存中找
+        Block block = Buffer.getBlock(fileName, blockNo);
+        bTreeNode = block.readBTreeNode(this);
+        putInList(bTreeNode);
+        return bTreeNode;
+    }
+
+    public BTreeInnerNode<TKey> createInnerNode() {
+        BTreeInnerNode<TKey> innerNode = new BTreeInnerNode<>(this, lastBlockNo);
+        lastBlockNo++;
+        innerNode.dirty = true;
+        putInList(innerNode);
+        return innerNode;
+    }
+
+    public BTreeLeafNode<TKey> createLeafNode() {
+        BTreeLeafNode<TKey> leafNode = new BTreeLeafNode<>(this, lastBlockNo);
+        lastBlockNo++;
+        leafNode.dirty = true;
+        putInList(leafNode);
+        return leafNode;
+    }
+
+
+    private void deleteBlock(BTreeNode<TKey> bTreeNode) {
+//        System.out.println("DELETE BLOCK:" + bTreeNode.blockNo);
+        current--;
+        //刷新到磁盘
+        bTreeNode.pre.next = bTreeNode.next;
+        bTreeNode.next.pre = bTreeNode.pre;
+        bTreeNodeMap.remove(bTreeNode.blockNo);
+        if (bTreeNode.dirty) {
+            //todo 删除node，要获取buffer,是否会发生抖动？
+            Block block = Buffer.getBlock(fileName, bTreeNode.blockNo);
+            bTreeNode.writeToBlock(block);
+        }
+    }
+
+    private void moveToTail(BTreeNode<TKey> bTreeNode) {
+        bTreeNode.pre.next = bTreeNode.next;
+        bTreeNode.next.pre = bTreeNode.pre;
+        bTreeNode.pre = tail.pre;
+        tail.pre.next = bTreeNode;
+        tail.pre = bTreeNode;
+        bTreeNode.next = tail;
+    }
+
+    private void putInList(BTreeNode<TKey> bTreeNode) {
+        current++;
+        bTreeNodeMap.put(bTreeNode.blockNo, bTreeNode);
+        bTreeNode.pre = tail.pre;
+        tail.pre.next = bTreeNode;
+        tail.pre = bTreeNode;
+        bTreeNode.next = tail;
+    }
+
+    /**
+     * 关闭缓冲区，同步脏数据
+     */
+    public void close() {
+        BTreeNode<TKey> iterator = head.next;
+        while (iterator != tail) {
+            if (iterator.dirty) {
+                Block block = Buffer.getBlock(fileName, iterator.blockNo);
+                iterator.writeToBlock(block);
+                iterator.dirty = false;
+            }
+            iterator = iterator.next;
+        }
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
     }
 
     /**
@@ -24,14 +135,14 @@ public class BTree<TKey extends Comparable<TKey>, TValue> {
      * @param key
      * @param value
      */
-    public void insert(TKey key, TValue value) {
-        BTreeLeafNode<TKey, TValue> leaf = this.findLeafNodeShouldContainKey(key);
+    public void insert(TKey key, int value) {
+        BTreeLeafNode<TKey> leaf = this.findLeafNodeShouldContainKey(key);
         leaf.insertKey(key, value);
         //leaf溢出
         if (leaf.isOverflow()) {
-            BTreeNode<TKey> n = leaf.dealOverflow();
+            int n = leaf.dealOverflow();
             //如果生成了根节点，则更新root
-            if (n != null)
+            if (n != -1)
                 this.root = n;
         }
     }
@@ -42,11 +153,133 @@ public class BTree<TKey extends Comparable<TKey>, TValue> {
      * @param key
      * @return
      */
-    public TValue search(TKey key) {
-        BTreeLeafNode<TKey, TValue> leaf = this.findLeafNodeShouldContainKey(key);
+    public int search(TKey key) {
+        BTreeLeafNode<TKey> leaf = this.findLeafNodeShouldContainKey(key);
 
         int index = leaf.search(key);
-        return (index == -1) ? null : leaf.getValue(index);
+        return (index == -1) ? -1 : leaf.getValue(index);
+    }
+
+    /**
+     * 在B+树种搜索key
+     *
+     * @param key
+     * @return
+     */
+    public List<Integer> searchList(TKey key) {
+        BTreeLeafNode<TKey> leaf = this.findLeafNodeShouldContainKey(key);
+        List<Integer> list = leaf.searchList(key);
+        List<Integer> resList = new ArrayList<>();
+        if (list != null) {
+            resList.addAll(list.stream().map(leaf::getValue).collect(Collectors.toList()));
+        }
+        while (leaf.leftSibling != -1) {
+            BTreeLeafNode<TKey> node = (BTreeLeafNode<TKey>) getNode(leaf.leftSibling);
+            List<Integer> leftList = node.searchList(key);
+            if (leftList == null) break;
+            resList.addAll(leftList.stream().map(leaf::getValue).collect(Collectors.toList()));
+        }
+        while (leaf.rightSibling != -1) {
+            BTreeLeafNode<TKey> node = (BTreeLeafNode<TKey>) getNode(leaf.rightSibling);
+            List<Integer> rightList = node.searchList(key);
+            if (rightList == null) break;
+            resList.addAll(rightList.stream().map(leaf::getValue).collect(Collectors.toList()));
+        }
+        if (resList.size() == 0) return null;
+        return resList;
+    }
+
+    public List<Integer> searchRange(TKey minKey, TKey maxKey) {
+        BTreeLeafNode<TKey> maxLeaf = this.findLeafNodeShouldContainKey(maxKey);
+        while (maxLeaf.rightSibling != -1) {
+            BTreeLeafNode<TKey> node = (BTreeLeafNode<TKey>) getNode(maxLeaf.rightSibling);
+            int search = node.search(maxKey);
+            if (search == -1) break;
+            maxLeaf = node;
+        }
+        Integer maxIndex = Collections.max(maxLeaf.searchList(maxKey));
+
+        BTreeLeafNode<TKey> minLeaf = this.findLeafNodeShouldContainKey(minKey);
+        while (minLeaf.leftSibling != -1) {
+            BTreeLeafNode<TKey> node = (BTreeLeafNode<TKey>) getNode(minLeaf.leftSibling);
+            int search = node.search(minKey);
+            if (search == -1) break;
+            minLeaf = node;
+        }
+        Integer minIndex = Collections.min(minLeaf.searchList(minKey));
+        if (maxLeaf == minLeaf && minIndex > maxIndex) return null;
+        List<Integer> resList = new ArrayList<>();
+        if (maxLeaf == minLeaf) {
+            for (int i = minIndex; i <= maxIndex; i++) {
+                resList.add(minLeaf.getValue(i));
+            }
+            return resList;
+        }
+        for (int i = minIndex; i < minLeaf.getKeyCount(); i++) {
+            resList.add(minLeaf.getValue(i));
+        }
+        for (int i = 0; i <= maxIndex; i++) {
+            resList.add(maxLeaf.getValue(i));
+        }
+        while (minLeaf.rightSibling != -1) {
+            minLeaf = (BTreeLeafNode<TKey>) getNode(minLeaf.rightSibling);
+            if (minLeaf == maxLeaf) break;
+            int keyCount = minLeaf.getKeyCount();
+            for (int i = 0; i < keyCount; i++) {
+                resList.add(minLeaf.getValue(i));
+            }
+        }
+        return resList;
+    }
+
+    public List<Integer> searchGreater(TKey minKey) {
+
+        BTreeLeafNode<TKey> minLeaf = this.findLeafNodeShouldContainKey(minKey);
+        while (minLeaf.leftSibling != -1) {
+            BTreeLeafNode<TKey> node = (BTreeLeafNode<TKey>) getNode(minLeaf.leftSibling);
+            int search = node.search(minKey);
+            if (search == -1) break;
+            minLeaf = node;
+        }
+        Integer minIndex = minLeaf.searchGreater(minKey);
+        if (minIndex == -1) return null;
+        List<Integer> resList = new ArrayList<>();
+        for (int i = minIndex; i < minLeaf.getKeyCount(); i++) {
+            resList.add(minLeaf.getValue(i));
+        }
+        while (minLeaf.rightSibling != -1) {
+            minLeaf = (BTreeLeafNode<TKey>) getNode(minLeaf.rightSibling);
+            int keyCount = minLeaf.getKeyCount();
+            for (int i = 0; i < keyCount; i++) {
+                resList.add(minLeaf.getValue(i));
+            }
+        }
+        return resList;
+    }
+
+    public List<Integer> searchLesser(TKey maxKey) {
+
+        BTreeLeafNode<TKey> maxLeaf = this.findLeafNodeShouldContainKey(maxKey);
+        while (maxLeaf.rightSibling != -1) {
+            BTreeLeafNode<TKey> node = (BTreeLeafNode<TKey>) getNode(maxLeaf.rightSibling);
+            int search = node.search(maxKey);
+            if (search == -1) break;
+            maxLeaf = node;
+        }
+        Integer maxIndex = maxLeaf.searchLesser(maxKey);
+        if (maxIndex == -1) return null;
+        List<Integer> resList = new ArrayList<>();
+        for (int i = 0; i <= maxIndex; i++) {
+            resList.add(maxLeaf.getValue(i));
+        }
+        while (maxLeaf.leftSibling != -1) {
+            maxLeaf = (BTreeLeafNode<TKey>) getNode(maxLeaf.leftSibling);
+            int keyCount = maxLeaf.getKeyCount();
+            for (int i = 0; i < keyCount; i++) {
+                resList.add(maxLeaf.getValue(i));
+            }
+        }
+        return resList;
     }
 
     /**
@@ -69,11 +302,11 @@ public class BTree<TKey extends Comparable<TKey>, TValue> {
      * 删除的时候要考虑下溢
      */
     public void delete(TKey key) {
-        BTreeLeafNode<TKey, TValue> leaf = this.findLeafNodeShouldContainKey(key);
+        BTreeLeafNode<TKey> leaf = this.findLeafNodeShouldContainKey(key);
 
         if (leaf.delete(key) && leaf.isUnderflow()) {
-            BTreeNode<TKey> n = leaf.dealUnderflow();
-            if (n != null)
+            int n = leaf.dealUnderflow();
+            if (n != -1)
                 this.root = n;
         }
     }
@@ -85,25 +318,25 @@ public class BTree<TKey extends Comparable<TKey>, TValue> {
      * @return
      */
     @SuppressWarnings("unchecked")
-    private BTreeLeafNode<TKey, TValue> findLeafNodeShouldContainKey(TKey key) {
-        BTreeNode<TKey> node = this.root;
+    private BTreeLeafNode<TKey> findLeafNodeShouldContainKey(TKey key) {
+        BTreeNode<TKey> node = getNode(this.root);
         while (node.getNodeType() == TreeNodeType.InnerNode) {
-            node = ((BTreeInnerNode<TKey>) node).getChild(node.search(key));
+            node = getNode(((BTreeInnerNode<TKey>) node).getChild(node.search(key)));
         }
 
-        return (BTreeLeafNode<TKey, TValue>) node;
+        return (BTreeLeafNode<TKey>) node;
     }
 
     /**
      * B+树的层序遍历，打印此B+树的结构
      */
     public void print() {
-        Queue<BTreeNode> queue = new ArrayDeque<>();
+        Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(this.root);
         int start = 0;
         int end = queue.size();
         while (!queue.isEmpty()) {
-            BTreeNode node = queue.poll();
+            BTreeNode<TKey> node = getNode(queue.poll());
             printNode(node);
             if (node.getNodeType() == TreeNodeType.InnerNode) {
                 BTreeInnerNode innerNode = (BTreeInnerNode) node;
@@ -127,4 +360,15 @@ public class BTree<TKey extends Comparable<TKey>, TValue> {
         System.out.print("\t");
     }
 
+    public int getRoot() {
+        return root;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public int getLastBlockNo() {
+        return lastBlockNo;
+    }
 }

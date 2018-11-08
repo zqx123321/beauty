@@ -2,7 +2,6 @@ package cn.ouctechnology.oodb.operator;
 
 import cn.ouctechnology.oodb.reocrd.Tuple;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +34,7 @@ public class Project extends Operator {
     protected Tuple fetchNext() {
         if (child.hasNext()) {
             Tuple tuple = child.next();
+            if (tuple == null) return null;
             Tuple newTuple = new Tuple();
             for (String field : selectFieldList) {
                 Object value = tuple.get(field);

@@ -1,23 +1,64 @@
 package cn.ouctechnology.oodb.btree;
 
+import cn.ouctechnology.oodb.buffer.Block;
+import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+
+import static cn.ouctechnology.oodb.constant.Constants.BLOCK_SIZE;
+import static cn.ouctechnology.oodb.constant.Constants.SIZE_INT;
+
 enum TreeNodeType {
     InnerNode,
     LeafNode
 }
 
-abstract class BTreeNode<TKey extends Comparable<TKey>> {
-    protected Object[] keys;
+public abstract class BTreeNode<TKey extends Comparable<TKey>> {
+    protected TKey[] keys;
     protected int keyCount;
-    protected BTreeNode<TKey> parentNode;
-    protected BTreeNode<TKey> leftSibling;
-    protected BTreeNode<TKey> rightSibling;
+    protected int parentNode;
+    protected int leftSibling;
+    protected int rightSibling;
+    protected int blockNo;
+    protected int size;
+    protected BTree<TKey> bTree;
+    BTreeNode<TKey> pre;
+    BTreeNode<TKey> next;
+    boolean dirty;
 
 
-    protected BTreeNode() {
+    protected BTreeNode(BTree<TKey> bTree, int blockNo) {
         this.keyCount = 0;
-        this.parentNode = null;
-        this.leftSibling = null;
-        this.rightSibling = null;
+        this.parentNode = -1;
+        this.leftSibling = -1;
+        this.rightSibling = -1;
+        this.bTree = bTree;
+        this.blockNo = blockNo;
+        this.dirty = false;
+        this.size = (BLOCK_SIZE - 5 * SIZE_INT) / (SIZE_INT + bTree.getAttribute().getLength()) - 1;
+        this.keys = (TKey[]) new Comparable[this.size];
+    }
+
+    public BTreeNode(BTree<TKey> bTree, int blockNo, int keyCount, int parentNode, int leftSibling, int rightSibling) {
+        this.keyCount = keyCount;
+        this.parentNode = parentNode;
+        this.leftSibling = leftSibling;
+        this.rightSibling = rightSibling;
+        this.blockNo = blockNo;
+        this.bTree = bTree;
+        this.dirty = false;
+        this.size = (BLOCK_SIZE - 5 * SIZE_INT) / (SIZE_INT + bTree.getAttribute().getLength()) - 1;
+        this.keys = (TKey[]) new Comparable[this.size];
+    }
+
+    protected BTreeNode<TKey> getNode(int blockNo) {
+        return bTree.getNode(blockNo);
+    }
+
+    protected BTreeInnerNode<TKey> createInnerNode() {
+        return bTree.createInnerNode();
+    }
+
+    protected BTreeLeafNode<TKey> createLeafNode() {
+        return bTree.createLeafNode();
     }
 
     public int getKeyCount() {
@@ -30,19 +71,25 @@ abstract class BTreeNode<TKey extends Comparable<TKey>> {
     }
 
     public void setKey(int index, TKey key) {
+        dirty = true;
         this.keys[index] = key;
     }
 
-    public BTreeNode<TKey> getParent() {
+    public int getParent() {
         return this.parentNode;
     }
 
-    public void setParent(BTreeNode<TKey> parent) {
+    public void setParent(int parent) {
+        dirty = true;
         this.parentNode = parent;
     }
 
-    public abstract TreeNodeType getNodeType();
 
+    public void setKeyCount(int keyCount) {
+        this.keyCount = keyCount;
+    }
+
+    public abstract TreeNodeType getNodeType();
 
     /**
      * Search a key on current node, if found the key then return its position,
@@ -50,6 +97,21 @@ abstract class BTreeNode<TKey extends Comparable<TKey>> {
      * return the child node btree which should contain the key for a internal node.
      */
     public abstract int search(TKey key);
+
+    public void writeToBlock(Block block) {
+        block.writeInt(parentNode);
+        block.writeInt(rightSibling);
+        block.writeInt(leftSibling);
+        int keyCount = this.keyCount;
+        block.writeInt(keyCount);
+        Attribute attribute = bTree.getAttribute();
+        for (int i = 0; i < keyCount; i++) {
+            TKey key = getKey(i);
+            attribute.writeValue(block, key);
+        }
+    }
+
+
 
 
 
@@ -62,34 +124,34 @@ abstract class BTreeNode<TKey extends Comparable<TKey>> {
     /**
      * 从下向上处理溢出，是一个递归的过程
      */
-    public BTreeNode<TKey> dealOverflow() {
+    public int dealOverflow() {
         //取中间节点
         int midIndex = this.getKeyCount() / 2;
         TKey upKey = this.getKey(midIndex);
         //分裂出右节点
-        BTreeNode<TKey> newRNode = this.split();
+        BTreeNode<TKey> newRNode = getNode(this.split());
 
         //如果是根节点分裂，则生成新的根节点
-        if (this.getParent() == null) {
-            this.setParent(new BTreeInnerNode<TKey>());
+        if (this.getParent() == -1) {
+            this.setParent(createInnerNode().blockNo);
         }
         newRNode.setParent(this.getParent());
         //串接双向链表
         // maintain links of sibling nodes
-        newRNode.setLeftSibling(this);
+        newRNode.setLeftSibling(this.blockNo);
         newRNode.setRightSibling(this.rightSibling);
-        if (this.getRightSibling() != null)
-            this.getRightSibling().setLeftSibling(newRNode);
-        this.setRightSibling(newRNode);
+        if (rightSibling != -1)
+            getNode(this.rightSibling).setLeftSibling(newRNode.blockNo);
+        this.setRightSibling(newRNode.blockNo);
 
         // push up a key to parent internal node
         //返回生成的根节点
-        return this.getParent().pushUpKey(upKey, this, newRNode);
+        return getNode(this.getParent()).pushUpKey(upKey, this.blockNo, newRNode.blockNo);
     }
 
-    protected abstract BTreeNode<TKey> split();
+    protected abstract int split();
 
-    protected abstract BTreeNode<TKey> pushUpKey(TKey key, BTreeNode<TKey> leftChild, BTreeNode<TKey> rightNode);
+    protected abstract int pushUpKey(TKey key, int leftChildNo, int rightNodeNo);
 
 
 
@@ -108,56 +170,54 @@ abstract class BTreeNode<TKey extends Comparable<TKey>> {
     }
 
     //是兄弟的前提是同一个父亲
-    public BTreeNode<TKey> getLeftSibling() {
-        if (this.leftSibling != null && this.leftSibling.getParent() == this.getParent())
+    public int getLeftSibling() {
+        if (this.leftSibling != -1 /*&& getNode(this.leftSibling).getParent() == this.getParent()*/)
             return this.leftSibling;
-        return null;
+        return -1;
     }
 
-    public void setLeftSibling(BTreeNode<TKey> sibling) {
+    public void setLeftSibling(int sibling) {
         this.leftSibling = sibling;
     }
 
-    public BTreeNode<TKey> getRightSibling() {
-        if (this.rightSibling != null && this.rightSibling.getParent() == this.getParent())
+    public int getRightSibling() {
+        if (this.rightSibling != -1 /*&& getNode(this.rightSibling).getParent() == this.getParent()*/)
             return this.rightSibling;
-        return null;
+        return -1;
     }
 
-    public void setRightSibling(BTreeNode<TKey> silbling) {
+    public void setRightSibling(int silbling) {
         this.rightSibling = silbling;
     }
 
-    public BTreeNode<TKey> dealUnderflow() {
-        if (this.getParent() == null)
-            return null;
+    public int dealUnderflow() {
+        if (this.getParent() == -1)
+            return -1;
 
         // try to borrow a key from sibling
-        BTreeNode<TKey> leftSibling = this.getLeftSibling();
-        if (leftSibling != null && leftSibling.canLendAKey()) {
-            this.getParent().processChildrenTransfer(this, leftSibling, leftSibling.getKeyCount() - 1);
-            return null;
+        if (leftSibling != -1 && getNode(leftSibling).getParent() == this.getParent() && getNode(leftSibling).canLendAKey()) {
+            getNode(this.getParent()).processChildrenTransfer(this.blockNo, leftSibling, getNode(leftSibling).getKeyCount() - 1);
+            return -1;
         }
 
-        BTreeNode<TKey> rightSibling = this.getRightSibling();
-        if (rightSibling != null && rightSibling.canLendAKey()) {
-            this.getParent().processChildrenTransfer(this, rightSibling, 0);
-            return null;
+        if (rightSibling != -1 && getNode(rightSibling).getParent() == this.getParent() && getNode(rightSibling).canLendAKey()) {
+            getNode(this.getParent()).processChildrenTransfer(this.blockNo, rightSibling, 0);
+            return -1;
         }
 
         // Can not borrow a key from any sibling, then do fusion with sibling
-        if (leftSibling != null) {
-            return this.getParent().processChildrenFusion(leftSibling, this);
+        if (leftSibling != -1) {
+            return getNode(this.getParent()).processChildrenFusion(leftSibling, this.blockNo);
         } else {
-            return this.getParent().processChildrenFusion(this, rightSibling);
+            return getNode(this.getParent()).processChildrenFusion(this.blockNo, rightSibling);
         }
     }
 
-    protected abstract void processChildrenTransfer(BTreeNode<TKey> borrower, BTreeNode<TKey> lender, int borrowIndex);
+    protected abstract void processChildrenTransfer(int borrowerNo, int lenderNo, int borrowIndex);
 
-    protected abstract BTreeNode<TKey> processChildrenFusion(BTreeNode<TKey> leftChild, BTreeNode<TKey> rightChild);
+    protected abstract int processChildrenFusion(int leftChildNo, int rightChildNo);
 
-    protected abstract void fusionWithSibling(TKey sinkKey, BTreeNode<TKey> rightSibling);
+    protected abstract void fusionWithSibling(TKey sinkKey, int rightSiblingNo);
 
-    protected abstract TKey transferFromSibling(TKey sinkKey, BTreeNode<TKey> sibling, int borrowIndex);
+    protected abstract TKey transferFromSibling(TKey sinkKey, int siblingNo, int borrowIndex);
 }

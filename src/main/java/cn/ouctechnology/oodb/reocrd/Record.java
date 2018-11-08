@@ -3,6 +3,7 @@ package cn.ouctechnology.oodb.reocrd;
 import cn.ouctechnology.oodb.buffer.Block;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.Index;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.util.JudgeUtil;
 import cn.ouctechnology.oodb.util.WhereClauseUtil;
@@ -64,6 +65,13 @@ public class Record {
         tuple.write(block, tableName);
         //添加元组数量
         Catalog.addTupleNum(tableName);
+        //维护索引
+        List<Index> indexes = Catalog.getIndexes(tableName);
+        int dataOffset = block.getDataOffset() - Catalog.getTupleLength(tableName);
+        int offset = block.getBlockKey().blockOffset * BLOCK_SIZE + dataOffset;
+        for (Index index : indexes) {
+            index.getbTree().insert((Comparable) tuple.get(index.getColumnName()), offset);
+        }
         return SINGLE_AFFECTED;
     }
 

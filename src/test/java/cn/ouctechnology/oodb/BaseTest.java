@@ -22,7 +22,8 @@ public class BaseTest {
 
     @After
     public void close() throws IOException {
-        Buffer.close();
         Catalog.storeCatalog();
+        Buffer.close();
+
     }
 }

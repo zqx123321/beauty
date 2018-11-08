@@ -1,12 +1,14 @@
 package cn.ouctechnology.oodb.logical;
 
 import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.Index;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.dbenum.Type;
 import cn.ouctechnology.oodb.exception.ParseException;
 import cn.ouctechnology.oodb.operator.*;
 import cn.ouctechnology.oodb.operator.aggregator.Aggregator;
 import cn.ouctechnology.oodb.parser.OQLParser;
+import cn.ouctechnology.oodb.reocrd.Field;
 import cn.ouctechnology.oodb.util.OgnlUtil;
 import cn.ouctechnology.oodb.util.WhereClauseUtil;
 import cn.ouctechnology.oodb.util.where.InnerNode;
@@ -281,15 +283,77 @@ public class LogicalPlan {
             Iterator<Map.Entry<String, String>> iterator = tableNode.getTables().entrySet().iterator();
             Map.Entry<String, String> table = iterator.next();
             physicalPlan = new SeqScan(table.getValue(), table.getKey());
-            if (filterNode.getWhereTree() != null) {
-                physicalPlan = new Filter(physicalPlan, filterNode.getWhereTree());
+            WhereNode whereTree = filterNode.getWhereTree();
+            if (whereTree != null) {
+                Map<WhereNode, List<String>> whereNodeListMap = new HashMap<>();
+                optimalTree(whereTree, whereNodeListMap);
+                Iterator<Map.Entry<WhereNode, List<String>>> whereNodeListIterator = whereNodeListMap.entrySet().iterator();
+                //检查是否可以进行索引优化
+                while (whereNodeListIterator.hasNext()) {
+                    Map.Entry<WhereNode, List<String>> next = whereNodeListIterator.next();
+                    DbIterator indexScan = getIndexScan(next, table.getValue(), table.getKey());
+                    if (indexScan != null) {
+                        physicalPlan = indexScan;
+                        whereNodeListIterator.remove();
+                        break;
+                    }
+                }
+                //如果使用了索引优化，重新组织where条件
+                if (physicalPlan instanceof IndexScan) {
+                    WhereNode newWhereTree = reArrangeWhereTree(whereNodeListMap);
+                    if (newWhereTree != null) physicalPlan = new Filter(physicalPlan, newWhereTree);
+                } else {
+                    physicalPlan = new Filter(physicalPlan, whereTree);
+                }
             }
             return highLevelPhysicalPlan(physicalPlan);
-
         }
         //处理多表查询
         physicalPlan = joinToPhysicalPlan();
         return highLevelPhysicalPlan(physicalPlan);
+    }
+
+    private DbIterator getIndexScan(Map.Entry<WhereNode, List<String>> next, String tableName, String tableAlias) {
+        List<String> valueList = next.getValue();
+        if (valueList.size() != 1) return null;
+        WhereNode key = next.getKey();
+        InnerNode node = (InnerNode) key;
+        if (!(node.getLeft() instanceof LeafNode && node.getRight() instanceof LeafNode)) return null;
+        LeafNode left = (LeafNode) node.getLeft();
+        LeafNode right = (LeafNode) node.getRight();
+        Field field = null;
+        Object value = null;
+        if (left.getValue() instanceof Field) field = (Field) left.getValue();
+        else value = left.getValue();
+        if (right.getValue() instanceof Field) {
+            if (field != null) return null;
+            field = (Field) right.getValue();
+        } else {
+            if (value != null) return null;
+            value = right.getValue();
+        }
+        if (field == null || value == null) return null;
+        String columnName = OgnlUtil.getLeftField(field.getName());
+        Index index = Catalog.getIndexByColumnName(tableName, columnName);
+        if (index == null) return null;
+        Op operator = node.getOperator();
+        return new IndexScan(tableName, tableAlias, columnName, operator, (Comparable) value);
+    }
+
+    private WhereNode reArrangeWhereTree(Map<WhereNode, List<String>> whereNodeListMap) {
+        WhereNode newWhereTree = null;
+        Iterator<Map.Entry<WhereNode, List<String>>> whereNodeListIterator = whereNodeListMap.entrySet().iterator();
+        if (whereNodeListIterator.hasNext()) {
+            newWhereTree = whereNodeListIterator.next().getKey();
+            while (whereNodeListIterator.hasNext()) {
+                WhereNode next = whereNodeListIterator.next().getKey();
+                InnerNode innerNode = new InnerNode(Op.AND);
+                innerNode.setLeft(newWhereTree);
+                innerNode.setRight(next);
+                newWhereTree = innerNode;
+            }
+        }
+        return newWhereTree;
     }
 
     private DbIterator highLevelPhysicalPlan(DbIterator physicalPlan) {
@@ -354,10 +418,16 @@ public class LogicalPlan {
                 List<String> aliasList = whereNodeListEntry.getValue();
                 if (aliasList.size() == 1) {
                     String alias = aliasList.get(0);
+                    String name = tableNode.getTables().get(alias);
                     int index = findInList(alias, groupList);
-                    DbIterator dbIterator = iteratorMap.get(index);
-                    dbIterator = new Filter(dbIterator, whereNodeListEntry.getKey());
-                    iteratorMap.put(index, dbIterator);
+                    DbIterator indexScan = getIndexScan(whereNodeListEntry, name, alias);
+                    if (indexScan != null) {
+                        iteratorMap.put(index, indexScan);
+                    } else {
+                        DbIterator dbIterator = iteratorMap.get(index);
+                        dbIterator = new Filter(dbIterator, whereNodeListEntry.getKey());
+                        iteratorMap.put(index, dbIterator);
+                    }
                     whereNodeListIterator.remove();
                 }
             }
@@ -374,9 +444,19 @@ public class LogicalPlan {
                 if (indexSet.size() == 1) {
                     Integer next = indexIterator.next();
                     DbIterator dbIterator = iteratorMap.get(next);
-                    dbIterator  = new Filter(dbIterator, whereNode);
+                    dbIterator = new Filter(dbIterator, whereNode);
                     iteratorMap.put(next, dbIterator);
                 } else {
+                    DbIterator indexJoin = getIndexJoin(indexSet, iteratorMap, whereNode);
+                    if (indexJoin != null) {
+                        removeJoin(indexIterator, iteratorMap, groupList, indexJoin);
+                        continue;
+                    }
+                    DbIterator hashJoin = getHashJoin(indexSet, iteratorMap, whereNode, groupList);
+                    if (hashJoin != null) {
+                        removeJoin(indexIterator, iteratorMap, groupList, hashJoin);
+                        continue;
+                    }
                     //涉及多个组，做Join操作
                     Integer first = indexIterator.next();
                     DbIterator dbIterator = iteratorMap.get(first);
@@ -411,6 +491,82 @@ public class LogicalPlan {
         }
         return resIterator;
 
+    }
+
+    private void removeJoin(Iterator<Integer> indexIterator, Map<Integer, DbIterator> iteratorMap, List<List<String>> groupList, DbIterator iterator) {
+        Integer first = indexIterator.next();
+        Integer second = indexIterator.next();
+        List<String> firstList = groupList.get(first);
+        List<String> nextList = groupList.get(second);
+        groupList.remove(second.intValue());
+        firstList.addAll(nextList);
+        iteratorMap.remove(second);
+        iteratorMap.put(first, iterator);
+    }
+
+    private DbIterator getIndexJoin(Set<Integer> indexSet, Map<Integer, DbIterator> iteratorMap, WhereNode whereNode) {
+        if (indexSet.size() != 2) return null;
+        InnerNode node = (InnerNode) whereNode;
+        if (!(node.getLeft() instanceof LeafNode && node.getRight() instanceof LeafNode)) return null;
+        LeafNode left = (LeafNode) node.getLeft();
+        LeafNode right = (LeafNode) node.getRight();
+        if (!(left.getValue() instanceof Field && right.getValue() instanceof Field)) return null;
+        Op operator = node.getOperator();
+        String field1 = ((Field) left.getValue()).getName();
+        String field2 = ((Field) right.getValue()).getName();
+        String alias1 = OgnlUtil.getField(field1, 0);
+        String column1 = OgnlUtil.getLeftField(field1);
+        String alias2 = OgnlUtil.getField(field2, 0);
+        String column2 = OgnlUtil.getLeftField(field2);
+        String table1 = tableNode.getTables().get(alias1);
+        String table2 = tableNode.getTables().get(alias2);
+        Iterator<Integer> indexIterator = indexSet.iterator();
+        //涉及多个组，做Join操作
+        Integer first = indexIterator.next();
+        Integer second = indexIterator.next();
+        DbIterator firstDbIterator = iteratorMap.get(first);
+        DbIterator secondDbIterator = iteratorMap.get(second);
+        Index index;
+        index = Catalog.getIndexByColumnName(table1, column1);
+        if (index != null) {
+            return new IndexJoin(secondDbIterator, table1, alias1, field2, column1, operator);
+        }
+        index = Catalog.getIndexByColumnName(table2, column2);
+        if (index != null) {
+            return new IndexJoin(firstDbIterator, table2, alias2, field1, column2, operator);
+        }
+        return null;
+    }
+
+    private DbIterator getHashJoin(Set<Integer> indexSet, Map<Integer, DbIterator> iteratorMap, WhereNode whereNode, List<List<String>> groupList) {
+        if (indexSet.size() != 2) return null;
+        InnerNode node = (InnerNode) whereNode;
+        Op operator = node.getOperator();
+        if (operator != Op.Equality) return null;
+        if (!(node.getLeft() instanceof LeafNode && node.getRight() instanceof LeafNode)) return null;
+        LeafNode left = (LeafNode) node.getLeft();
+        LeafNode right = (LeafNode) node.getRight();
+        if (!(left.getValue() instanceof Field && right.getValue() instanceof Field)) return null;
+        String field1 = ((Field) left.getValue()).getName();
+        String field2 = ((Field) right.getValue()).getName();
+        String alias1 = OgnlUtil.getField(field1, 0);
+        String alias2 = OgnlUtil.getField(field2, 0);
+        Iterator<Integer> indexIterator = indexSet.iterator();
+        //涉及多个组，做Join操作
+        Integer first = indexIterator.next();
+        Integer second = indexIterator.next();
+        String firstField;
+        String secondField;
+        if (groupList.get(first).contains(alias1)) {
+            firstField = field1;
+            secondField = field2;
+        } else {
+            firstField = field2;
+            secondField = field1;
+        }
+        DbIterator firstDbIterator = iteratorMap.get(first);
+        DbIterator secondDbIterator = iteratorMap.get(second);
+        return new HashJoin(firstDbIterator, secondDbIterator, firstField, secondField);
     }
 
     private int findInList(String alias, List<List<String>> groupList) {

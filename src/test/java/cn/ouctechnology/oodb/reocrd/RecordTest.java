@@ -2,6 +2,7 @@ package cn.ouctechnology.oodb.reocrd;
 
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.Index;
 import cn.ouctechnology.oodb.catalog.Table;
 import cn.ouctechnology.oodb.catalog.attribute.CharAttribute;
 import cn.ouctechnology.oodb.catalog.attribute.IntAttribute;
@@ -40,7 +41,7 @@ public class RecordTest {
                 "person",
                 Arrays.asList("id"),
                 Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20)),
-                0
+                new ArrayList<Index>(), 0
         );
 
         Catalog.createTable(table);

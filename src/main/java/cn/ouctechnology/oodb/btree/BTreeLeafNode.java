@@ -1,20 +1,32 @@
 package cn.ouctechnology.oodb.btree;
 
-class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKey> {
-    protected final static int LEAFORDER = 4;
-    private Object[] values;
+import cn.ouctechnology.oodb.buffer.Block;
+import cn.ouctechnology.oodb.util.SearchUtil;
 
-    public BTreeLeafNode() {
-        this.keys = new Object[LEAFORDER + 1];
-        this.values = new Object[LEAFORDER + 1];
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class BTreeLeafNode<TKey extends Comparable<TKey>> extends BTreeNode<TKey> {
+    private int[] values;
+
+    public BTreeLeafNode(BTree<TKey> bTree, int blockNo) {
+        super(bTree, blockNo);
+        this.values = new int[size];
+    }
+
+    public BTreeLeafNode(BTree<TKey> bTree, int blockNo, int keyCount, int parentNode, int leftSibling, int rightSibling) {
+        super(bTree, blockNo, keyCount, parentNode, leftSibling, rightSibling);
+        this.values = new int[size];
     }
 
     @SuppressWarnings("unchecked")
-    public TValue getValue(int index) {
-        return (TValue) this.values[index];
+    public int getValue(int index) {
+        return this.values[index];
     }
 
-    public void setValue(int index, TValue value) {
+    public void setValue(int index, int value) {
+        dirty = true;
         this.values[index] = value;
     }
 
@@ -25,29 +37,72 @@ class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKe
 
     @Override
     public int search(TKey key) {
-        for (int i = 0; i < this.getKeyCount(); ++i) {
-            int cmp = this.getKey(i).compareTo(key);
-            if (cmp == 0) {
-                return i;
-            } else if (cmp > 0) {
-                return -1;
-            }
-        }
+        int index = Arrays.binarySearch(keys, 0, getKeyCount(), key, Comparable::compareTo);
+        if (index < 0) return -1;
+        return index;
+    }
 
-        return -1;
+    public int searchGreater(TKey key) {
+        int up = SearchUtil.upperBound(keys, getKeyCount(), key);
+        if (up == getKeyCount()) return -1;
+        up = getKey(up).compareTo(key) == 0 ? up + 1 : up;
+        if (up == getKeyCount()) return -1;
+        return up;
+    }
+
+    public int searchLesser(TKey key) {
+        int low = SearchUtil.lowerBound(keys, getKeyCount(), key);
+        if (low < 0) return -1;
+        low = getKey(low).compareTo(key) == 0 ? low - 1 : low;
+        if (low < 0) return -1;
+        return low;
+    }
+
+
+    public List<Integer> searchList(TKey key) {
+        return searchRange(key, key);
+    }
+
+    public List<Integer> searchRange(TKey maxKey, TKey minKey) {
+        int low = SearchUtil.lowerBound(keys, getKeyCount(), minKey);
+        int up = SearchUtil.upperBound(keys, getKeyCount(), maxKey);
+        if (low >= getKeyCount() || up < 0) return null;
+        if (up >= getKeyCount()) up = getKeyCount() - 1;
+        if (low < 0) low = 0;
+        up = getKey(up).compareTo(maxKey) == 0 ? up : up - 1;
+        low = getKey(low).compareTo(minKey) == 0 ? low : low + 1;
+        if (low > up) return null;
+        List<Integer> resList = new ArrayList<>();
+        for (int i = low; i <= up; i++) {
+            resList.add(i);
+        }
+        return resList;
+    }
+
+    @Override
+    public void writeToBlock(Block block) {
+        block.setDataOffset(0);
+        block.writeInt(1);
+        super.writeToBlock(block);
+        int keyCount = getKeyCount();
+        for (int i = 0; i < keyCount; i++) {
+            block.writeInt(getValue(i));
+        }
     }
 
 
     /* The codes below are used to support insertion operation */
 
-    public void insertKey(TKey key, TValue value) {
+    public void insertKey(TKey key, int value) {
+        dirty = true;
         int index = 0;
         while (index < this.getKeyCount() && this.getKey(index).compareTo(key) < 0)
             ++index;
         this.insertAt(index, key, value);
     }
 
-    private void insertAt(int index, TKey key, TValue value) {
+    private void insertAt(int index, TKey key, int value) {
+        dirty = true;
         // move space for the new key
         for (int i = this.getKeyCount() - 1; i >= index; --i) {
             this.setKey(i + 1, this.getKey(i));
@@ -66,24 +121,25 @@ class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKe
      * 从当前节点分裂出一个叶子节点
      */
     @Override
-    protected BTreeNode<TKey> split() {
+    protected int split() {
+        dirty = true;
         int midIndex = this.getKeyCount() / 2;
 
-        BTreeLeafNode<TKey, TValue> newRNode = new BTreeLeafNode<TKey, TValue>();
+        BTreeLeafNode<TKey> newRNode = createLeafNode();
         for (int i = midIndex; i < this.getKeyCount(); ++i) {
             newRNode.setKey(i - midIndex, this.getKey(i));
             newRNode.setValue(i - midIndex, this.getValue(i));
             this.setKey(i, null);
-            this.setValue(i, null);
+            this.setValue(i, -1);
         }
         newRNode.keyCount = this.getKeyCount() - midIndex;
         this.keyCount = midIndex;
 
-        return newRNode;
+        return newRNode.blockNo;
     }
 
     @Override
-    protected BTreeNode<TKey> pushUpKey(TKey key, BTreeNode<TKey> leftChild, BTreeNode<TKey> rightNode) {
+    protected int pushUpKey(TKey key, int leftChildNo, int rightNodeNo) {
         throw new UnsupportedOperationException();
     }
 
@@ -93,6 +149,7 @@ class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKe
     /* The codes below are used to support deletion operation */
 
     public boolean delete(TKey key) {
+        dirty = true;
         int index = this.search(key);
         if (index == -1)
             return false;
@@ -102,23 +159,24 @@ class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKe
     }
 
     private void deleteAt(int index) {
+        dirty = true;
         int i = index;
         for (i = index; i < this.getKeyCount() - 1; ++i) {
             this.setKey(i, this.getKey(i + 1));
             this.setValue(i, this.getValue(i + 1));
         }
         this.setKey(i, null);
-        this.setValue(i, null);
+        this.setValue(i, -1);
         --this.keyCount;
     }
 
     @Override
-    protected void processChildrenTransfer(BTreeNode<TKey> borrower, BTreeNode<TKey> lender, int borrowIndex) {
+    protected void processChildrenTransfer(int borrowerNo, int lenderNo, int borrowIndex) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected BTreeNode<TKey> processChildrenFusion(BTreeNode<TKey> leftChild, BTreeNode<TKey> rightChild) {
+    protected int processChildrenFusion(int leftChildNo, int rightChildNo) {
         throw new UnsupportedOperationException();
     }
 
@@ -127,8 +185,10 @@ class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKe
      */
     @Override
     @SuppressWarnings("unchecked")
-    protected void fusionWithSibling(TKey sinkKey, BTreeNode<TKey> rightSibling) {
-        BTreeLeafNode<TKey, TValue> siblingLeaf = (BTreeLeafNode<TKey, TValue>) rightSibling;
+    protected void fusionWithSibling(TKey sinkKey, int rightSiblingNo) {
+        dirty = true;
+        BTreeNode<TKey> rightSibling = getNode(rightSiblingNo);
+        BTreeLeafNode<TKey> siblingLeaf = (BTreeLeafNode<TKey>) rightSibling;
 
         int j = this.getKeyCount();
         for (int i = 0; i < siblingLeaf.getKeyCount(); ++i) {
@@ -138,14 +198,16 @@ class BTreeLeafNode<TKey extends Comparable<TKey>, TValue> extends BTreeNode<TKe
         this.keyCount += siblingLeaf.getKeyCount();
 
         this.setRightSibling(siblingLeaf.rightSibling);
-        if (siblingLeaf.rightSibling != null)
-            siblingLeaf.rightSibling.setLeftSibling(this);
+        if (siblingLeaf.rightSibling != -1)
+            getNode(siblingLeaf.rightSibling).setLeftSibling(this.blockNo);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected TKey transferFromSibling(TKey sinkKey, BTreeNode<TKey> sibling, int borrowIndex) {
-        BTreeLeafNode<TKey, TValue> siblingNode = (BTreeLeafNode<TKey, TValue>) sibling;
+    protected TKey transferFromSibling(TKey sinkKey, int siblingNo, int borrowIndex) {
+        dirty = true;
+        BTreeNode<TKey> sibling = getNode(siblingNo);
+        BTreeLeafNode<TKey> siblingNode = (BTreeLeafNode<TKey>) sibling;
 
         this.insertKey(siblingNode.getKey(borrowIndex), siblingNode.getValue(borrowIndex));
         siblingNode.deleteAt(borrowIndex);

@@ -17,17 +17,20 @@ public class Table {
     String tableName;//表名
     List<String> primaryKeys;//主键
     List<Attribute> attributes;//属性组
+    List<Index> indexes;
     int tupleNum;//表中元组的数量
     int tupleLength;//一个元组的大小
 
     public Table() {
         primaryKeys = new ArrayList<>();
         attributes = new ArrayList<>();
+        indexes = new ArrayList<>();
     }
 
-    public Table(String tableName, List<String> primaryKeys, List<Attribute> attributes, int tupleNum) {
+    public Table(String tableName, List<String> primaryKeys, List<Attribute> attributes, List<Index> indexes, int tupleNum) {
         this.tableName = tableName;
         this.primaryKeys = primaryKeys;
+        this.indexes = indexes;
         this.attributes = attributes;
         this.tupleNum = tupleNum;
         for (Attribute attribute : attributes) {
@@ -82,4 +85,9 @@ public class Table {
     public void setTupleLength(int tupleLength) {
         this.tupleLength = tupleLength;
     }
+
+    public List<Index> getIndexes() {
+        return indexes;
+    }
+
 }

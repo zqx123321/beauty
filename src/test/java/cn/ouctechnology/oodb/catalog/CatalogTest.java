@@ -1,9 +1,13 @@
 package cn.ouctechnology.oodb.catalog;
 
-import cn.ouctechnology.oodb.catalog.attribute.*;
+import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+import cn.ouctechnology.oodb.catalog.attribute.CharAttribute;
+import cn.ouctechnology.oodb.catalog.attribute.IntAttribute;
+import cn.ouctechnology.oodb.catalog.attribute.ObjectAttribute;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -39,7 +43,7 @@ public class CatalogTest {
                 "teacher",
                 Arrays.asList("id"),
                 Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20), objectAttribute),
-                0
+                new ArrayList<Index>(), 0
         );
 
         Catalog.createTable(table);
@@ -54,7 +58,7 @@ public class CatalogTest {
                 "person",
                 Arrays.asList("id"),
                 Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20)),
-                0
+                new ArrayList<Index>(), 0
         );
 
         Catalog.createTable(table);

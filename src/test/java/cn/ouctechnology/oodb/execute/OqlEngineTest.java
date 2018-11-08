@@ -37,23 +37,23 @@ public class OqlEngineTest extends BaseTest {
             }
             System.out.print("OODB>");
         }
-        Buffer.close();
         Catalog.storeCatalog();
+        Buffer.close();
     }
 
 
     @Test
     public void testInsertPush() {
-        for (int i = 10000; i < 100000; i++) {
+        for (int i = 0; i < 100000; i++) {
             String oql = "insert into person values(" + i + ",'hhh" + i + "')";
-            OqlEngine.execute(oql);
+            System.out.println(OqlEngine.execute(oql));
         }
     }
 
     @Test
     public void testSelect() {
         long l = System.currentTimeMillis();
-        String oql = "select a from person a join test b on(a.id=b.id) where a.id=22222 or a.name='hhh5555'";
+        String oql = "select a,b from person a join teacher b on(a.id=b.id) where a.id=6666";
         System.out.println(OqlEngine.execute(oql));
         long l1 = System.currentTimeMillis();
         System.out.println(l1 - l);

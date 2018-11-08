@@ -1,45 +1,29 @@
 package cn.ouctechnology.oodb.btree;
 
+import cn.ouctechnology.oodb.BaseTest;
+import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import org.junit.Test;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @program: oodb
  * @author: ZQX
- * @create: 2018-11-05 16:48
+ * @create: 2018-11-06 14:21
  * @description: TODO
  **/
-public class BTreeTest {
-
-    class BTreeKey implements Comparable<BTreeKey> {
-        private Map<String, Comparable> values = new LinkedHashMap<>();
-
-
-        @Override
-        public int compareTo(BTreeKey o) {
-            for (Map.Entry<String, Comparable> stringObjectEntry : values.entrySet()) {
-                String key = stringObjectEntry.getKey();
-                Comparable value = stringObjectEntry.getValue();
-                Comparable otherValue = o.values.get(key);
-                int res = value.compareTo(otherValue);
-                if (res != 0) return res;
-            }
-            return 0;
-        }
-
-        @Override
-        public String toString() {
-            return "BTreeKey{" +
-                    "values=" + values +
-                    '}';
-        }
-    }
+public class BTreeTest extends BaseTest {
 
     @Test
     public void insert() {
-        BTree<BTreeKey, Integer> bTree = new BTree<>();
-        bTree.insert(new BTreeKey(), 1);
+        Attribute attribute = Catalog.getAttribute("person", "id");
+        BTree<Integer> bTree = new BTree<>("person.id.index", attribute, 747, 549);
+//        for (int i = 2; i < 1000; i++) {
+//            bTree.insert(i, i + 10000);
+//        }
+        System.out.println(bTree.searchGreater(444));
+        System.out.println(bTree.getRoot());
+        System.out.println(bTree.getLastBlockNo());
+        bTree.close();
+
     }
 }

@@ -36,4 +36,8 @@ public class Constants {
     public static final int TUPLE_AVAILABLE = -1;
     //返回受影响
     public static final String ROWS_AFFECTED = " ROWS AFFECTED";
+    //索引文件后缀
+    public static final String INDEX_SUFFIX = ".index";
+    //索引二级缓存中最大的索引块数量
+    public static final int MAX_NUM_OF_NODE = 50;
 }

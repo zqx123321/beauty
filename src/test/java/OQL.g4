@@ -9,6 +9,8 @@ oqlStat
     | deleteStat   #deleteStatement
     | dropStat     #dropStatement
     | showStat     #showStatement
+    | createIndexStat  #createIndexStatement
+    | dropIndexStat    #dropIndexStatement
     ;
 
 selectStat
@@ -296,6 +298,14 @@ showStat
     : SHOW DATABASES
     ;
 
+createIndexStat
+    : CREATE INDEX WORD ON WORD LBRACKET pathExpr RBRACKET
+    ;
+
+dropIndexStat
+    : DROP INDEX WORD ON WORD
+    ;
+
 
 fragment A:('A'|'a');
 fragment B:('B'|'b');
@@ -389,6 +399,7 @@ ON:O N;
 SHOW:S H O W;
 DATABASES: D A T A B A S E S;
 FINAL:F I N A L;
+INDEX:I N D E X;
 
 MUL:                                '*';
 DIV:                                '/';

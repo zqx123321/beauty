@@ -1,5 +1,10 @@
 package cn.ouctechnology.oodb.buffer;
 
+import cn.ouctechnology.oodb.btree.BTree;
+import cn.ouctechnology.oodb.btree.BTreeInnerNode;
+import cn.ouctechnology.oodb.btree.BTreeLeafNode;
+import cn.ouctechnology.oodb.btree.BTreeNode;
+import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.util.ByteUtil;
 
 import static cn.ouctechnology.oodb.constant.Constants.*;
@@ -130,5 +135,36 @@ public class Block {
 
     public BlockKey getBlockKey() {
         return blockKey;
+    }
+
+    public <TKey extends Comparable<TKey>> BTreeNode<TKey> readBTreeNode(BTree<TKey> bTree) {
+        setDataOffset(0);
+        int isLeaf = readInt();
+        int parent = readInt();
+        int right = readInt();
+        int left = readInt();
+        int keyCount = readInt();
+        Attribute attribute = bTree.getAttribute();
+        if (isLeaf == 1) {
+            BTreeLeafNode<TKey> bTreeLeafNode = new BTreeLeafNode<>(bTree, blockKey.blockOffset, keyCount, parent, left, right);
+            for (int i = 0; i < keyCount; i++) {
+                Object key = attribute.read(this);
+                bTreeLeafNode.setKey(i, (TKey) key);
+            }
+            for (int i = 0; i < keyCount; i++) {
+                bTreeLeafNode.setValue(i, readInt());
+            }
+            return bTreeLeafNode;
+        }
+        BTreeInnerNode<TKey> bTreeInnerNode = new BTreeInnerNode<>(bTree, blockKey.blockOffset, keyCount, parent, left, right);
+        for (int i = 0; i < keyCount; i++) {
+            Object key = attribute.read(this);
+            bTreeInnerNode.setKey(i, (TKey) key);
+        }
+        for (int i = 0; i <= keyCount; i++) {
+            int child = readInt();
+            bTreeInnerNode.setChild(i, child);
+        }
+        return bTreeInnerNode;
     }
 }

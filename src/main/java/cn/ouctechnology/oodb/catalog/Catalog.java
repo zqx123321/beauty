@@ -1,5 +1,6 @@
 package cn.ouctechnology.oodb.catalog;
 
+import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.dbenum.Type;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -60,17 +61,28 @@ public class Catalog {
             dis = new DataInputStream(new FileInputStream(file));
             while (dis.available() > 0) {
                 List<String> primaryKeys = new ArrayList<>();
+                List<Index> indices = new ArrayList<>();
                 String tableName = dis.readUTF();
                 int primaryKeyNum = dis.readInt();
                 for (int i = 0; i < primaryKeyNum; i++) {
                     primaryKeys.add(dis.readUTF());
                 }
                 List<Attribute> attributes = readAttributes(dis);
+                int indexNum = dis.readInt();
+                for (int i = 0; i < indexNum; i++) {
+                    String indexName = dis.readUTF();
+                    String columnName = dis.readUTF();
+                    int rootNo = dis.readInt();
+                    int lastNo = dis.readInt();
+                    for (Attribute attribute : attributes) {
+                        if (attribute.getName().equals(columnName)) {
+                            indices.add(new Index(tableName, indexName, columnName, rootNo, lastNo, attribute));
+                        }
+                    }
+                }
                 int tupleNum = dis.readInt();
-                tables.put(tableName, new Table(tableName, primaryKeys, attributes, tupleNum));
+                tables.put(tableName, new Table(tableName, primaryKeys, attributes, indices, tupleNum));
             }
-        } catch (IOException e) {
-            throw e;
         } finally {
             //关闭的时候只需要关闭包装流即可
             IOUtils.closeQuietly(dis);
@@ -120,10 +132,17 @@ public class Catalog {
                 }
                 //写入属性
                 writeAttributes(v.attributes, dos);
+                dos.writeInt(v.indexes.size());
+                for (Index index : v.indexes) {
+                    //同步脏数据
+                    index.bTree.close();
+                    dos.writeUTF(index.indexName);
+                    dos.writeUTF(index.columnName);
+                    dos.writeInt(index.bTree.getRoot());
+                    dos.writeInt(index.bTree.getLastBlockNo());
+                }
                 dos.writeInt(v.tupleNum);
             }
-        } catch (IOException e) {
-            throw e;
         } finally {
             //只需要关闭包装流
             IOUtils.closeQuietly(dos);
@@ -165,6 +184,7 @@ public class Catalog {
             sb.append("Table name: ").append(v.tableName).append('\n');
             sb.append("Length of tuple: ").append(v.tupleLength).append('\n');
             sb.append("Primary key: ").append(v.primaryKeys).append('\n');
+            sb.append("index: ").append(v.indexes).append('\n');
             sb.append("Number of tuples: ").append(v.tupleNum).append('\n');
             sb.append("Attributes: ").append(v.attributes.size()).append('\n');
             //格式化打印属性组，使用Jackson
@@ -282,6 +302,51 @@ public class Catalog {
         table.tupleNum++;
     }
 
+    public static Index getIndexByIndexName(String tableName, String indexName) {
+        Table table = getTable(tableName);
+        for (Index index : table.indexes) {
+            if (index.indexName.equals(indexName)) return index;
+        }
+        return null;
+    }
+
+    public static Index getIndexByColumnName(String tableName, String columnName) {
+        Table table = getTable(tableName);
+        for (Index index : table.indexes) {
+            if (index.columnName.equals(columnName)) return index;
+        }
+        return null;
+    }
+
+    public static void addIndex(String tableName, String indexName, String columnName) {
+        if (getIndexByIndexName(tableName, indexName) != null)
+            throw new IllegalArgumentException("the index is already existed");
+        Table table = getTable(tableName);
+        Attribute attribute = getAttribute(tableName, columnName);
+        table.indexes.add(new Index(tableName, indexName, columnName, 0, 0, attribute));
+    }
+
+    public static void dropIndex(String tableName, String indexName) {
+        Table table = getTable(tableName);
+        Iterator<Index> iterator = table.indexes.iterator();
+        while (iterator.hasNext()) {
+            Index index = iterator.next();
+            if (index.indexName.equals(indexName)) {
+                index.bTree.close();
+                //强制刷新buffer
+                Buffer.writeToDisk(tableName + "." + indexName);
+                iterator.remove();
+            }
+        }
+        File file = new File(DB_PATH + tableName + "." + indexName + RECORD_SUFFIX);
+        if (file.exists())
+            file.delete();
+    }
+
+    public static List<Index> getIndexes(String tableName) {
+        Table table = getTable(tableName);
+        return table.indexes;
+    }
 }
 
 

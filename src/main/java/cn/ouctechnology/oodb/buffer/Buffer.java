@@ -63,8 +63,13 @@ public class Buffer {
     public static void writeToDisk(String tableName) {
         Block iterator = head.next;
         while (iterator != tail) {
-            if (iterator.blockKey.filename.equals(tableName) && iterator.dirty) writeToDisk(iterator);
-            iterator = iterator.next;
+            if (iterator.blockKey.filename.equals(tableName)) {
+                Block next = iterator.next;
+                deleteBlock(iterator.blockKey);
+                iterator = next;
+            } else {
+                iterator = iterator.next;
+            }
         }
     }
 

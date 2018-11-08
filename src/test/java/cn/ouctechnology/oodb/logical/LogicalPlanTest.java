@@ -17,7 +17,7 @@ public class LogicalPlanTest extends BaseTest {
 
     @Test
     public void getLogicalPlan() {
-        String oql = "select a,c.sex from teacher a join test c on a.id=c.id group by c.sex order by a.age  desc limit 1,3";
+        String oql = "select a,b from person a join teacher b on(a.id<b.id)";
         OQLParser.SelectStatementContext selectStatementContext = (OQLParser.SelectStatementContext) OQLParserTest.getParseTree(oql);
         OQLParser.SelectStatContext selectStatContext = selectStatementContext.selectStat();
         LogicalPlan logicalPlan = LogicalPlan.getLogicalPlan(selectStatContext);
