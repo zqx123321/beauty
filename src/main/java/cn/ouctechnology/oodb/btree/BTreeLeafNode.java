@@ -42,42 +42,7 @@ public class BTreeLeafNode<TKey extends Comparable<TKey>> extends BTreeNode<TKey
         return index;
     }
 
-    public int searchGreater(TKey key) {
-        int up = SearchUtil.upperBound(keys, getKeyCount(), key);
-        if (up == getKeyCount()) return -1;
-        up = getKey(up).compareTo(key) == 0 ? up + 1 : up;
-        if (up == getKeyCount()) return -1;
-        return up;
-    }
 
-    public int searchLesser(TKey key) {
-        int low = SearchUtil.lowerBound(keys, getKeyCount(), key);
-        if (low < 0) return -1;
-        low = getKey(low).compareTo(key) == 0 ? low - 1 : low;
-        if (low < 0) return -1;
-        return low;
-    }
-
-
-    public List<Integer> searchList(TKey key) {
-        return searchRange(key, key);
-    }
-
-    public List<Integer> searchRange(TKey maxKey, TKey minKey) {
-        int low = SearchUtil.lowerBound(keys, getKeyCount(), minKey);
-        int up = SearchUtil.upperBound(keys, getKeyCount(), maxKey);
-        if (low >= getKeyCount() || up < 0) return null;
-        if (up >= getKeyCount()) up = getKeyCount() - 1;
-        if (low < 0) low = 0;
-        up = getKey(up).compareTo(maxKey) == 0 ? up : up - 1;
-        low = getKey(low).compareTo(minKey) == 0 ? low : low + 1;
-        if (low > up) return null;
-        List<Integer> resList = new ArrayList<>();
-        for (int i = low; i <= up; i++) {
-            resList.add(i);
-        }
-        return resList;
-    }
 
     @Override
     public void writeToBlock(Block block) {
@@ -158,7 +123,7 @@ public class BTreeLeafNode<TKey extends Comparable<TKey>> extends BTreeNode<TKey
         return true;
     }
 
-    private void deleteAt(int index) {
+    public void deleteAt(int index) {
         dirty = true;
         int i = index;
         for (i = index; i < this.getKeyCount() - 1; ++i) {

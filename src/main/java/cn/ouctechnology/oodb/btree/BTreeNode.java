@@ -206,7 +206,7 @@ public abstract class BTreeNode<TKey extends Comparable<TKey>> {
         }
 
         // Can not borrow a key from any sibling, then do fusion with sibling
-        if (leftSibling != -1) {
+        if (leftSibling != -1 && getNode(leftSibling).getParent() == this.getParent()) {
             return getNode(this.getParent()).processChildrenFusion(leftSibling, this.blockNo);
         } else {
             return getNode(this.getParent()).processChildrenFusion(this.blockNo, rightSibling);

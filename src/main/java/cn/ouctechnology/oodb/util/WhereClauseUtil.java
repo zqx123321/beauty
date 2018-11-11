@@ -1,5 +1,7 @@
 package cn.ouctechnology.oodb.util;
 
+import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.Index;
 import cn.ouctechnology.oodb.reocrd.Field;
 import cn.ouctechnology.oodb.util.where.InnerNode;
 import cn.ouctechnology.oodb.util.where.LeafNode;
@@ -192,5 +194,44 @@ public class WhereClauseUtil {
         }
         ConditionalExprContext exprContext = factor.getChild(ConditionalExprContext.class);
         return buildWhereTree(exprContext);
+    }
+
+
+    public static class IndexStruct {
+        public Index index;
+        public String column;
+        public Comparable value;
+        public Op op;
+
+        public IndexStruct(Index index, String column, Comparable value, Op op) {
+            this.index = index;
+            this.column = column;
+            this.value = value;
+            this.op = op;
+        }
+    }
+
+    public static IndexStruct getIndex(String tableName, WhereNode whereTree) {
+        if (!(whereTree instanceof InnerNode)) return null;
+        InnerNode node = (InnerNode) whereTree;
+        if (!(node.getLeft() instanceof LeafNode && node.getRight() instanceof LeafNode)) return null;
+        LeafNode left = (LeafNode) node.getLeft();
+        LeafNode right = (LeafNode) node.getRight();
+        Field field = null;
+        Object value = null;
+        if (left.getValue() instanceof Field) field = (Field) left.getValue();
+        else value = left.getValue();
+        if (right.getValue() instanceof Field) {
+            if (field != null) return null;
+            field = (Field) right.getValue();
+        } else {
+            if (value != null) return null;
+            value = right.getValue();
+        }
+        if (field == null || value == null) return null;
+        String columnName = OgnlUtil.getLeftField(field.getName());
+        Index index = Catalog.getIndexByColumnName(tableName, columnName);
+        if (index == null) return null;
+        return new IndexStruct(index, columnName, (Comparable) value, node.getOperator());
     }
 }

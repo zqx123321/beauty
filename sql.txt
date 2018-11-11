@@ -1,0 +1,9 @@
+create table person(id int,name char(20))
+
+#create index idx on person(id)
+
+insert into person values(1,'ddd')
+
+insert into person values(2,'aa')
+
+select a from person a

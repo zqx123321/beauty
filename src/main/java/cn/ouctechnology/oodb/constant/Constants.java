@@ -1,5 +1,11 @@
 package cn.ouctechnology.oodb.constant;
 
+import cn.ouctechnology.oodb.buffer.Block;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @program: oodb
  * @author: ZQX
@@ -27,17 +33,21 @@ public class Constants {
     //FLOAT类型所占字节数
     public static final int SIZE_FLOAT = 4;
     //空闲链表结尾标志
-    public static final int FREE_LIST_EOF = 0;
+    public static final int FREE_LIST_EOF = -1;
     //数据文件后缀
     public static final String RECORD_SUFFIX = ".ood";
     //单条数据操作受影响
     public static final int SINGLE_AFFECTED = 1;
     //元组有效标志位
-    public static final int TUPLE_AVAILABLE = -1;
+    public static final int TUPLE_AVAILABLE = -2;
     //返回受影响
     public static final String ROWS_AFFECTED = " ROWS AFFECTED";
     //索引文件后缀
     public static final String INDEX_SUFFIX = ".index";
     //索引二级缓存中最大的索引块数量
     public static final int MAX_NUM_OF_NODE = 50;
+    //用于读
+    public static final int READ = 0;
+    //用于写
+    public static final int WRITE = 1;
 }

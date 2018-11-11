@@ -3,6 +3,7 @@ package cn.ouctechnology.oodb.catalog;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.dbenum.Type;
+import cn.ouctechnology.oodb.transcation.TransactionMap;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static cn.ouctechnology.oodb.constant.Constants.*;
 
@@ -22,7 +24,7 @@ import static cn.ouctechnology.oodb.constant.Constants.*;
  **/
 public class Catalog {
     private static Logger logger = LoggerFactory.getLogger(Catalog.class);
-    private static Map<String, Table> tables = new HashMap<>();
+    private static Map<String, Table> tables = new ConcurrentHashMap<>();
 
 
     /**
@@ -52,6 +54,7 @@ public class Catalog {
      * @throws IOException 抛出IOException，告知上层应用停止运行
      */
     private static void initialTableCatalog() throws IOException {
+        tables = new HashMap<>();
         File file = new File(DB_PATH + TABLE_FILE_NAME + CATALOG_SUFFIX);
         DataInputStream dis = null;
         try {
@@ -111,7 +114,7 @@ public class Catalog {
      *
      * @throws IOException 抛出IOException，告知上层应用停止运行
      */
-    private static void storeTableCatalog() throws IOException {
+    private synchronized static void storeTableCatalog() throws IOException {
         File file = new File(DB_PATH + TABLE_FILE_NAME + CATALOG_SUFFIX);
         DataOutputStream dos = null;
         try {
@@ -173,7 +176,7 @@ public class Catalog {
     /**
      * 显示表信息
      */
-    private static String showTableCatalog() {
+    private synchronized static String showTableCatalog() {
         StringBuilder sb = new StringBuilder();
         sb.append("There are ").append(tables.size()).append(" tables in the database: ").append('\n');
         Set<Map.Entry<String, Table>> entries = tables.entrySet();
@@ -216,8 +219,23 @@ public class Catalog {
      * 根据表名获取表
      */
     public static Table getTable(String tableName) {
+        if (TransactionMap.getTableMap().containsKey(Thread.currentThread())) {
+            return getTableTransaction(tableName);
+        }
         Table table = tables.get(tableName);
         if (table == null) throw new IllegalArgumentException("file:" + tableName + " not found");
+        return table;
+    }
+
+    private static Table getTableTransaction(String tableName) {
+        List<Table> tableList = TransactionMap.getTableMap().get(Thread.currentThread());
+        for (Table table : tableList) {
+            if (table.getTableName().equals(tableName)) return table;
+        }
+        Table table = tables.get(tableName);
+        if (table == null) throw new IllegalArgumentException("file:" + tableName + " not found");
+        table = (Table) table.clone();
+        tableList.add(table);
         return table;
     }
 
@@ -297,7 +315,7 @@ public class Catalog {
     /**
      * 添加元组数量
      */
-    public static void addTupleNum(String tableName) {
+    public synchronized static void addTupleNum(String tableName) {
         Table table = getTable(tableName);
         table.tupleNum++;
     }
@@ -318,7 +336,7 @@ public class Catalog {
         return null;
     }
 
-    public static void addIndex(String tableName, String indexName, String columnName) {
+    public synchronized static void addIndex(String tableName, String indexName, String columnName) {
         if (getIndexByIndexName(tableName, indexName) != null)
             throw new IllegalArgumentException("the index is already existed");
         Table table = getTable(tableName);
@@ -326,7 +344,7 @@ public class Catalog {
         table.indexes.add(new Index(tableName, indexName, columnName, 0, 0, attribute));
     }
 
-    public static void dropIndex(String tableName, String indexName) {
+    public synchronized static void dropIndex(String tableName, String indexName) {
         Table table = getTable(tableName);
         Iterator<Index> iterator = table.indexes.iterator();
         while (iterator.hasNext()) {
@@ -346,6 +364,16 @@ public class Catalog {
     public static List<Index> getIndexes(String tableName) {
         Table table = getTable(tableName);
         return table.indexes;
+    }
+
+    public synchronized static void dropIndex(String tableName) {
+        Table table = getTable(tableName);
+        for (Index index : table.indexes) {
+            File file = new File(DB_PATH + tableName + "." + index.indexName + RECORD_SUFFIX);
+            if (file.exists())
+                file.delete();
+        }
+        table.indexes = new ArrayList<>();
     }
 }
 

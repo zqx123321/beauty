@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static cn.ouctechnology.oodb.constant.Constants.BLOCK_SIZE;
+import static cn.ouctechnology.oodb.constant.Constants.READ;
 
 /**
  * @program: oodb
@@ -42,38 +43,7 @@ public class IndexScan implements DbIterator {
     @Override
     public void open() {
         Index index = Catalog.getIndexByColumnName(tableName, columnName);
-        switch (op) {
-            case Equality:
-                List list1 = index.getbTree().searchList(value);
-                if (list1 != null && list1.size() > 0) offsetList.addAll(list1);
-                break;
-            case GreaterThan:
-                List list = index.getbTree().searchGreater(value);
-                if (list != null && list.size() > 0)
-                    offsetList.addAll(list);
-                break;
-            case GreaterThanOrEqual:
-                list1 = index.getbTree().searchList(value);
-                if (list1 != null && list1.size() > 0) offsetList.addAll(list1);
-                list = index.getbTree().searchGreater(value);
-                if (list != null && list.size() > 0)
-                    offsetList.addAll(list);
-                break;
-            case LessThan:
-                list = index.getbTree().searchLesser(value);
-                if (list != null && list.size() > 0)
-                    offsetList.addAll(list);
-                break;
-            case LessThanOrEqual:
-                list1 = index.getbTree().searchList(value);
-                if (list1 != null && list1.size() > 0) offsetList.addAll(list1);
-                list = index.getbTree().searchLesser(value);
-                if (list != null && list.size() > 0)
-                    offsetList.addAll(list);
-                break;
-            default:
-                throw new DbException("unsupported operator");
-        }
+        List<Integer> offsetList = index.getbTree().search(value, op);
         iterator = offsetList.iterator();
     }
 
@@ -91,7 +61,7 @@ public class IndexScan implements DbIterator {
             if (next == -1) continue;
             int blockNo = next / BLOCK_SIZE;
             int dataOffset = next % BLOCK_SIZE;
-            Block block = Buffer.getBlock(tableName, blockNo);
+            Block block = Buffer.getBlock(tableName, blockNo, READ);
             block.setDataOffset(dataOffset);
             return Record.readTuple(block, tableName, tableAlias);
         }

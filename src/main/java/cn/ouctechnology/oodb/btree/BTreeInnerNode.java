@@ -139,7 +139,7 @@ public class BTreeInnerNode<TKey extends Comparable<TKey>> extends BTreeNode<TKe
     @Override
     protected void processChildrenTransfer(int borrowerNo, int lenderNo, int borrowIndex) {
         dirty = true;
-        BTreeNode<TKey> borrower = getNode(blockNo);
+        BTreeNode<TKey> borrower = getNode(borrowerNo);
         int borrowerChildIndex = 0;
         while (borrowerChildIndex < this.getKeyCount() + 1 && this.getChild(borrowerChildIndex) != borrowerNo)
             ++borrowerChildIndex;

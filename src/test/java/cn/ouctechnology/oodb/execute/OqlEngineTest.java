@@ -3,8 +3,10 @@ package cn.ouctechnology.oodb.execute;
 import cn.ouctechnology.oodb.BaseTest;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -57,5 +59,21 @@ public class OqlEngineTest extends BaseTest {
         System.out.println(OqlEngine.execute(oql));
         long l1 = System.currentTimeMillis();
         System.out.println(l1 - l);
+    }
+
+    @Test
+    public void oqlFromFile() throws IOException {
+        File file = new File("sql.txt");
+        Scanner sc = new Scanner(file);
+        while (sc.hasNext()) {
+            String line = sc.nextLine();
+            if (StringUtils.isBlank(line)) continue;
+            if (line.charAt(0) == '#') continue;
+            try {
+                System.out.println(OqlEngine.execute(line));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

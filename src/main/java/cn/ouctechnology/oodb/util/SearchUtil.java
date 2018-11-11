@@ -7,40 +7,63 @@ package cn.ouctechnology.oodb.util;
  * @description: TODO
  **/
 public class SearchUtil {
-    public static <T extends Comparable<T>> int lowerBound(T[] arr, int length, T key) {
-        int half;
-        int mid;
-        int first = 0;
-        while (length > 0) {
-            half = length >> 1;
-            mid = first + half;
-            //in the right part
-            if (arr[mid].compareTo(key) < 0) {
-                first = mid + 1;
-                //因为first=mid+1,所以这里的len需要在减去half的基础之上再减去1
-                length = length - half - 1;
+
+
+    public static <T extends Comparable<T>> int lowerBound(T[] array, int length, T value) {
+        if (array[length - 1].compareTo(value) < 0) return length - 1;
+        int low = 0;
+        int high = length;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            int res = value.compareTo(array[mid]);
+            if (res <= 0) {
+                high = mid;
             } else {
-                //in the left part
-                length = half;
+                low = mid + 1;
             }
         }
-        return first;
+        if (low > 0)
+            return low;
+        int res = array[low].compareTo(value);
+        if (res <= 0) return 0;
+        return -1;
     }
 
-    public static <T extends Comparable<T>> int upperBound(T[] arr, int length, T key) {
-        int mid;
-        int first = 0;
-        int half;
-        while (length > 0) {
-            half = length >> 1;
-            mid = half + first;
-            if (arr[mid].compareTo(key) > 0) {//in the left part
-                length = half;
-            } else {//if arr[mid]<= key ,in the right part
-                first = mid + 1;
-                length = length - half - 1;
+    public static <T extends Comparable<T>> int upperBound(T[] array, int length, T value) {
+        if (array[0].compareTo(value) > 0) return 0;
+        int low = 0;
+        int high = length;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            int res = value.compareTo(array[mid]);
+            if (res >= 0) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
         }
-        return first;
+        if (low < length)
+            return low;
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        Integer[] a = new Integer[]{1, 3, 3, 4, 4, 6, 6, 7};
+        //第一个小于某个数，应用于>=
+//        System.out.println(lowerBound(a, 8, 1));
+//        System.out.println(lowerBound(a, 8, 3));
+        System.out.println(lowerBound(a, 8, 4));
+//        System.out.println(lowerBound(a, 8, 5));
+//        System.out.println(lowerBound(a, 8, 6));
+//        System.out.println(lowerBound(a, 8, 0));
+//        System.out.println(lowerBound(a, 8, 8));
+        //第一个大于,应用于<=
+   //     System.out.println(upperBound(a, 8, 5));
+//        System.out.println(upperBound(a, 8, 3));
+//        System.out.println(upperBound(a, 8, 4));
+//        System.out.println(upperBound(a, 8, 5));
+//        System.out.println(upperBound(a, 8, 6));
+//        System.out.println(upperBound(a, 8, 0));
+//        System.out.println(upperBound(a, 8, 8));
     }
 }

@@ -1,12 +1,15 @@
 package cn.ouctechnology.oodb.reocrd;
 
+import cn.ouctechnology.oodb.btree.BTree;
 import cn.ouctechnology.oodb.buffer.Block;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.catalog.Index;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.util.JudgeUtil;
 import cn.ouctechnology.oodb.util.WhereClauseUtil;
+import cn.ouctechnology.oodb.util.where.Op;
 import cn.ouctechnology.oodb.util.where.WhereNode;
 
 import java.io.File;
@@ -35,7 +38,7 @@ public class Record {
             file.delete();
             //throw new IllegalArgumentException("The table:" + tableName + " is already exited in the database!");
         }
-        Block block = Buffer.getBlock(tableName, 0);
+        Block block = Buffer.getBlock(tableName, 0, WRITE);
         block.setDataOffset(0);
         //文件前四个字节写入空闲链表结束标志
         block.writeInt(FREE_LIST_EOF);
@@ -84,6 +87,10 @@ public class Record {
      * @param whereTree 选择条件
      */
     public static int update(String tableName, String tableAlias, Tuple tuple, WhereNode whereTree) {
+        //先检查是否能够使用索引更新
+        WhereClauseUtil.IndexStruct index = WhereClauseUtil.getIndex(tableName, whereTree);
+        if (index != null) return updateByIndex(tableName, tuple, index);
+
         List<String> whereFieldList = new ArrayList<>();
         if (whereTree != null) {
             WhereClauseUtil.getWhereFieldList(whereTree, whereFieldList);
@@ -95,7 +102,7 @@ public class Record {
         int tupleScan = 0;
         int tupleLength = Catalog.getTupleLength(tableName);
         while (tupleScan < tupleNum) {
-            Block block = Record.getBlock(tableName, tupleOffset);
+            Block block = Record.getBlock(tableName, tupleOffset, READ);
             int isAvailable = block.readInt();
             int dataOffset = block.getDataOffset();
             if (isAvailable == TUPLE_AVAILABLE) {
@@ -104,6 +111,8 @@ public class Record {
                 block.setDataOffset(dataOffset);
                 //判断where
                 if (JudgeUtil.whereJudge(whereTuple, whereTree)) {
+                    block = Record.getBlock(tableName, tupleOffset, WRITE);
+                    block.setDataOffset(dataOffset);
                     tuple.write(block, tableName);
                     res++;
                 }
@@ -114,6 +123,37 @@ public class Record {
             block.setDataOffset(dataOffset + tupleLength);
         }
         return res;
+    }
+
+
+    public static int updateByIndex(String tableName, Tuple tuple, WhereClauseUtil.IndexStruct indexStruct) {
+        BTree bTree = indexStruct.index.getbTree();
+        List<Integer> offsetList = bTree.search(indexStruct.value, indexStruct.op);
+        Comparable value = (Comparable) tuple.get(indexStruct.column);
+        if (value != null) {
+            List search = bTree.search(value, Op.Equality);
+            if (search != null && search.size() > 0) throw new DbException("the key is duplicate");
+        }
+        for (Integer offset : offsetList) {
+            int blockNo = offset / BLOCK_SIZE;
+            int dataOffset = offset % BLOCK_SIZE;
+            Block block = Buffer.getBlock(tableName, blockNo, WRITE);
+            block.setDataOffset(dataOffset);
+            tuple.write(block, tableName);
+        }
+        //更新索引
+        if (value != null) {
+            bTree.delete(indexStruct.value, indexStruct.op);
+            for (Integer offset : offsetList) {
+                List search = bTree.search(value, Op.Equality);
+                if (search == null || search.size() <= 0) {
+                    bTree.insert(value, offset);
+                } else {
+                    throw new DbException("the key is duplicate");
+                }
+            }
+        }
+        return offsetList.size();
     }
 
     /**
@@ -139,7 +179,7 @@ public class Record {
             throw new RuntimeException(e);
         }
         //重新写入初始标志
-        Block block = Buffer.getBlock(tableName, 0);
+        Block block = Buffer.getBlock(tableName, 0, WRITE);
         block.setDataOffset(0);
         //文件前四个字节写入空闲链表结束标志
         block.writeInt(FREE_LIST_EOF);
@@ -150,6 +190,9 @@ public class Record {
      * 有条件式删除
      */
     public static int delete(String tableName, String tableAlias, WhereNode whereTree) {
+        WhereClauseUtil.IndexStruct index = WhereClauseUtil.getIndex(tableName, whereTree);
+        if (index != null) return deleteByIndex(tableName, index);
+
         List<String> whereFieldList = new ArrayList<>();
         WhereClauseUtil.getWhereFieldList(whereTree, whereFieldList);
         whereFieldList = whereFieldList.stream().map(s -> s.substring(s.indexOf(".") + 1)).distinct().collect(Collectors.toList());
@@ -160,7 +203,7 @@ public class Record {
         int tupleScan = 0;
         int tupleLength = Catalog.getTupleLength(tableName);
         while (tupleScan < tupleNum) {
-            Block block = Record.getBlock(tableName, tupleOffset);
+            Block block = Record.getBlock(tableName, tupleOffset, READ);
             int isAvailable = block.readInt();
             int dataOffset = block.getDataOffset();
             if (isAvailable == TUPLE_AVAILABLE) {
@@ -170,15 +213,16 @@ public class Record {
                 //判断where
                 if (JudgeUtil.whereJudge(whereTuple, whereTree)) {
                     //读取第一行，空闲链表的起始位置
-                    Block firstBlock = Buffer.getBlock(tableName, 0);
+                    Block firstBlock = Buffer.getBlock(tableName, 0, WRITE);
                     firstBlock.setDataOffset(0);
                     int firstTupleOffset = firstBlock.readInt();
-                    int writePointer = firstTupleOffset > 0 ? firstTupleOffset : FREE_LIST_EOF;
 
                     firstBlock.setDataOffset(0);
                     firstBlock.writeInt(tupleOffset);
+                    //升级写锁
+                    block = Record.getBlock(tableName, tupleOffset, WRITE);
                     block.setDataOffset(dataOffset - SIZE_INT);
-                    block.writeInt(writePointer);
+                    block.writeInt(firstTupleOffset);
 
                     res++;
                 }
@@ -191,6 +235,39 @@ public class Record {
         //设置数量减少
         Catalog.getTable(tableName).setTupleNum(tupleNum - res);
         return res;
+    }
+
+    private static int deleteByIndex(String tableName, WhereClauseUtil.IndexStruct indexStruct) {
+        BTree bTree = indexStruct.index.getbTree();
+        List<Integer> offsetList = bTree.search(indexStruct.value, indexStruct.op);
+        for (Integer offset : offsetList) {
+            offset -= SIZE_INT;
+            int blockNo = offset / BLOCK_SIZE;
+            int dataOffset = offset % BLOCK_SIZE;
+            Block block = Buffer.getBlock(tableName, blockNo, WRITE);
+            block.setDataOffset(dataOffset);
+            //读取第一行，空闲链表的起始位置
+            Block firstBlock = Buffer.getBlock(tableName, 0, WRITE);
+            firstBlock.setDataOffset(0);
+            int firstTupleOffset = firstBlock.readInt();
+            int writePointer = firstTupleOffset > 0 ? firstTupleOffset : FREE_LIST_EOF;
+
+            int tupleLength = Catalog.getTupleLength(tableName);
+            //每个block最多容纳多少个tuple
+            int tupleInABlock = BLOCK_SIZE / (tupleLength + SIZE_INT);
+            int tupleOffset = dataOffset / (tupleLength + SIZE_INT) + (blockNo * tupleInABlock);
+
+            firstBlock.setDataOffset(0);
+            firstBlock.writeInt(tupleOffset - 1);
+            block.setDataOffset(dataOffset);
+            block.writeInt(writePointer);
+        }
+        //删除索引
+        bTree.delete(indexStruct.value, indexStruct.op);
+        //设置数量减少
+        int tupleNum = Catalog.getTupleNum(tableName);
+        Catalog.getTable(tableName).setTupleNum(tupleNum - offsetList.size());
+        return offsetList.size();
     }
 
 
@@ -215,7 +292,7 @@ public class Record {
      * @param block
      * @param tableName
      */
-    private static Tuple readTuple(Block block, String tableName, String tableAlias, List<String> fieldList) {
+    public static Tuple readTuple(Block block, String tableName, String tableAlias, List<String> fieldList) {
         Tuple tuple = new Tuple();
         int dataOffset = block.getDataOffset();
         for (String field : fieldList) {
@@ -223,7 +300,7 @@ public class Record {
             //重新归位
             block.setDataOffset(dataOffset + attributeOffset);
             Attribute attribute = Catalog.getAttribute(tableName, field);
-            tuple.add(tableAlias + "." + attribute.getName(), attribute.read(block));
+            tuple.add(tableAlias + "." + field, attribute.read(block));
         }
         return tuple;
     }
@@ -235,12 +312,12 @@ public class Record {
      */
     private static Block getWriteBlock(String tableName) {
         //读取第一行，空闲链表的起始位置
-        Block block = Buffer.getBlock(tableName, 0);
+        Block block = Buffer.getBlock(tableName, 0, WRITE);
         block.setDataOffset(0);
         int tupleOffset = block.readInt();
         //有空闲链表
-        if (tupleOffset > 0) {
-            Block nextFreeBlock = getBlock(tableName, tupleOffset);
+        if (tupleOffset != FREE_LIST_EOF) {
+            Block nextFreeBlock = getBlock(tableName, tupleOffset, WRITE);
             //保存旧的offset
             int oldOffset = nextFreeBlock.getDataOffset();
             //读取下一块空闲链表
@@ -253,7 +330,7 @@ public class Record {
             return nextFreeBlock;
         }
         int tupleNum = Catalog.getTupleNum(tableName);
-        return getBlock(tableName, tupleNum);
+        return getBlock(tableName, tupleNum, WRITE);
     }
 
     /**
@@ -262,7 +339,7 @@ public class Record {
      * @param tableName
      * @param tupleOffset
      */
-    public static Block getBlock(String tableName, int tupleOffset) {
+    public static Block getBlock(String tableName, int tupleOffset, int mode) {
         int tupleLength = Catalog.getTupleLength(tableName);
         //每个block最多容纳多少个tuple
         int tupleInABlock = BLOCK_SIZE / (tupleLength + SIZE_INT);
@@ -270,7 +347,7 @@ public class Record {
         int blockOffset = (tupleOffset + 1) / tupleInABlock;
         //最后一个元组在最后一个区块的块内偏移量
         int dataOffset = (SIZE_INT + tupleLength) * ((tupleOffset + 1) % tupleInABlock);
-        Block resBlock = Buffer.getBlock(tableName, blockOffset);
+        Block resBlock = Buffer.getBlock(tableName, blockOffset, mode);
         resBlock.setDataOffset(dataOffset);
         return resBlock;
     }

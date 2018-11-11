@@ -1,6 +1,7 @@
 package cn.ouctechnology.oodb.catalog;
 
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+import cn.ouctechnology.oodb.exception.DbException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @create: 2018-10-06 19:26
  * @description: 封装数据库表类, FastJson通过getter来获取属性值
  **/
-public class Table {
+public class Table implements Cloneable {
 
     String tableName;//表名
     List<String> primaryKeys;//主键
@@ -38,11 +39,11 @@ public class Table {
         }
     }
 
-    public void addAttribute(Attribute attribute) {
+    public synchronized void addAttribute(Attribute attribute) {
         attributes.add(attribute);
     }
 
-    public void addPrimaryKey(String key) {
+    public synchronized void addPrimaryKey(String key) {
         primaryKeys.add(key);
     }
 
@@ -50,7 +51,7 @@ public class Table {
         return tableName;
     }
 
-    public void setTableName(String tableName) {
+    public synchronized void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
@@ -58,7 +59,7 @@ public class Table {
         return primaryKeys;
     }
 
-    public void setPrimaryKeys(List<String> primaryKeys) {
+    public synchronized void setPrimaryKeys(List<String> primaryKeys) {
         this.primaryKeys = primaryKeys;
     }
 
@@ -66,7 +67,7 @@ public class Table {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
+    public synchronized void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
 
@@ -74,7 +75,7 @@ public class Table {
         return tupleNum;
     }
 
-    public void setTupleNum(int tupleNum) {
+    public synchronized void setTupleNum(int tupleNum) {
         this.tupleNum = tupleNum;
     }
 
@@ -82,7 +83,7 @@ public class Table {
         return tupleLength;
     }
 
-    public void setTupleLength(int tupleLength) {
+    public synchronized void setTupleLength(int tupleLength) {
         this.tupleLength = tupleLength;
     }
 
@@ -90,4 +91,13 @@ public class Table {
         return indexes;
     }
 
+    //todo 完善clone方法
+    @Override
+    protected Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new DbException(e);
+        }
+    }
 }

@@ -5,7 +5,10 @@ import cn.ouctechnology.oodb.btree.BTreeInnerNode;
 import cn.ouctechnology.oodb.btree.BTreeLeafNode;
 import cn.ouctechnology.oodb.btree.BTreeNode;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.util.ByteUtil;
+
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static cn.ouctechnology.oodb.constant.Constants.*;
 
@@ -15,7 +18,7 @@ import static cn.ouctechnology.oodb.constant.Constants.*;
  * @create: 2018-10-06 13:35
  * @description: 缓冲区块，链表结构单元
  **/
-public class Block {
+public class Block implements Cloneable {
     //缓冲区块为一个byte数组
     byte[] data = new byte[BLOCK_SIZE];
 
@@ -30,6 +33,13 @@ public class Block {
 
     //块内偏移地址
     int dataOffset = 0;
+
+    //非公平的读写锁
+    ReentrantReadWriteLock lock = new ReentrantReadWriteLock(false);
+    //最近引用这个block的线程
+    Thread thread;
+    //block包含的数据，用于事务回滚
+    byte[] oldData;
 
 
     /**
@@ -166,5 +176,37 @@ public class Block {
             bTreeInnerNode.setChild(i, child);
         }
         return bTreeInnerNode;
+    }
+
+    /**
+     * 保存镜像
+     */
+    public void setImage() {
+        if (oldData == null) oldData = new byte[BLOCK_SIZE];
+        System.arraycopy(data, 0, oldData, 0, BLOCK_SIZE);
+    }
+
+    /**
+     * 恢复镜像
+     */
+    public void rollBackImage() {
+        System.arraycopy(oldData, 0, data, 0, BLOCK_SIZE);
+    }
+
+    public ReentrantReadWriteLock getLock() {
+        return lock;
+    }
+
+    public boolean isLocked() {
+        return lock != null && (lock.isWriteLocked() || lock.getReadHoldCount() > 0);
+    }
+
+    @Override
+    protected Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new DbException(e);
+        }
     }
 }

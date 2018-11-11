@@ -1,11 +1,15 @@
 package cn.ouctechnology.oodb.execute;
 
 import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.Index;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.catalog.attribute.CharAttribute;
 import cn.ouctechnology.oodb.catalog.attribute.FloatAttribute;
 import cn.ouctechnology.oodb.catalog.attribute.IntAttribute;
+import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.exception.ExplainException;
+import cn.ouctechnology.oodb.operator.DbIterator;
+import cn.ouctechnology.oodb.operator.RebuildIndex;
 import cn.ouctechnology.oodb.parser.OQLParser;
 import lombok.Builder;
 
@@ -45,6 +49,18 @@ public class CreateIndexExplain {
 
     public String doCreate() {
         Catalog.addIndex(tableName, indexName, columnName);
+        //维护索引
+        Index index = Catalog.getIndexByIndexName(tableName, indexName);
+        if (Catalog.getTupleNum(tableName) > 0) {
+            DbIterator dbIterator = new RebuildIndex(tableName, tableName, index);
+            try {
+                dbIterator.open();
+                //出现重复值
+            } catch (DbException e) {
+                Catalog.dropIndex(tableName, indexName);
+                throw e;
+            }
+        }
         return SINGLE_AFFECTED + ROWS_AFFECTED;
     }
 }

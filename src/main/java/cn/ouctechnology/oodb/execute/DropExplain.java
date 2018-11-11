@@ -1,5 +1,6 @@
 package cn.ouctechnology.oodb.execute;
 
+import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.parser.OQLParser;
 import cn.ouctechnology.oodb.reocrd.Record;
@@ -20,6 +21,9 @@ public class DropExplain {
     private String tableName;
 
     public String doDrop() {
+        //todo 原子性的保证
+        Buffer.writeToDisk(tableName);
+        Catalog.dropIndex(tableName);
         Catalog.dropTable(tableName);
         Record.drop(tableName);
         return SINGLE_AFFECTED + ROWS_AFFECTED;

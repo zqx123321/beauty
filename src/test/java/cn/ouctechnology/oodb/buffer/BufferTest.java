@@ -1,5 +1,6 @@
 package cn.ouctechnology.oodb.buffer;
 
+import cn.ouctechnology.oodb.constant.Constants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class BufferTest {
     public void getBlock() throws IOException {
         File file = new File("teacher.data");
         if (!file.exists()) file.createNewFile();
-        Block block = Buffer.getBlock("teacher.data", 0);
+        Block block = Buffer.getBlock("teacher.data", 0, Constants.WRITE);
         System.out.println(block.readInt());
         System.out.println(block.readFloat());
         System.out.println(block.readString(2));
@@ -45,10 +46,10 @@ public class BufferTest {
 
     @Test
     public void testLRU() {
-        Block block1 = Buffer.getBlock("teacher.data", 0);
-        Block block2 = Buffer.getBlock("teacher.data", 1);
-        block1 = Buffer.getBlock("teacher.data", 0);
-        Block block3 = Buffer.getBlock("teacher.data", 2);
+        Block block1 = Buffer.getBlock("teacher.data", 0, Constants.WRITE);
+        Block block2 = Buffer.getBlock("teacher.data", 1, Constants.WRITE);
+        block1 = Buffer.getBlock("teacher.data", 0, Constants.WRITE);
+        Block block3 = Buffer.getBlock("teacher.data", 2, Constants.WRITE);
     }
 
 

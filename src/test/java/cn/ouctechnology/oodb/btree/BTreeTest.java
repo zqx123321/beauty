@@ -3,6 +3,7 @@ package cn.ouctechnology.oodb.btree;
 import cn.ouctechnology.oodb.BaseTest;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
+import cn.ouctechnology.oodb.util.where.Op;
 import org.junit.Test;
 
 /**
@@ -13,17 +14,20 @@ import org.junit.Test;
  **/
 public class BTreeTest extends BaseTest {
 
+
     @Test
     public void insert() {
         Attribute attribute = Catalog.getAttribute("person", "id");
-        BTree<Integer> bTree = new BTree<>("person.id.index", attribute, 747, 549);
-//        for (int i = 2; i < 1000; i++) {
-//            bTree.insert(i, i + 10000);
-//        }
-        System.out.println(bTree.searchGreater(444));
+        BTree<Integer> bTree = new BTree<>("person.id.index", attribute, 0, 0);
+        for (int i = 2; i < 20; i++) {
+            bTree.insert(i, i);
+        }
+        bTree.delete(9, Op.LessThanOrEqual);
+        bTree.print();
         System.out.println(bTree.getRoot());
         System.out.println(bTree.getLastBlockNo());
         bTree.close();
 
     }
+
 }

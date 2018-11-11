@@ -1,5 +1,7 @@
 package cn.ouctechnology.oodb.buffer;
 
+import cn.ouctechnology.oodb.constant.Constants;
+import cn.ouctechnology.oodb.transcation.TransactionMap;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static cn.ouctechnology.oodb.constant.Constants.*;
@@ -119,6 +122,11 @@ public class Buffer {
         block.pre.next = block.next;
         block.next.pre = block.pre;
         blockMap.remove(blockKey);
+        //级联删除
+        if (size >= MAX_NUM_OF_BLOCKS) {
+            Block firstBlock = getFirstBlockCanBeDeleted();
+            if (firstBlock != null) deleteBlock(firstBlock.blockKey);
+        }
     }
 
 
@@ -129,7 +137,7 @@ public class Buffer {
      * @param offset   块编号
      * @return 相应区块
      */
-    public static Block getBlock(String filename, int offset) {
+    private static Block getBlock(String filename, int offset) {
         //先查询这个区块是否已经调入内存
         BlockKey blockKey = new BlockKey(filename, offset);
         if (blockMap.containsKey(blockKey)) {
@@ -144,9 +152,75 @@ public class Buffer {
         }
         //缓冲区满了，执行LRU替换算法
         //删除最近最久未使用的区块
-        deleteBlock(head.next.blockKey);
+        Block firstBlock = getFirstBlockCanBeDeleted();
+        if (firstBlock != null)
+            deleteBlock(firstBlock.blockKey);
         //重新添加区块
         return addBlocks(blockKey);
+    }
+
+    /**
+     * 从头寻找第一个没有被加锁的block
+     */
+    private static Block getFirstBlockCanBeDeleted() {
+        Block next = head.next;
+        while (next.isLocked() && next != tail) {
+            next = next.next;
+        }
+        if (next == tail) return null;
+        return next;
+    }
+
+    /**
+     * 根据文件名和块编号查找相应的区块
+     *
+     * @param filename 文件名
+     * @param offset   块编号
+     * @param mode     读写标志
+     * @return 相应区块
+     */
+    public static Block getBlock(String filename, int offset, int mode) {
+        Thread thread = Thread.currentThread();
+        //存在与当前线程关联的事务
+        if (TransactionMap.getThreadMap().containsKey(thread)) {
+            return getBlockTransaction(filename, offset, mode);
+        }
+        return getBlock(filename, offset);
+    }
+
+    private static Block getBlockTransaction(String filename, int offset, int mode) {
+        Block block = getBlock(filename, offset);
+        Thread thread = Thread.currentThread();
+        List<Block> blocks = TransactionMap.getThreadMap().get(thread);
+        //不管什么模式，只要获取过，就给他
+        if (blocks.contains(block)) {
+            if (mode == WRITE) {
+                if (!block.lock.isWriteLockedByCurrentThread()) {
+                    block.lock.readLock().unlock();
+                    block.lock.writeLock().lock();
+                }
+                if (block.thread != thread) {
+                    block.setImage();
+                    block.thread = thread;
+                }
+            }
+            return block;
+        }
+        if (mode == Constants.READ) {
+            block.lock.readLock().lock();
+            //获取锁后，添加进与线程相关的map中
+            blocks.add(block);
+            return (Block) block.clone();
+        }
+        block.lock.writeLock().lock();
+        //如果线程变了，则保存镜像
+        if (block.thread != thread) {
+            block.setImage();
+            block.thread = thread;
+        }
+        //获取锁后，添加进与线程相关的map中
+        blocks.add(block);
+        return block;
     }
 
     /**
@@ -178,7 +252,7 @@ public class Buffer {
      *
      * @param block
      */
-    private static void writeToDisk(Block block) {
+    public static void writeToDisk(Block block) {
         if (!block.dirty) {
             return;
         }

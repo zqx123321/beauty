@@ -254,7 +254,6 @@ public class LogicalPlan {
                 checkField(field, tableAliasSet);
             }
         }
-
     }
 
     private void checkField(String field, Set<String> tableAliasSet) {
@@ -317,27 +316,9 @@ public class LogicalPlan {
         List<String> valueList = next.getValue();
         if (valueList.size() != 1) return null;
         WhereNode key = next.getKey();
-        InnerNode node = (InnerNode) key;
-        if (!(node.getLeft() instanceof LeafNode && node.getRight() instanceof LeafNode)) return null;
-        LeafNode left = (LeafNode) node.getLeft();
-        LeafNode right = (LeafNode) node.getRight();
-        Field field = null;
-        Object value = null;
-        if (left.getValue() instanceof Field) field = (Field) left.getValue();
-        else value = left.getValue();
-        if (right.getValue() instanceof Field) {
-            if (field != null) return null;
-            field = (Field) right.getValue();
-        } else {
-            if (value != null) return null;
-            value = right.getValue();
-        }
-        if (field == null || value == null) return null;
-        String columnName = OgnlUtil.getLeftField(field.getName());
-        Index index = Catalog.getIndexByColumnName(tableName, columnName);
+        WhereClauseUtil.IndexStruct index = WhereClauseUtil.getIndex(tableName, key);
         if (index == null) return null;
-        Op operator = node.getOperator();
-        return new IndexScan(tableName, tableAlias, columnName, operator, (Comparable) value);
+        return new IndexScan(tableName, tableAlias, index.column, index.op, index.value);
     }
 
     private WhereNode reArrangeWhereTree(Map<WhereNode, List<String>> whereNodeListMap) {
@@ -550,7 +531,6 @@ public class LogicalPlan {
         String field1 = ((Field) left.getValue()).getName();
         String field2 = ((Field) right.getValue()).getName();
         String alias1 = OgnlUtil.getField(field1, 0);
-        String alias2 = OgnlUtil.getField(field2, 0);
         Iterator<Integer> indexIterator = indexSet.iterator();
         //涉及多个组，做Join操作
         Integer first = indexIterator.next();

@@ -11,6 +11,10 @@ oqlStat
     | showStat     #showStatement
     | createIndexStat  #createIndexStatement
     | dropIndexStat    #dropIndexStatement
+    | syncStat             #syncStatement
+    | beginTranStat  #beginTranStatement
+    | commitStat     #commitStatement
+    | rollBackStat   #rollBackStatement
     ;
 
 selectStat
@@ -295,7 +299,7 @@ dropStat
 
 
 showStat
-    : SHOW DATABASES
+    : SHOW TABLES
     ;
 
 createIndexStat
@@ -306,6 +310,21 @@ dropIndexStat
     : DROP INDEX WORD ON WORD
     ;
 
+syncStat
+    :SYNC
+    ;
+
+beginTranStat
+    :BEGIN TRANSACTION
+    ;
+
+commitStat
+    :COMMIT
+    ;
+
+rollBackStat
+    :ROLL BACK
+    ;
 
 fragment A:('A'|'a');
 fragment B:('B'|'b');
@@ -397,9 +416,15 @@ DROP:D R O P;
 CASCADE:C A S C A D E;
 ON:O N;
 SHOW:S H O W;
-DATABASES: D A T A B A S E S;
+TABLES:T A B L E S;
 FINAL:F I N A L;
 INDEX:I N D E X;
+SYNC:S Y N C;
+BEGIN:B E G I N;
+TRANSACTION:T R A N S A C T I O N;
+COMMIT:C O M M I T;
+ROLL:R O L L;
+BACK:B A C K;
 
 MUL:                                '*';
 DIV:                                '/';

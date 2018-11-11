@@ -6,6 +6,7 @@ import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.reocrd.Record;
 import cn.ouctechnology.oodb.reocrd.Tuple;
 
+import static cn.ouctechnology.oodb.constant.Constants.READ;
 import static cn.ouctechnology.oodb.constant.Constants.TUPLE_AVAILABLE;
 
 /**
@@ -62,7 +63,7 @@ public class SeqScan implements DbIterator {
     public Tuple next() {
         if (!open) throw new DbException("the iterator has not opened");
         while (hasNext()) {
-            Block block = Record.getBlock(tableName, tupleOffset);
+            Block block = Record.getBlock(tableName, tupleOffset, READ);
             int isAvailable = block.readInt();
             int dataOffset = block.getDataOffset();
             if (isAvailable == TUPLE_AVAILABLE) {
