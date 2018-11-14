@@ -2,12 +2,16 @@ package cn.ouctechnology.oodb.socket;
 
 import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.execute.OqlEngine;
+import cn.ouctechnology.oodb.reocrd.Tuple;
+import cn.ouctechnology.oodb.util.SerializationUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: parser
@@ -71,9 +75,17 @@ public class SocketProcessor implements Runnable {
 
     private Object process(String message) {
         if (message == null) return null;
-        Object response = null;
+        if (message.contains("quit")) {
+            isQuit = true;
+            return null;
+        }
+        Object response;
         try {
             response = OqlEngine.execute(message);
+            if (response instanceof List) {
+                List<Tuple> resList = (List<Tuple>) response;
+                response = resList.stream().map(Tuple::getValues).collect(Collectors.toList());
+            }
         } catch (Exception e) {
             response = "error:" + e.getMessage();
             e.printStackTrace();
@@ -83,8 +95,9 @@ public class SocketProcessor implements Runnable {
 
     private void send(Object response) {
         if (response == null) return;
+
         writeByteBuffer.clear();
-        writeByteBuffer.put(response.toString().getBytes(StandardCharsets.UTF_8));
+        writeByteBuffer.put(SerializationUtil.serialize(response));
         writeByteBuffer.flip();
 
         while (writeByteBuffer.hasRemaining()) {

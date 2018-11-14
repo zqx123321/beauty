@@ -132,7 +132,7 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        Client client = new Client("www.ouctechnology.cn", 9999);
+        Client client = new Client("localhost", 9999);
         client.start();
     }
 }

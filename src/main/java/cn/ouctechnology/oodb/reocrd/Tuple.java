@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static cn.ouctechnology.oodb.constant.Constants.NOT_FOUND;
@@ -19,8 +20,8 @@ import static cn.ouctechnology.oodb.constant.Constants.NOT_FOUND;
  * @create: 2018-10-08 17:01
  * @description: 查询结果封装, 把查询结果当成无差别的Tuple
  **/
-public class Tuple {
-    private Logger logger = LoggerFactory.getLogger(Tuple.class);
+public class Tuple implements Serializable {
+    transient private Logger logger = LoggerFactory.getLogger(Tuple.class);
     private Map<String, Object> values = new HashMap<>();
 
     public void add(String name, Object value) {
@@ -115,5 +116,9 @@ public class Tuple {
     @Override
     public int hashCode() {
         return Objects.hash(values);
+    }
+
+    public void setValues(Map<String, Object> values) {
+        this.values = values;
     }
 }

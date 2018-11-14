@@ -46,24 +46,4 @@ public class SearchUtil {
             return low;
         return -1;
     }
-
-    public static void main(String[] args) {
-        Integer[] a = new Integer[]{1, 3, 3, 4, 4, 6, 6, 7};
-        //第一个小于某个数，应用于>=
-//        System.out.println(lowerBound(a, 8, 1));
-//        System.out.println(lowerBound(a, 8, 3));
-        System.out.println(lowerBound(a, 8, 4));
-//        System.out.println(lowerBound(a, 8, 5));
-//        System.out.println(lowerBound(a, 8, 6));
-//        System.out.println(lowerBound(a, 8, 0));
-//        System.out.println(lowerBound(a, 8, 8));
-        //第一个大于,应用于<=
-   //     System.out.println(upperBound(a, 8, 5));
-//        System.out.println(upperBound(a, 8, 3));
-//        System.out.println(upperBound(a, 8, 4));
-//        System.out.println(upperBound(a, 8, 5));
-//        System.out.println(upperBound(a, 8, 6));
-//        System.out.println(upperBound(a, 8, 0));
-//        System.out.println(upperBound(a, 8, 8));
-    }
 }
