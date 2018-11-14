@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <server>
+        <domain>localhost</domain>
+        <port>9999</port>
+    </server>
+
+</configuration>

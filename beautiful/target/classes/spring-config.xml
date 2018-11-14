@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置sessionFactory-->
+    <bean id="sessionFactory" class="cn.ouctechnology.oodb.beauty.session.SessionFactory">
+        <property name="domain" value="localhost"/>
+        <property name="port" value="9999"/>
+    </bean>
+
+    <!--配置注解扫描器-->
+    <bean id="beautyScanner" class="cn.ouctechnology.oodb.beauty.session.BeautyScanner">
+        <property name="basePackage" value="cn.ouctechnology.oodb.beauty.test"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+</beans>
