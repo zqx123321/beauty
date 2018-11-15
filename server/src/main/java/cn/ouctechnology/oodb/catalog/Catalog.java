@@ -63,13 +63,11 @@ public class Catalog {
             }
             dis = new DataInputStream(new FileInputStream(file));
             while (dis.available() > 0) {
-                List<String> primaryKeys = new ArrayList<>();
                 List<Index> indices = new ArrayList<>();
                 String tableName = dis.readUTF();
-                int primaryKeyNum = dis.readInt();
-                for (int i = 0; i < primaryKeyNum; i++) {
-                    primaryKeys.add(dis.readUTF());
-                }
+                String primaryName = dis.readUTF();
+                PrimaryKey.PrimaryKeyPolicy policy = PrimaryKey.PrimaryKeyPolicy.values()[dis.readInt()];
+                PrimaryKey primaryKey = new PrimaryKey(primaryName, policy);
                 List<Attribute> attributes = readAttributes(dis);
                 int indexNum = dis.readInt();
                 for (int i = 0; i < indexNum; i++) {
@@ -84,7 +82,7 @@ public class Catalog {
                     }
                 }
                 int tupleNum = dis.readInt();
-                tables.put(tableName, new Table(tableName, primaryKeys, attributes, indices, tupleNum));
+                tables.put(tableName, new Table(tableName, primaryKey, attributes, indices, tupleNum));
             }
         } finally {
             //关闭的时候只需要关闭包装流即可
@@ -129,10 +127,8 @@ public class Catalog {
             for (Map.Entry<String, Table> entry : entries) {
                 Table v = entry.getValue();
                 dos.writeUTF(v.tableName);
-                dos.writeInt(v.primaryKeys.size());
-                for (String s : v.primaryKeys) {
-                    dos.writeUTF(s);
-                }
+                dos.writeUTF(v.primaryKey.name);
+                dos.writeInt(v.primaryKey.policy.ordinal());
                 //写入属性
                 writeAttributes(v.attributes, dos);
                 dos.writeInt(v.indexes.size());
@@ -186,7 +182,7 @@ public class Catalog {
             sb.append("\nTable ").append(count++).append('\n');
             sb.append("Table name: ").append(v.tableName).append('\n');
             sb.append("Length of tuple: ").append(v.tupleLength).append('\n');
-            sb.append("Primary key: ").append(v.primaryKeys).append('\n');
+            sb.append("Primary key: ").append(v.primaryKey).append('\n');
             sb.append("index: ").append(v.indexes).append('\n');
             sb.append("Number of tuples: ").append(v.tupleNum).append('\n');
             sb.append("Attributes: ").append(v.attributes.size()).append('\n');
@@ -374,6 +370,11 @@ public class Catalog {
                 file.delete();
         }
         table.indexes = new ArrayList<>();
+    }
+
+    public static PrimaryKey getPrimaryKey(String tableName) {
+        Table table = getTable(tableName);
+        return table.getPrimaryKey();
     }
 }
 

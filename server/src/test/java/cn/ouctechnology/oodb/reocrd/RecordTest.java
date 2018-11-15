@@ -37,16 +37,16 @@ public class RecordTest {
 
     @Test
     public void create() {
-        Table table = new Table(
-                "person",
-                Arrays.asList("id"),
-                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20)),
-                new ArrayList<Index>(), 0
-        );
-
-        Catalog.createTable(table);
-        Record.create("person");
-        Catalog.showCatalog();
+//        Table table = new Table(
+//                "person",
+//                Arrays.asList("id"),
+//                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20)),
+//                new ArrayList<Index>(), 0
+//        );
+//
+//        Catalog.createTable(table);
+//        Record.create("person");
+//        Catalog.showCatalog();
     }
 
     @Test

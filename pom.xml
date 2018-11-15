@@ -11,7 +11,7 @@
     <modules>
         <module>client</module>
         <module>server</module>
-        <module>beautiful</module>
+        <module>beauty</module>
     </modules>
     <dependencies>
 

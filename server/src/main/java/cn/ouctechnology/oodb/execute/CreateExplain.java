@@ -1,12 +1,15 @@
 package cn.ouctechnology.oodb.execute;
 
 import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.catalog.PrimaryKey;
 import cn.ouctechnology.oodb.catalog.Table;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.catalog.attribute.AttributeFactory;
 import cn.ouctechnology.oodb.catalog.attribute.ListAttribute;
 import cn.ouctechnology.oodb.catalog.attribute.ObjectAttribute;
+import cn.ouctechnology.oodb.dbenum.Type;
 import cn.ouctechnology.oodb.exception.ExplainException;
+import cn.ouctechnology.oodb.exception.ParseException;
 import cn.ouctechnology.oodb.reocrd.Record;
 import lombok.Builder;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -75,10 +78,19 @@ public class CreateExplain {
         try {
             Catalog.createTable(table);
             Record.create(tableName);
+            //在主键上建立索引
+            PrimaryKey primaryKey = table.getPrimaryKey();
+            if (primaryKey != null) {
+                Catalog.addIndex(tableName, "idx_" + primaryKey.getName(), primaryKey.getName());
+            }
         } catch (Exception e) {
             //出错后回滚，保证一致性
             Catalog.dropTable(tableName);
             Record.drop(tableName);
+            PrimaryKey primaryKey = table.getPrimaryKey();
+            if (primaryKey != null) {
+                Catalog.dropIndex(tableName, "idx_" + primaryKey.getName());
+            }
             throw e;
         }
         return SINGLE_AFFECTED + ROWS_AFFECTED;
@@ -91,7 +103,10 @@ public class CreateExplain {
 
             for (String extendsTableName : extendsTables) {
                 Table extendsTable = Catalog.getTable(extendsTableName);
-                table.getAttributes().addAll(extendsTable.getAttributes());
+                List<Attribute> attributes = extendsTable.getAttributes();
+                for (Attribute attribute : attributes) {
+                    if (attribute.isSee()) table.getAttributes().add(attribute);
+                }
             }
         }
     }
@@ -102,10 +117,27 @@ public class CreateExplain {
             List<ColumnDefinitionItemContext> itemContexts = columnDefinition.getChildren(ColumnDefinitionItemContext.class);
             for (ColumnDefinitionItemContext itemContext : itemContexts) {
                 Attribute attribute = dealWithItemContext(itemContext);
-                if (dealWithColumnConstraint(itemContext)) {
-                    if (primary) throw new ExplainException("primary key id duplicated");
-                    table.addPrimaryKey(attribute.getName());
-                    primary = true;
+                List<ColumnConstraintContext> constraintContexts = itemContext.columnConstraint();
+                for (ColumnConstraintContext context : constraintContexts) {
+                    if (context.PRIMARY() != null) {
+                        if (primary) throw new ParseException("only supported one primary key");
+                        primary = true;
+                        String primaryName = attribute.getName();
+                        PrimaryKey.PrimaryKeyPolicy policy;
+                        if (context.AUTO_INCREMENT() != null) {
+                            policy = PrimaryKey.PrimaryKeyPolicy.AUTO_INCREASE;
+                        } else if (context.UUID() != null) {
+                            if (attribute.getType() != Type.CHAR)
+                                throw new ParseException("the uuid can only be applied to the char attribute");
+                            policy = PrimaryKey.PrimaryKeyPolicy.UUID;
+                        } else {
+                            policy = PrimaryKey.PrimaryKeyPolicy.ASSIGN;
+                        }
+                        table.setPrimaryKey(new PrimaryKey(primaryName, policy));
+                    }
+                    if (context.FINAL() != null) {
+                        attribute.setSee(false);
+                    }
                 }
                 attributeList.add(attribute);
             }
@@ -154,17 +186,6 @@ public class CreateExplain {
         return AttributeFactory.createAttribute(type, name, length);
     }
 
-    private boolean dealWithColumnConstraint(ColumnDefinitionItemContext itemContext) {
-        List<ColumnConstraintContext> constraintContexts = itemContext.getChildren(ColumnConstraintContext.class);
-        if (constraintContexts != null) {
-            for (ColumnConstraintContext context : constraintContexts) {
-                if (context.getTokens(PRIMARY) != null) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     private void dealWithTableConstraint() {
         if (constraintContext != null) {
@@ -175,10 +196,21 @@ public class CreateExplain {
                     .map(ParseTree::getText)
                     .collect(Collectors.toList());
             //检查语义错误
-            for (String key : keys) {
-                Catalog.getAttribute(table.getAttributes(), key);
+            if (keys.size() > 1) throw new ParseException("only supported one primary key");
+            String key = keys.get(0);
+            Catalog.getAttribute(table.getAttributes(), key);
+            PrimaryKey.PrimaryKeyPolicy policy;
+            if (constraintContext.AUTO_INCREMENT() != null) {
+                policy = PrimaryKey.PrimaryKeyPolicy.AUTO_INCREASE;
+            } else if (constraintContext.UUID() != null) {
+                Attribute attribute = Catalog.getAttribute(tableName, key);
+                if (attribute.getType() != Type.CHAR)
+                    throw new ParseException("the uuid can only be applied to the char attribute");
+                policy = PrimaryKey.PrimaryKeyPolicy.UUID;
+            } else {
+                policy = PrimaryKey.PrimaryKeyPolicy.ASSIGN;
             }
-            table.getPrimaryKeys().addAll(keys);
+            table.setPrimaryKey(new PrimaryKey(key, policy));
             primary = true;
         }
     }

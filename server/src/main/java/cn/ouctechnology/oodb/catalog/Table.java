@@ -15,25 +15,28 @@ import java.util.List;
  **/
 public class Table implements Cloneable {
 
+
     String tableName;//表名
-    List<String> primaryKeys;//主键
+    PrimaryKey primaryKey;//主键
     List<Attribute> attributes;//属性组
     List<Index> indexes;
     int tupleNum;//表中元组的数量
     int tupleLength;//一个元组的大小
+    int maxId;
 
     public Table() {
-        primaryKeys = new ArrayList<>();
         attributes = new ArrayList<>();
         indexes = new ArrayList<>();
+        this.maxId = 0;
     }
 
-    public Table(String tableName, List<String> primaryKeys, List<Attribute> attributes, List<Index> indexes, int tupleNum) {
+    public Table(String tableName, PrimaryKey primaryKey, List<Attribute> attributes, List<Index> indexes, int tupleNum) {
         this.tableName = tableName;
-        this.primaryKeys = primaryKeys;
+        this.primaryKey = primaryKey;
         this.indexes = indexes;
         this.attributes = attributes;
         this.tupleNum = tupleNum;
+        this.maxId = 0;
         for (Attribute attribute : attributes) {
             this.tupleLength += attribute.getLength();
         }
@@ -41,10 +44,6 @@ public class Table implements Cloneable {
 
     public synchronized void addAttribute(Attribute attribute) {
         attributes.add(attribute);
-    }
-
-    public synchronized void addPrimaryKey(String key) {
-        primaryKeys.add(key);
     }
 
     public String getTableName() {
@@ -55,12 +54,12 @@ public class Table implements Cloneable {
         this.tableName = tableName;
     }
 
-    public List<String> getPrimaryKeys() {
-        return primaryKeys;
+    public PrimaryKey getPrimaryKey() {
+        return primaryKey;
     }
 
-    public synchronized void setPrimaryKeys(List<String> primaryKeys) {
-        this.primaryKeys = primaryKeys;
+    public synchronized void setPrimaryKey(PrimaryKey primaryKey) {
+        this.primaryKey = primaryKey;
     }
 
     public List<Attribute> getAttributes() {
@@ -89,6 +88,14 @@ public class Table implements Cloneable {
 
     public List<Index> getIndexes() {
         return indexes;
+    }
+
+    public int getMaxId() {
+        return maxId;
+    }
+
+    public void setMaxId(int maxId) {
+        this.maxId = maxId;
     }
 
     //todo 完善clone方法

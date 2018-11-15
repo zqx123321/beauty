@@ -19,10 +19,12 @@ public abstract class Attribute {
     protected String name;//字段名称
     protected Type type;//字段类型
     protected int length;//字段长度
+    protected boolean see;//是否可以继承
 
     public Attribute(String name, int length) {
         this.name = name;
         this.length = length;
+        this.see = true;
     }
 
     public String getName() {
@@ -53,7 +55,8 @@ public abstract class Attribute {
 
     /**
      * 将该属性对应的value写入block中，此方法延迟到子类中实现
-     *  @param block
+     *
+     * @param block
      * @param value
      * @param offset
      */
@@ -74,5 +77,13 @@ public abstract class Attribute {
     public Attribute getAttribute(String attributeName) {
         if (name.equals(attributeName)) return this;
         return null;
+    }
+
+    public void setSee(boolean see) {
+        this.see = see;
+    }
+
+    public boolean isSee() {
+        return see;
     }
 }

@@ -220,9 +220,7 @@ columnType
 	;
 
 columnConstraint
-    : AUTO_INCREMENT
-    | PRIMARY KEY
-    | UNIQUE KEY
+    : PRIMARY KEY (AUTO_INCREMENT|ASSIGN|UUID)?
     | FINAL
     ;
 
@@ -231,7 +229,7 @@ extendsTable
     ;
 
 tableConstraint
-    : PRIMARY KEY LBRACKET pathExpr(COMMA pathExpr)* RBRACKET;
+    : PRIMARY KEY LBRACKET pathExpr(COMMA pathExpr)* RBRACKET (AUTO_INCREMENT|ASSIGN|UUID)?;
 
 
 updateStat
@@ -425,6 +423,8 @@ TRANSACTION:T R A N S A C T I O N;
 COMMIT:C O M M I T;
 ROLL:R O L L;
 BACK:B A C K;
+ASSIGN:A S S I G N;
+UUID:U U I D;
 
 MUL:                                '*';
 DIV:                                '/';

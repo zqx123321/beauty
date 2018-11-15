@@ -5,6 +5,8 @@ import cn.ouctechnology.oodb.buffer.Block;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.catalog.Index;
+import cn.ouctechnology.oodb.catalog.PrimaryKey;
+import cn.ouctechnology.oodb.catalog.Table;
 import cn.ouctechnology.oodb.catalog.attribute.Attribute;
 import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.util.JudgeUtil;
@@ -16,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static cn.ouctechnology.oodb.constant.Constants.*;
@@ -60,6 +63,45 @@ public class Record {
      * @param tuple     元组
      */
     public static int insert(String tableName, Tuple tuple) {
+        //主键检查
+        PrimaryKey primaryKey = Catalog.getPrimaryKey(tableName);
+        if (primaryKey != null) {
+            String name = primaryKey.getName();
+            Comparable value = (Comparable) tuple.get(name);
+            if (value != null) {
+                Index index = Catalog.getIndexByColumnName(tableName, name);
+                List search = index.getbTree().search(value, Op.Equality);
+                if (search != null && search.size() > 0) {
+                    throw new DbException("the primary is duplicate");
+                }
+                if (primaryKey.getPolicy() == PrimaryKey.PrimaryKeyPolicy.AUTO_INCREASE) {
+                    Table table = Catalog.getTable(tableName);
+                    int maxId = table.getMaxId();
+                    table.setMaxId(Math.max(maxId, (Integer) value));
+                }
+            } else {
+                //生成主键
+                switch (primaryKey.getPolicy()) {
+                    case UUID:
+                        Attribute attribute = Catalog.getAttribute(tableName, name);
+                        int length = attribute.getLength() / 2;
+                        String uuid = UUID.randomUUID().toString();
+                        //截断
+                        if (uuid.length() > length) uuid = uuid.substring(length);
+                        tuple.add(name, uuid);
+                        break;
+                    case AUTO_INCREASE:
+                        Table table = Catalog.getTable(tableName);
+                        int maxId = table.getMaxId();
+                        maxId++;
+                        table.setMaxId(maxId);
+                        tuple.add(name, maxId);
+                        break;
+                    case ASSIGN:
+                        throw new DbException("the primary key can not bt null");
+                }
+            }
+        }
         //获取block
         Block block = getWriteBlock(tableName);
         //写入有效标志位

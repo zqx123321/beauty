@@ -34,35 +34,35 @@ public class CatalogTest {
 
     @Test
     public void testCreateTable() throws IOException {
-        Catalog.initialCatalog();
-        Attribute objectAttribute = new ObjectAttribute(
-                "dept",
-                30,
-                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("deptNme", 30)));
-        Table table = new Table(
-                "teacher",
-                Arrays.asList("id"),
-                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20), objectAttribute),
-                new ArrayList<Index>(), 0
-        );
-
-        Catalog.createTable(table);
-        Catalog.showCatalog();
-        Catalog.storeCatalog();
+//        Catalog.initialCatalog();
+//        Attribute objectAttribute = new ObjectAttribute(
+//                "dept",
+//                30,
+//                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("deptNme", 30)));
+//        Table table = new Table(
+//                "teacher",
+//                Arrays.asList("id"),
+//                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20), objectAttribute),
+//                new ArrayList<Index>(), 0
+//        );
+//
+//        Catalog.createTable(table);
+//        Catalog.showCatalog();
+//        Catalog.storeCatalog();
     }
 
     @Test
     public void testCreateTablePerson() throws IOException {
-        Catalog.initialCatalog();
-        Table table = new Table(
-                "person",
-                Arrays.asList("id"),
-                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20)),
-                new ArrayList<Index>(), 0
-        );
-
-        Catalog.createTable(table);
-        Catalog.showCatalog();
-        Catalog.storeCatalog();
+//        Catalog.initialCatalog();
+//        Table table = new Table(
+//                "person",
+//                Arrays.asList("id"),
+//                Arrays.asList(new IntAttribute("id", 4), new CharAttribute("name", 20)),
+//                new ArrayList<Index>(), 0
+//        );
+//
+//        Catalog.createTable(table);
+//        Catalog.showCatalog();
+//        Catalog.storeCatalog();
     }
 }
