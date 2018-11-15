@@ -46,5 +46,13 @@ public class Server {
                 logger.info(SyncExplain.sync());
             }
         }, 0, 3000);
+        //检测死锁定时任务，每分钟执行一次
+//        DeadlockDetector deadlockDetector = new DeadlockDetector();
+//        new Timer("sync-timer ").schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                deadlockDetector.run();
+//            }
+//        }, 0, 60000);
     }
 }

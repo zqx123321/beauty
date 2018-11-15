@@ -53,6 +53,10 @@ public class Transaction {
 
     public static void rollback() {
         Thread currentThread = Thread.currentThread();
+        rollback(currentThread);
+    }
+
+    public static void rollback(Thread currentThread) {
         List<Block> blocks = TransactionMap.getThreadMap().get(currentThread);
         if (blocks == null) throw new DbException("the transaction is not start");
         for (Block block : blocks) {
