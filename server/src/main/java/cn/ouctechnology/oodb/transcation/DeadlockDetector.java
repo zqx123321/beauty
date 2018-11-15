@@ -36,31 +36,50 @@ public class DeadlockDetector implements Runnable {
 
     @Override
     public void run() {
-        Set<Thread> threads = TransactionMap.getThreadMap().keySet();
-        int count = threads.size();
-        Iterator<Thread> iterator = threads.iterator();
-        while (count-- > 0 && iterator.hasNext()) {
+
+        while (TransactionMap.getThreadMap().keySet().size() > 0) {
             logger.info("detect dead lock.....");
-            buildGraph();
-            hasCircle = false;
-            for (Map.Entry<Integer, Boolean> pointVisited : hasVisited.entrySet()) {
-                Boolean value = pointVisited.getValue();
-                if (!value) {
-                    pointVisited.setValue(true);
-                    judgeCircle(pointVisited.getKey());
-                }
-                if (hasCircle) {
-                    logger.error("dead lock found,process.....");
-                    Transaction.rollback(iterator.next());
-                    break;
-                }
-            }
-            if (!hasCircle) {
+            long[] threadIds = threadMXBean.findDeadlockedThreads();
+            if (threadIds == null || threadIds.length == 0) {
                 logger.info("no dead lock....");
                 break;
             }
+            logger.error("dead lock found,process.....");
+            for (long threadId : threadIds) {
+                Set<Thread> threads = TransactionMap.getThreadMap().keySet();
+                for (Thread thread : threads) {
+                    if (thread.getId() == threadId) {
+                        Transaction.rollback(thread);
+                    }
+                }
+            }
         }
+//        Set<Thread> threads = TransactionMap.getThreadMap().keySet();
+//        int count = threads.size();
+//        Iterator<Thread> iterator = threads.iterator();
+//        while (count-- > 0 && iterator.hasNext()) {
+//            logger.info("detect dead lock.....");
+//            buildGraph();
+//            hasCircle = false;
+//            for (Map.Entry<Integer, Boolean> pointVisited : hasVisited.entrySet()) {
+//                Boolean value = pointVisited.getValue();
+//                if (!value) {
+//                    pointVisited.setValue(true);
+//                    judgeCircle(pointVisited.getKey());
+//                }
+//                if (hasCircle) {
+//                    logger.error("dead lock found,process.....");
+//                    Transaction.rollback(iterator.next());
+//                    break;
+//                }
+//            }
+//            if (!hasCircle) {
+//                logger.info("no dead lock....");
+//                break;
+//            }
+//        }
     }
+
 
     /**
      * 建立有向图

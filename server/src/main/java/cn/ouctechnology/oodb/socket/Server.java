@@ -3,6 +3,7 @@ package cn.ouctechnology.oodb.socket;
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
 import cn.ouctechnology.oodb.execute.SyncExplain;
+import cn.ouctechnology.oodb.transcation.DeadlockDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +47,13 @@ public class Server {
                 logger.info(SyncExplain.sync());
             }
         }, 0, 3000);
-        //检测死锁定时任务，每分钟执行一次
-//        DeadlockDetector deadlockDetector = new DeadlockDetector();
-//        new Timer("sync-timer ").schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                deadlockDetector.run();
-//            }
-//        }, 0, 60000);
+//        检测死锁定时任务，每分钟执行一次
+        DeadlockDetector deadlockDetector = new DeadlockDetector();
+        new Timer("sync-timer ").schedule(new TimerTask() {
+            @Override
+            public void run() {
+                deadlockDetector.run();
+            }
+        }, 0, 30000);
     }
 }
