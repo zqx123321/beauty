@@ -53,6 +53,7 @@ public class Session {
     }
 
     public Query createQuery(String oql) {
+        logger.info("create query:{}", oql);
         return new Query(oql, this);
     }
 
@@ -108,15 +109,19 @@ public class Session {
         List<String> columnList = getColumnList(object, "");
         List<Object> valueList = getValueList(object);
         String separator = "";
-        for (String column : columnList) {
+        for (int i = 0; i < columnList.size(); i++) {
+            Object value = valueList.get(i);
+            if (value == null) continue;
+            String column = columnList.get(i);
             oql.append(separator).append(column);
             separator = ",";
         }
+
         oql.append(")values(");
 
         separator = "";
         for (Object value : valueList) {
-            if (value == null) value = "";
+            if (value == null) continue;
             oql.append(separator).append(value);
             separator = ",";
         }
@@ -139,9 +144,9 @@ public class Session {
             throw new BeautifulException("the column size id not equal to value size");
         String separator = "";
         for (int i = 0; i < columnList.size(); i++) {
-            String column = columnList.get(i);
             Object value = valueList.get(i);
-            if (value == null) value = "";
+            if (value == null) continue;
+            String column = columnList.get(i);
             oql.append(separator).append(tableName).append(".").append(column).append("=").append(value);
             separator = ",";
         }

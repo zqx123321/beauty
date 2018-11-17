@@ -1,18 +1,21 @@
 package cn.ouctechnology.oodb.beauty.session;
 
 import cn.ouctechnology.oodb.beauty.annotation.*;
+import cn.ouctechnology.oodb.beauty.criteria.Criteria;
+import cn.ouctechnology.oodb.beauty.criteria.Criterion;
+import cn.ouctechnology.oodb.beauty.criteria.Projections;
+import cn.ouctechnology.oodb.beauty.criteria.Restrictions;
 import cn.ouctechnology.oodb.beauty.exception.BeautifulException;
 import cn.ouctechnology.oodb.beauty.util.BeanUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @program: oodb
@@ -26,7 +29,26 @@ public class BeautyProxy implements InvocationHandler {
 
     private Map<String, Object> columnValueMap;
 
+    private Class genericClz;
+
+    private Set<Method> methodSet;
+
+    private Set<String> fieldSet;
+
+
     public Object bind(Class<?> clz) {
+        //判断是否继承BaseBeauty
+        Type[] genericInterfaces = clz.getGenericInterfaces();
+        if (genericInterfaces != null && genericInterfaces.length > 0) {
+            Type genericInterface = clz.getGenericInterfaces()[0];
+            if (genericInterface instanceof ParameterizedType) {
+                ParameterizedType baseBeautyType = (ParameterizedType) genericInterface;
+                genericClz = (Class) baseBeautyType.getActualTypeArguments()[0];
+                fieldSet = Arrays.stream(genericClz.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet());
+                methodSet = new HashSet<>();
+                methodSet.addAll(Arrays.asList(clz.getDeclaredMethods()));
+            }
+        }
         return Proxy.newProxyInstance(clz.getClassLoader(), new Class[]{clz}, this);
     }
 
@@ -37,6 +59,10 @@ public class BeautyProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
+        if (genericClz != null && !methodSet.contains(method)) {
+            return invokeBase(genericClz, session, method, args);
+        }
+        initMap(method, args);
         Select select = method.getAnnotation(Select.class);
         Insert insert = method.getAnnotation(Insert.class);
         Update update = method.getAnnotation(Update.class);
@@ -53,10 +79,15 @@ public class BeautyProxy implements InvocationHandler {
         } else if (delete != null) {
             oql = delete.value();
         }
-        if (oql == null) return null;
+        if (oql == null) {
+            String methodName = method.getName();
+            if (methodName.startsWith("findBy") || methodName.startsWith("updateBy") || methodName.startsWith("deleteBy")) {
+                return invokeProperty(genericClz, session, method, args);
+            }
+            return null;
+        }
         List<String> paramList = new ArrayList<>();
         oql = transferOqlParams(oql, paramList);
-        initMap(method, args);
         oql = fillParams(oql, paramList);
 
         if (isSelect) return doSelect(method, oql);
@@ -160,5 +191,107 @@ public class BeautyProxy implements InvocationHandler {
             return update;
         }
         return null;
+    }
+
+
+    private Object invokeBase(Class genericClz, Session session, Method method, Object[] args) {
+        String methodName = method.getName();
+        String tableName = StringUtils.uncapitalize(genericClz.getSimpleName());
+        if (methodName.equals("save")) {
+            return session.save(args[0]);
+        }
+        if (methodName.equals("delete")) {
+            return session.delete(genericClz, (Criterion) args[0]);
+        }
+        if (methodName.equals("update")) {
+            return session.update(args[0], (Criterion) args[1]);
+        }
+        if (methodName.equals("get")) {
+            return session.createCriteria(genericClz).add((Criterion) args[0]).uniqueResult();
+        }
+        if (methodName.equals("selectList")) {
+            return session.createCriteria(genericClz).add((Criterion) args[0]).list(genericClz);
+        }
+        return null;
+    }
+
+    private Object invokeProperty(Class genericClz, Session session, Method method, Object[] args) {
+        String methodName = method.getName();
+        if (methodName.startsWith("findBy")) {
+            String suffix = methodName.substring("findBy".length());
+            Criteria criteria = session.createCriteria(genericClz).add(getCriterion(suffix));
+            Class<?> returnType = method.getReturnType();
+            if (returnType == List.class)
+                return criteria.list(genericClz);
+            return criteria.uniqueResult(genericClz);
+        } else if (methodName.startsWith("deleteBy")) {
+            String suffix = methodName.substring("deleteBy".length());
+            return session.delete(genericClz, getCriterion(suffix));
+        } else if (methodName.startsWith("updateBy")) {
+            String suffix = methodName.substring("updateBy".length());
+            Object object = args[0];
+            if (object.getClass() != genericClz)
+                throw new BeautifulException("the update's first param must be the object");
+            return session.update(object, getCriterion(suffix));
+        }
+        return null;
+    }
+
+    private Criterion getCriterion(String suffix) {
+        if (fieldSet.size() == 0) return null;
+        int and = suffix.indexOf("And");
+        int or = suffix.indexOf("Or");
+        if (and != -1) return getAndCriterion(suffix, and);
+        if (or != -1) return getOrCriterion(suffix, or);
+        return getOneCriterion(StringUtils.uncapitalize(suffix));
+    }
+
+
+    private Criterion getAndCriterion(String suffix, int op) {
+        String first = StringUtils.uncapitalize(suffix.substring(0, op));
+        String second = StringUtils.uncapitalize(suffix.substring(op + 3));
+        return Restrictions.and(getOneCriterion(first), getOneCriterion(second));
+    }
+
+    private Criterion getOrCriterion(String suffix, int op) {
+        String first = StringUtils.uncapitalize(suffix.substring(0, op));
+        String second = StringUtils.uncapitalize(suffix.substring(op + 2));
+        return Restrictions.or(getOneCriterion(first), getOneCriterion(second));
+    }
+
+
+    private Criterion getOneCriterion(String first) {
+        if (first.endsWith("Greater")) {
+            first = first.substring(0, first.length() - "Greater".length());
+            if (!fieldSet.contains(first)) throw new BeautifulException("the property not found");
+            Object value = columnValueMap.get(first);
+            if (value == null) throw new BeautifulException("the value not found");
+            return Restrictions.gt(first, value);
+        }
+        if (first.endsWith("GreaterOrEqual")) {
+            first = first.substring(0, first.length() - "GreaterOrEqual".length());
+            if (!fieldSet.contains(first)) throw new BeautifulException("the property not found");
+            Object value = columnValueMap.get(first);
+            if (value == null) throw new BeautifulException("the value not found");
+            return Restrictions.ge(first, value);
+        }
+        if (first.endsWith("Lesser")) {
+            first = first.substring(0, first.length() - "Lesser".length());
+            if (!fieldSet.contains(first)) throw new BeautifulException("the property not found");
+            Object value = columnValueMap.get(first);
+            if (value == null) throw new BeautifulException("the value not found");
+            return Restrictions.lt(first, value);
+        }
+        if (first.endsWith("LesserOrEqual")) {
+            first = first.substring(0, first.length() - "LesserOrEqual".length());
+            if (!fieldSet.contains(first)) throw new BeautifulException("the property not found");
+            Object value = columnValueMap.get(first);
+            if (value == null) throw new BeautifulException("the value not found");
+            return Restrictions.le(first, value);
+        }
+        if (!fieldSet.contains(first)) throw new BeautifulException("the property not found");
+        Object value = columnValueMap.get(first);
+        if (value == null) throw new BeautifulException("the value not found");
+        return Restrictions.eq(first, value);
     }
 }

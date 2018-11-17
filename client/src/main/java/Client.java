@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -31,7 +30,7 @@ public class Client {
         @Override
         public void run() {
             while (true) {
-                String res = "";
+                Object res = null;
                 readBuffer.clear();
                 try {
                     int bytesRead = socketChannel.read(readBuffer);
@@ -41,7 +40,7 @@ public class Client {
                         while (readBuffer.hasRemaining()) {
                             readBuffer.get(bytes);
                         }
-                        res = new String(bytes, StandardCharsets.UTF_8);
+                        res = SerializationUtil.deserialize(bytes);
                     }
                 } catch (IOException e) {
                     logger.error("从服务端获取消息出错：{}", e.getMessage());

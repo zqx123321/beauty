@@ -44,6 +44,7 @@ public class Criteria {
 
 
     public Criteria add(Criterion expression) {
+        if (expression == null) return this;
         criterionEntries.add(expression);
         return this;
     }
@@ -54,17 +55,20 @@ public class Criteria {
     }
 
     public Criteria addOrder(Order ordering) {
+        if (ordering == null) return this;
         orderEntries.add(ordering);
         return this;
     }
 
     public Criteria addJoinCondition(JoinCondition joinCondition) {
+        if (joinCondition == null) return this;
         joinEntries.add(joinCondition);
         return this;
     }
 
 
     public Criteria setProjection(Projection projection) {
+        if (projection == null) return this;
         this.projection = projection;
         return this;
     }
@@ -92,6 +96,10 @@ public class Criteria {
 
     public Object uniqueResult() {
         return list().get(0);
+    }
+
+    public Object uniqueResult(Class clz) {
+        return list(clz).get(0);
     }
 
     public String getOql() {

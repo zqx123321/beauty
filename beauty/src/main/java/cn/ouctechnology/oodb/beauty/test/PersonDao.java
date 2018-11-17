@@ -1,9 +1,7 @@
 package cn.ouctechnology.oodb.beauty.test;
 
-import cn.ouctechnology.oodb.beauty.annotation.Beauty;
-import cn.ouctechnology.oodb.beauty.annotation.Insert;
-import cn.ouctechnology.oodb.beauty.annotation.Select;
-import cn.ouctechnology.oodb.beauty.annotation.Update;
+import cn.ouctechnology.oodb.beauty.annotation.*;
+import cn.ouctechnology.oodb.beauty.session.BaseBeauty;
 
 import java.util.List;
 
@@ -14,7 +12,7 @@ import java.util.List;
  * @description: TODO
  **/
 @Beauty
-public interface PersonDao {
+public interface PersonDao extends BaseBeauty<Person> {
 
     @Select("select a from person a")
     List<Person> list();
@@ -27,5 +25,13 @@ public interface PersonDao {
 
     @Insert("insert into person values(#{id}, #{name})")
     int insert(Person person);
+
+    List<Person> findByNameOrIdGreater(@Param("name") String name, @Param("id") Integer id);
+
+    Person findById(@Param("id") Integer id);
+
+    int deleteById(@Param("id") int id);
+
+    int updateByIdOrName(Person person, @Param("name") String name, @Param("id") Integer id);
 
 }

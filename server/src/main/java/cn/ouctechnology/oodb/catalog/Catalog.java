@@ -65,9 +65,13 @@ public class Catalog {
             while (dis.available() > 0) {
                 List<Index> indices = new ArrayList<>();
                 String tableName = dis.readUTF();
-                String primaryName = dis.readUTF();
-                PrimaryKey.PrimaryKeyPolicy policy = PrimaryKey.PrimaryKeyPolicy.values()[dis.readInt()];
-                PrimaryKey primaryKey = new PrimaryKey(primaryName, policy);
+                PrimaryKey primaryKey = null;
+                boolean hasKey = dis.readBoolean();
+                if (hasKey) {
+                    String primaryName = dis.readUTF();
+                    PrimaryKey.PrimaryKeyPolicy policy = PrimaryKey.PrimaryKeyPolicy.values()[dis.readInt()];
+                    primaryKey = new PrimaryKey(primaryName, policy);
+                }
                 List<Attribute> attributes = readAttributes(dis);
                 int indexNum = dis.readInt();
                 for (int i = 0; i < indexNum; i++) {
@@ -127,8 +131,14 @@ public class Catalog {
             for (Map.Entry<String, Table> entry : entries) {
                 Table v = entry.getValue();
                 dos.writeUTF(v.tableName);
-                dos.writeUTF(v.primaryKey.name);
-                dos.writeInt(v.primaryKey.policy.ordinal());
+                PrimaryKey primaryKey = v.primaryKey;
+                if (primaryKey != null) {
+                    dos.writeBoolean(true);
+                    dos.writeUTF(primaryKey.name);
+                    dos.writeInt(primaryKey.policy.ordinal());
+                } else {
+                    dos.writeBoolean(false);
+                }
                 //写入属性
                 writeAttributes(v.attributes, dos);
                 dos.writeInt(v.indexes.size());
