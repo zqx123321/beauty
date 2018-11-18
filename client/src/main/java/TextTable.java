@@ -6,6 +6,7 @@ import java.util.*;
  * @create: 2018-11-16 18:43
  * @description: TODO
  **/
+@SuppressWarnings("all")
 public class TextTable {
 
     public final static String SEP = "\n";
@@ -89,7 +90,7 @@ public class TextTable {
             sb.append(polishing);
             sb.append("|");
             separateLine.append(polishing);
-            separateLine.append("|");
+            separateLine.append("-");
             int index = item.start;
             for (Map.Entry<String, Object> objectEntry : item.dataMap.entrySet()) {
                 Object value = objectEntry.getValue();
@@ -104,11 +105,11 @@ public class TextTable {
                     queue.push(new Item(index, (Map<String, Object>) value));
                     separateLine.append(" ");
                     separateLine.append(buildStrWithFixCharAndLength('-', length));
-                    separateLine.append(" |");
+                    separateLine.append(" -");
                 } else {
                     separateLine.append(" ");
                     separateLine.append(buildStrWithFixCharAndLength(' ', length));
-                    separateLine.append(" |");
+                    separateLine.append(" -");
                 }
                 index += (length + 3);
             }

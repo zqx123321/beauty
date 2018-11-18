@@ -64,6 +64,8 @@ public class Catalog {
             dis = new DataInputStream(new FileInputStream(file));
             while (dis.available() > 0) {
                 List<Index> indices = new ArrayList<>();
+                List<String> refs = new ArrayList<>();
+                List<String> extendsTables = new ArrayList<>();
                 String tableName = dis.readUTF();
                 PrimaryKey primaryKey = null;
                 boolean hasKey = dis.readBoolean();
@@ -73,6 +75,16 @@ public class Catalog {
                     primaryKey = new PrimaryKey(primaryName, policy);
                 }
                 List<Attribute> attributes = readAttributes(dis);
+                //读引用表
+                int refNum = dis.readInt();
+                for (int i = 0; i < refNum; i++) {
+                    refs.add(dis.readUTF());
+                }
+                //读继承表
+                int extendsNum = dis.readInt();
+                for (int i = 0; i < extendsNum; i++) {
+                    extendsTables.add(dis.readUTF());
+                }
                 int indexNum = dis.readInt();
                 for (int i = 0; i < indexNum; i++) {
                     String indexName = dis.readUTF();
@@ -86,7 +98,7 @@ public class Catalog {
                     }
                 }
                 int tupleNum = dis.readInt();
-                tables.put(tableName, new Table(tableName, primaryKey, attributes, indices, tupleNum));
+                tables.put(tableName, new Table(tableName, primaryKey, attributes, refs, extendsTables, indices, tupleNum));
             }
         } finally {
             //关闭的时候只需要关闭包装流即可
@@ -141,6 +153,16 @@ public class Catalog {
                 }
                 //写入属性
                 writeAttributes(v.attributes, dos);
+                //写入引用表
+                dos.writeInt(v.refs.size());
+                for (String ref : v.refs) {
+                    dos.writeUTF(ref);
+                }
+                //写入继承表
+                dos.writeInt(v.extendTables.size());
+                for (String extendTable : v.extendTables) {
+                    dos.writeUTF(extendTable);
+                }
                 dos.writeInt(v.indexes.size());
                 for (Index index : v.indexes) {
                     //同步脏数据
@@ -193,6 +215,8 @@ public class Catalog {
             sb.append("Table name: ").append(v.tableName).append('\n');
             sb.append("Length of tuple: ").append(v.tupleLength).append('\n');
             sb.append("Primary key: ").append(v.primaryKey).append('\n');
+            sb.append("refs: ").append(v.refs).append('\n');
+            sb.append("extends: ").append(v.extendTables).append('\n');
             sb.append("index: ").append(v.indexes).append('\n');
             sb.append("Number of tuples: ").append(v.tupleNum).append('\n');
             sb.append("Attributes: ").append(v.attributes.size()).append('\n');
@@ -385,6 +409,28 @@ public class Catalog {
     public static PrimaryKey getPrimaryKey(String tableName) {
         Table table = getTable(tableName);
         return table.getPrimaryKey();
+    }
+
+    public static List<String> checkRef(String tableName) {
+        List<String> beRef = new ArrayList<>();
+        tables.forEach((k, v) -> {
+            List<String> refs = v.getRefs();
+            if (refs != null && refs.contains(tableName)) {
+                beRef.add(k);
+            }
+        });
+        return beRef;
+    }
+
+    public static List<String> checkExtend(String tableName) {
+        List<String> beExtend = new ArrayList<>();
+        tables.forEach((k, v) -> {
+            List<String> extendTables = v.getExtendTables();
+            if (extendTables != null && extendTables.contains(tableName)) {
+                beExtend.add(k);
+            }
+        });
+        return beExtend;
     }
 }
 

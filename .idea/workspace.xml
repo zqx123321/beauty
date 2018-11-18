@@ -7,80 +7,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35488d3e-ebb8-4495-8cb4-3df131f3ce8f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/beautiful_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Beauty.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Delete.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Id$Policy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Insert.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Length.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Param.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Select.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Size.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/annotation/Update.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/AggregateProjection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Conjunction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Criteria.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Criterion.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Disjunction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/GroupByProjection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/JoinCondition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Joins.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Junction$Nature.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Junction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/LogicalExpression.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Order.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Projection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/ProjectionList.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Projections.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/PropertyExpression.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/PropertyProjection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/Restrictions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/SimpleExpression.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/criteria/SimpleJoinCondition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/exception/BeautifulException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BeautyProxy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BeautyProxyFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BeautyScanner.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/Predicate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/Query.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/Session.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/SessionFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/Tuple.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/test/Dept.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/test/Person.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/test/PersonDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/test/Teacher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/test/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/test/UserDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/util/BeanUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/util/SerializationUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/logback-test.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/logback.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/oodb.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/spring-config.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/PackageScanTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/PersonDaoTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/SessionFactoryTest$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/SessionFactoryTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/SpringTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/UserDaoTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/test/PersonDaoTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/criteria/Criteria.java" beforeDir="false" afterPath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/criteria/Criteria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/PersonDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/PersonDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BaseBeauty.class" beforeDir="false" afterPath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BaseBeauty.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BeautyProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/beautiful/target/classes/cn/ouctechnology/oodb/beauty/session/BeautyProxy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/PersonDaoTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/beautiful/target/test-classes/cn/ouctechnology/oodb/beauty/PersonDaoTest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/PersonDaoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/PersonDaoTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/TextTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/TextTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/Client$ClientListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/Client$ClientListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/TextTable$Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/TextTable$Item.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/TextTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/TextTable.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/db/person.idx_id.ood" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/db/person.ood" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/db/table.catalog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/db/user.idx_id.ood" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/db/user.ood" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/cn/ouctechnology/oodb/catalog/Catalog.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/cn/ouctechnology/oodb/catalog/Catalog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropExplain.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropExplain.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -112,7 +58,7 @@
     <session id="-305301618">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="94" />
+          <entry key="project.closed" value="96" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.15" value="2" />
@@ -122,7 +68,7 @@
           <entry key="project.open.time.2" value="5" />
           <entry key="project.open.time.20" value="8" />
           <entry key="project.open.time.21" value="5" />
-          <entry key="project.open.time.22" value="10" />
+          <entry key="project.open.time.22" value="11" />
           <entry key="project.open.time.23" value="8" />
           <entry key="project.open.time.24" value="7" />
           <entry key="project.open.time.25" value="5" />
@@ -146,7 +92,7 @@
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.91" value="1" />
           <entry key="project.open.time.99" value="1" />
-          <entry key="project.opened" value="98" />
+          <entry key="project.opened" value="99" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -154,7 +100,7 @@
           <entry key="dummy" value="50" />
           <entry key="ft" value="110" />
           <entry key="g4" value="1689" />
-          <entry key="java" value="120552" />
+          <entry key="java" value="126537" />
           <entry key="txt" value="209" />
           <entry key="xml" value="435" />
         </counts>
@@ -162,7 +108,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ANTLR v4 grammar file" value="1689" />
-          <entry key="JAVA" value="120552" />
+          <entry key="JAVA" value="126537" />
           <entry key="PLAIN_TEXT" value="259" />
           <entry key="VTL" value="110" />
           <entry key="XML" value="435" />
@@ -173,8 +119,8 @@
           <entry key="catalog" value="20" />
           <entry key="class" value="18" />
           <entry key="data" value="4" />
-          <entry key="g4" value="37" />
-          <entry key="java" value="1580" />
+          <entry key="g4" value="38" />
+          <entry key="java" value="1594" />
           <entry key="kt" value="1" />
           <entry key="ood" value="37" />
           <entry key="person" value="2" />
@@ -186,9 +132,9 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="ANTLR v4 grammar file" value="37" />
+          <entry key="ANTLR v4 grammar file" value="38" />
           <entry key="CLASS" value="18" />
-          <entry key="JAVA" value="1580" />
+          <entry key="JAVA" value="1594" />
           <entry key="Kotlin" value="1" />
           <entry key="PLAIN_TEXT" value="71" />
           <entry key="XML" value="41" />
@@ -204,28 +150,34 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxy.java">
+        <entry file="file://$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/PersonDaoTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="227" column="51" selection-start-line="227" selection-start-column="51" selection-end-line="227" selection-end-column="51" />
+            <state relative-caret-position="233">
+              <caret line="65" selection-start-line="65" selection-end-line="65" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/List.java">
+        <entry file="file://$PROJECT_DIR$/client/src/main/java/PrintTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+            <state relative-caret-position="117">
+              <caret line="385" column="9" selection-start-line="385" selection-start-column="9" selection-end-line="385" selection-end-column="9" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#165#189#0" expanded="true" />
+                <element signature="e#10270#10271#0" expanded="true" />
+                <element signature="e#10338#10339#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/PersonDao.java">
+        <entry file="file://$PROJECT_DIR$/client/src/test/java/PrintTableTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
+            <state relative-caret-position="272">
+              <caret line="43" column="39" lean-forward="true" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -233,77 +185,75 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/ArrayList.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="164" column="11" selection-start-line="164" selection-start-column="11" selection-end-line="164" selection-end-column="11" />
-              <folding>
-                <element signature="e#6283#6284#0" expanded="true" />
-                <element signature="e#6351#6352#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="148" column="46" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Query.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="53" column="28" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/reocrd/Record.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12">
-              <caret line="68" selection-start-line="68" selection-end-line="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/PersonDaoTest.java">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Table.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="71" column="9" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/Person.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
-              <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/criteria/Criteria.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="96" column="18" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
+            <state relative-caret-position="51">
+              <caret line="31" column="41" selection-start-line="31" selection-start-column="41" selection-end-line="31" selection-end-column="41" />
               <folding>
-                <element signature="e#2189#2190#0" expanded="true" />
-                <element signature="e#2251#2252#0" expanded="true" />
-                <element signature="e#2388#2389#0" expanded="true" />
-                <element signature="e#2424#2425#0" expanded="true" />
-                <element signature="e#2464#2465#0" expanded="true" />
-                <element signature="e#2500#2501#0" expanded="true" />
+                <element signature="e#1552#1553#0" expanded="true" />
+                <element signature="e#1600#1601#0" expanded="true" />
+                <element signature="e#1560#1561#0" expanded="true" />
+                <element signature="e#1592#1593#0" expanded="true" />
+                <element signature="e#1715#1716#0" expanded="true" />
+                <element signature="e#1742#1743#0" expanded="true" />
+                <element signature="e#1787#1788#0" expanded="true" />
+                <element signature="e#1822#1823#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropExplain.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="653">
+              <caret line="43" column="37" lean-forward="true" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/constant/Constants.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="63">
+              <caret line="57" column="37" lean-forward="true" selection-start-line="57" selection-start-column="37" selection-end-line="57" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="74">
+              <caret line="83" column="30" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Map.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="151">
+              <caret line="617" column="17" selection-start-line="617" selection-start-column="17" selection-end-line="617" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/test/java/OQL.g4">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -318,26 +268,13 @@
         <option value="spring-beans.schema" />
         <option value="AnnotationType" />
         <option value="Interface" />
-        <option value="JUnit4 Test Class" />
         <option value="Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>success</find>
-      <find>getSe</find>
-      <find>getv</find>
-      <find>GETrES</find>
-      <find>getRes</find>
-      <find>getCol</find>
-      <find>DbException</find>
-      <find />
-      <find>gen</find>
-      <find>pop</find>
-      <find>getColumnList</find>
-      <find>getBlock</find>
-      <find>Primary</find>
       <find>Primary ke</find>
       <find>extends EnhanceParserRuleContext</find>
       <find>extends ParserRuleContext</find>
@@ -355,6 +292,19 @@
       <find>save</find>
       <find>tableN</find>
       <find>fir</find>
+      <find>count</find>
+      <find>buildStrWithFixCharAndLength</find>
+      <find>ToString</find>
+      <find>buildR</find>
+      <find>getLength</find>
+      <find>strLen</find>
+      <find>.leng</find>
+      <find>getLe</find>
+      <find>lens</find>
+      <find>subData</find>
+      <find>extends</find>
+      <find>REF</find>
+      <find>read</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -369,9 +319,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/beautiful/src/main/resources/spring-config.xml" />
-        <option value="$PROJECT_DIR$/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/annotation/Length.java" />
-        <option value="$PROJECT_DIR$/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/session/SessionFactory.java" />
         <option value="$PROJECT_DIR$/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/test/Dept.java" />
         <option value="$PROJECT_DIR$/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/test/Person.java" />
         <option value="$PROJECT_DIR$/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/annotation/Size.java" />
@@ -390,8 +337,6 @@
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/parser/OQLLexer.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/parser/OQLParser.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/attribute/Attribute.java" />
-        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java" />
-        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Table.java" />
         <option value="$PROJECT_DIR$/server/src/test/java/cn/ouctechnology/oodb/reocrd/RecordTest.java" />
         <option value="$PROJECT_DIR$/server/src/test/java/cn/ouctechnology/oodb/catalog/CatalogTest.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/PrimaryKey.java" />
@@ -406,20 +351,25 @@
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/transcation/DeadlockDetector.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/socket/Server.java" />
         <option value="$PROJECT_DIR$/client/src/main/java/SerializationUtil.java" />
-        <option value="$PROJECT_DIR$/client/src/main/java/Client.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/User.java" />
         <option value="$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/HashCodeTest.java" />
         <option value="$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/SessionFactoryTest.java" />
-        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java" />
-        <option value="$PROJECT_DIR$/client/src/main/java/TextTable.java" />
-        <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BaseBeauty.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/Person.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BaseBeautyHandler.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/PersonDao.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/criteria/Criteria.java" />
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxy.java" />
+        <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BaseBeauty.java" />
+        <option value="$PROJECT_DIR$/client/src/main/java/TextTable.java" />
+        <option value="$PROJECT_DIR$/client/src/main/java/Client.java" />
         <option value="$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/PersonDaoTest.java" />
+        <option value="$PROJECT_DIR$/client/src/main/java/PrintTable.java" />
+        <option value="$PROJECT_DIR$/client/src/test/java/PrintTableTest.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropExplain.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Table.java" />
       </list>
     </option>
   </component>
@@ -473,102 +423,34 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="oodb" type="58d84e3e:PackageViewProjectNode" />
+              <item name="oodb" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="oodb" type="58d84e3e:PackageViewProjectNode" />
+              <item name="oodb" type="616d4139:PackageViewModuleNode" />
+              <item name="cn.ouctechnology.oodb" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="oodb" type="58d84e3e:PackageViewProjectNode" />
+              <item name="oodb" type="616d4139:PackageViewModuleNode" />
+              <item name="cn.ouctechnology.oodb" type="1f31426a:PackageElementNode" />
+              <item name="execute" type="1f31426a:PackageElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
               <item name="oodb" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="criteria" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="session" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
@@ -734,34 +616,19 @@
             </path>
             <path>
               <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
+              <item name="oodb" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="oodb" type="58d84e3e:PackageViewProjectNode" />
-              <item name="oodb" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="oodb" type="58d84e3e:PackageViewProjectNode" />
-              <item name="oodb" type="616d4139:PackageViewModuleNode" />
-              <item name="cn.ouctechnology.oodb" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="oodb" type="58d84e3e:PackageViewProjectNode" />
-              <item name="oodb" type="616d4139:PackageViewModuleNode" />
-              <item name="cn.ouctechnology.oodb" type="1f31426a:PackageElementNode" />
-              <item name="execute" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -780,29 +647,25 @@
     <property name="SearchEverywhereHistoryKey" value="Sess&#9;FILE&#9;file://D:/杂乱文件终章/oodb/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java&#10;TypeVariableImpl&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/sun/reflect/generics/reflectiveObjects/TypeVariableImpl.class&#10;ParameterizedTy&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/reflect/ParameterizedType.java&#10;ThreadLocal&#9;PSI&#9;JAVA://java.lang.ThreadLocal&#10;Map&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Map.java&#10;String&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/java/lang/String.class&#10;Group&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/test/java/cn/ouctechnology/oodb/operator/GroupTest.java&#10;Op&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/main/java/cn/ouctechnology/oodb/operator&#10;Buffer&#9;PSI&#9;JAVA://cn.ouctechnology.oodb.buffer.Buffer&#10;TerminalNodeImpl&#9;PSI&#9;JAVA://org.antlr.v4.runtime.tree.TerminalNodeImpl" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542467600432" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542548870373" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/beautiful/src/test/java" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/server/src/main/java" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.runner" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="cn.ouctechnology.oodb.beautiful" />
-      <recent name="cn.ouctechnology.oodb.catalog" />
-    </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="" />
       <recent name="cn.ouctechnology.oodb.transcation" />
       <recent name="cn.ouctechnology.oodb.beautiful.test" />
       <recent name="cn.ouctechnology.oodb.beautiful" />
       <recent name="cn.ouctechnology.oodb.beautifuldao" />
-      <recent name="cn.ouctechnology.oodb.operator" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -813,6 +676,13 @@
       <recent name="" />
       <recent name="cn.ouctechnology.oodb.catalog" />
       <recent name="cn.ouctechnology.oodb.execute" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\杂乱文件终章\oodb\beautiful\src\main\resources" />
+      <recent name="D:\杂乱文件终章\oodb" />
+      <recent name="D:\杂乱文件终章\oodb\beautiful\src\test" />
+      <recent name="D:\杂乱文件终章\oodb\client\src\main\resources" />
+      <recent name="D:\杂乱文件终章\oodb\server" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\杂乱文件终章\oodb\server\src\main\resources" />
@@ -833,12 +703,9 @@
       <recent name="cn.ouctechnology.oodb.constant.Constants" />
       <recent name="cn.ouctechnology.oodb.util.WhereClauseUtil" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\杂乱文件终章\oodb\beautiful\src\main\resources" />
-      <recent name="D:\杂乱文件终章\oodb" />
-      <recent name="D:\杂乱文件终章\oodb\beautiful\src\test" />
-      <recent name="D:\杂乱文件终章\oodb\client\src\main\resources" />
-      <recent name="D:\杂乱文件终章\oodb\server" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="cn.ouctechnology.oodb.beautiful" />
+      <recent name="cn.ouctechnology.oodb.catalog" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -853,7 +720,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.PersonDaoTest.testBaseBeauty">
+  <component name="RunManager" selected="Application.Client">
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client" />
       <module name="client" />
@@ -874,6 +741,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="PrintTable" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="PrintTable" />
+      <module name="client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.ouctechnology.oodb.socket.Server" />
       <module name="server" />
@@ -887,30 +761,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TextTable" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="TextTable" />
-      <module name="client" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="HashCodeTest.testHashCode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="beauty" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cn.ouctechnology.oodb.beauty.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="cn.ouctechnology.oodb.beauty" />
-      <option name="MAIN_CLASS_NAME" value="cn.ouctechnology.oodb.beauty.HashCodeTest" />
-      <option name="METHOD_NAME" value="testHashCode" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PersonDaoTest.testBaseBeauty" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PersonDaoTest.testTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="beauty" />
       <extension name="coverage">
         <pattern>
@@ -920,7 +771,17 @@
       </extension>
       <option name="PACKAGE_NAME" value="cn.ouctechnology.oodb.beauty" />
       <option name="MAIN_CLASS_NAME" value="cn.ouctechnology.oodb.beauty.PersonDaoTest" />
-      <option name="METHOD_NAME" value="testBaseBeauty" />
+      <option name="METHOD_NAME" value="testTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PrintTableTest.testToString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="client" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="PrintTableTest" />
+      <option name="METHOD_NAME" value="testToString" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -930,17 +791,17 @@
       <item itemvalue="Application.OqlEngineTest" />
       <item itemvalue="Application.Server" />
       <item itemvalue="Application.Client" />
-      <item itemvalue="Application.TextTable" />
-      <item itemvalue="JUnit.HashCodeTest.testHashCode" />
-      <item itemvalue="JUnit.PersonDaoTest.testBaseBeauty" />
+      <item itemvalue="Application.PrintTable" />
+      <item itemvalue="JUnit.PersonDaoTest.testTest" />
+      <item itemvalue="JUnit.PrintTableTest.testToString" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PersonDaoTest.testBaseBeauty" />
-        <item itemvalue="Application.Server" />
-        <item itemvalue="Application.TextTable" />
         <item itemvalue="Application.Client" />
-        <item itemvalue="JUnit.HashCodeTest.testHashCode" />
+        <item itemvalue="Application.Server" />
+        <item itemvalue="JUnit.PrintTableTest.testToString" />
+        <item itemvalue="Application.PrintTable" />
+        <item itemvalue="JUnit.PersonDaoTest.testTest" />
       </list>
     </recent_temporary>
   </component>
@@ -1053,44 +914,45 @@
       <workItem from="1542418844853" duration="106000" />
       <workItem from="1542419633498" duration="8584000" />
       <workItem from="1542429657503" duration="5193000" />
-      <workItem from="1542462966871" duration="4593000" />
+      <workItem from="1542462966871" duration="4788000" />
+      <workItem from="1542504974624" duration="27877000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 22h 55m 59s.xml">
+    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 13m 09s.xml">
       <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 22h 56m 09s.xml">
+    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 13m 26s.xml">
       <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 22h 56m 51s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PersonDaoTest_testTest - 2018.11.18 at 15h 59m 06s.xml">
+      <configuration name="PersonDaoTest.testTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 01m 59s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PersonDaoTest_testTest - 2018.11.18 at 15h 59m 27s.xml">
+      <configuration name="PersonDaoTest.testTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 03m 01s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PersonDaoTest_testTest - 2018.11.18 at 16h 00m 04s.xml">
+      <configuration name="PersonDaoTest.testTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 03m 10s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PersonDaoTest_testTest - 2018.11.18 at 16h 01m 06s.xml">
+      <configuration name="PersonDaoTest.testTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 07m 26s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PersonDaoTest_testTest - 2018.11.18 at 16h 02m 01s.xml">
+      <configuration name="PersonDaoTest.testTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 08m 12s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PersonDaoTest_testTest - 2018.11.18 at 16h 02m 51s.xml">
+      <configuration name="PersonDaoTest.testTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 09m 46s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PrintTableTest_testToString - 2018.11.18 at 17h 33m 26s.xml">
+      <configuration name="PrintTableTest.testToString" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PersonDaoTest_testBaseBeauty - 2018.11.17 at 23h 10m 28s.xml">
-      <configuration name="PersonDaoTest.testBaseBeauty" configurationId="JUnit" />
+    <history-entry file="PrintTableTest_testToString - 2018.11.18 at 20h 04m 43s.xml">
+      <configuration name="PrintTableTest.testToString" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="631243000" />
+    <option name="totallyTimeSpent" value="659315000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1103,9 +965,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7865497" visible="true" weight="0.30030257" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7865497" visible="true" weight="0.30484116" />
       <window_info id="Structure" order="1" sideWeight="0.2134503" side_tool="true" weight="0.295764" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1115,26 +976,26 @@
       <window_info anchor="bottom" id="Spring" order="0" weight="0.4573379" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.29692832" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4778157" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.46928328" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.27133107" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.29180887" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32764506" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50075644" side_tool="true" weight="0.39419794" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.27986348" />
-      <window_info active="true" anchor="bottom" id="Run" order="12" sideWeight="0.49924356" visible="true" weight="0.41467577" />
+      <window_info anchor="bottom" id="Run" order="12" sideWeight="0.49924356" weight="0.64846414" />
       <window_info anchor="bottom" id="Tool Output" order="13" weight="0.19795223" />
       <window_info anchor="bottom" id="ANTLR Preview" order="14" weight="0.39249146" />
-      <window_info anchor="bottom" id="Statistic" order="15" sideWeight="0.49924356" weight="0.32935154" />
+      <window_info anchor="bottom" id="Statistic" order="15" sideWeight="0.49924356" weight="0.44027305" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="1" visible="true" weight="0.0" />
       <window_info anchor="right" id="Palette" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="right" id="Database" order="4" weight="0.055219363" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Palette&#9;" order="6" />
+      <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info anchor="right" id="Palette&#9;" order="5" />
+      <window_info anchor="right" id="Database" order="6" visible="true" weight="0.0" />
       <window_info anchor="right" id="Maven Projects" order="7" weight="0.32980332" />
       <window_info anchor="right" x="92" y="92" width="1182" height="544" id="Byte Code Viewer" order="8" type="FLOATING" />
       <window_info anchor="right" id="Ant Build" order="9" weight="0.24962178" />
@@ -1201,6 +1062,12 @@
           <properties />
           <option name="timeStamp" value="55" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java</url>
+          <line>189</line>
+          <properties />
+          <option name="timeStamp" value="93" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
@@ -1233,44 +1100,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/src/test/java/cn/ouctechnology/oodb/catalog/CatalogTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="64" column="32" lean-forward="true" selection-start-line="64" selection-start-column="32" selection-end-line="64" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/test/java/cn/ouctechnology/oodb/reocrd/RecordTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/db/table.catalog">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropIndexExplain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-385">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropExplain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/beauty/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
@@ -1300,24 +1129,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4325">
-          <caret line="194" column="29" selection-start-line="194" selection-start-column="29" selection-end-line="194" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/PrimaryKey.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="900">
           <caret line="44" column="5" selection-start-line="42" selection-start-column="4" selection-end-line="44" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/constant/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="16" column="31" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -1339,13 +1154,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1775">
           <caret line="98" column="15" selection-start-line="98" selection-start-column="15" selection-end-line="98" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/test/java/OQL.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="197" column="76" selection-start-line="197" selection-start-column="61" selection-end-line="197" selection-end-column="76" />
         </state>
       </provider>
     </entry>
@@ -1406,20 +1214,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/HashCodeTest.java" />
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2150">
-          <caret line="96" column="13" selection-start-line="96" selection-start-column="13" selection-end-line="96" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6875">
-          <caret line="291" column="14" selection-start-line="291" selection-start-column="14" selection-end-line="291" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/SessionFactoryTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4150">
@@ -1427,20 +1221,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/TextTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="97" column="28" selection-start-line="97" selection-start-column="27" selection-end-line="97" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -1465,27 +1245,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxyFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/db/person.idx_id.ood">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BaseBeautyHandler.java" />
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BaseBeauty.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="24" column="13" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40725">
@@ -1522,17 +1285,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/List.java">
+    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BaseBeauty.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+        <state relative-caret-position="500">
+          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/reocrd/Record.java">
+    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxyFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12">
-          <caret line="68" selection-start-line="68" selection-end-line="68" />
+        <state relative-caret-position="250">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4925">
+          <caret line="214" column="18" selection-start-line="214" selection-start-column="18" selection-end-line="214" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Query.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="62">
+          <caret line="53" column="28" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -1546,17 +1326,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Query.java">
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/reocrd/Record.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="53" column="28" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="148" column="46" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="46" />
+        <state relative-caret-position="550">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
         </state>
       </provider>
     </entry>
@@ -1569,23 +1342,145 @@
             <element signature="e#2251#2252#0" expanded="true" />
             <element signature="e#2388#2389#0" expanded="true" />
             <element signature="e#2424#2425#0" expanded="true" />
-            <element signature="e#2464#2465#0" expanded="true" />
-            <element signature="e#2500#2501#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/BeautyProxy.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/List.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="227" column="51" selection-start-line="227" selection-start-column="51" selection-end-line="227" selection-end-column="51" />
+        <state relative-caret-position="92">
+          <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/socket/SocketProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="52" column="23" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/main/java/TextTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="215" column="38" selection-start-line="215" selection-start-column="38" selection-end-line="215" selection-end-column="38" />
+          <folding>
+            <element signature="e#115#139#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="333" column="9" selection-start-line="333" selection-start-column="9" selection-end-line="333" selection-end-column="9" />
+          <folding>
+            <element signature="e#5995#5996#0" expanded="true" />
+            <element signature="e#6041#6042#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="129" column="13" selection-start-line="129" selection-start-column="13" selection-end-line="129" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/test/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/beauty/src/test/java/cn/ouctechnology/oodb/beauty/PersonDaoTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="71" column="9" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
+        <state relative-caret-position="233">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/main/java/PrintTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="385" column="9" selection-start-line="385" selection-start-column="9" selection-end-line="385" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#165#189#0" expanded="true" />
+            <element signature="e#10270#10271#0" expanded="true" />
+            <element signature="e#10338#10339#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/test/java/PrintTableTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="43" column="39" lean-forward="true" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/test/java/OQL.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="617" column="17" selection-start-line="617" selection-start-column="17" selection-end-line="617" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/constant/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/CreateExplain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="57" column="37" lean-forward="true" selection-start-line="57" selection-start-column="37" selection-end-line="57" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Catalog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="74">
+          <caret line="83" column="30" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/execute/DropExplain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="653">
+          <caret line="43" column="37" lean-forward="true" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/catalog/Table.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="31" column="41" selection-start-line="31" selection-start-column="41" selection-end-line="31" selection-end-column="41" />
+          <folding>
+            <element signature="e#1552#1553#0" expanded="true" />
+            <element signature="e#1600#1601#0" expanded="true" />
+            <element signature="e#1560#1561#0" expanded="true" />
+            <element signature="e#1592#1593#0" expanded="true" />
+            <element signature="e#1715#1716#0" expanded="true" />
+            <element signature="e#1742#1743#0" expanded="true" />
+            <element signature="e#1787#1788#0" expanded="true" />
+            <element signature="e#1822#1823#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1642,11 +1537,12 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Spring|oodb</last-edited>
+          <last-edited>oodb</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

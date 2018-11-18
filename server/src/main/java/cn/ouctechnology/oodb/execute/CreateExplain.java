@@ -42,6 +42,8 @@ public class CreateExplain {
 
     private Table table;
 
+    private List<String> refs;
+
     //只能存在一个主键
     private boolean primary;
 
@@ -50,9 +52,11 @@ public class CreateExplain {
         ColumnDefinitionContext columnDefinitionContext = create.getChild(ColumnDefinitionContext.class);
         ExtendsTableContext extendsTableContext = create.getChild(ExtendsTableContext.class);
         TableConstraintContext tableConstraintContext = create.getChild(TableConstraintContext.class);
+        List<String> refs = new ArrayList<>();
         return CreateExplain
                 .builder()
                 .tableName(tableName)
+                .refs(refs)
                 .columnDefinitionContext(columnDefinitionContext)
                 .constraintContext(tableConstraintContext)
                 .extendsTableContext(extendsTableContext)
@@ -75,6 +79,7 @@ public class CreateExplain {
             table.setTupleLength(length);
         }
         dealWithTableConstraint();
+        table.setRefs(refs);
         try {
             Catalog.createTable(table);
             Record.create(tableName);
@@ -108,6 +113,8 @@ public class CreateExplain {
                     if (attribute.isSee()) table.getAttributes().add(attribute);
                 }
             }
+
+            table.setExtendTables(extendsTables);
         }
     }
 
@@ -180,6 +187,7 @@ public class CreateExplain {
             String refTable = word.getText();
             length = Catalog.getTupleLength(refTable);
             List<Attribute> innerAttributes = Catalog.getAttributes(refTable);
+            refs.add(refTable);
             return new ObjectAttribute(name, length, innerAttributes);
         }
         type = columnTypeContext.getChild(0).getText();

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -55,7 +57,12 @@ public class Client {
                     }
                 }
                 isPrinting = true;
-                System.out.println(res);
+                if (res instanceof List) {
+                    List<Map<String, Object>> resMap = (List<Map<String, Object>>) res;
+                    if (resMap.size() > 0) {
+                        System.out.println(new PrintTable(resMap));
+                    } else System.out.println("there is not data in the table");
+                } else System.out.println(res);
                 System.out.print(">");
                 isPrinting = false;
                 printCondition.signal();

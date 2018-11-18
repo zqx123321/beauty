@@ -19,21 +19,27 @@ public class Table implements Cloneable {
     String tableName;//表名
     PrimaryKey primaryKey;//主键
     List<Attribute> attributes;//属性组
-    List<Index> indexes;
+    List<Index> indexes;//主键
+    List<String> refs;//引用表
+    List<String> extendTables;//继承表
     int tupleNum;//表中元组的数量
     int tupleLength;//一个元组的大小
     int maxId;
 
     public Table() {
         attributes = new ArrayList<>();
+        refs = new ArrayList<>();
+        extendTables = new ArrayList<>();
         indexes = new ArrayList<>();
         this.maxId = 0;
     }
 
-    public Table(String tableName, PrimaryKey primaryKey, List<Attribute> attributes, List<Index> indexes, int tupleNum) {
+    public Table(String tableName, PrimaryKey primaryKey, List<Attribute> attributes, List<String> refs, List<String> extendTables, List<Index> indexes, int tupleNum) {
         this.tableName = tableName;
         this.primaryKey = primaryKey;
         this.indexes = indexes;
+        this.refs = refs;
+        this.extendTables = extendTables;
         this.attributes = attributes;
         this.tupleNum = tupleNum;
         this.maxId = 0;
@@ -48,6 +54,22 @@ public class Table implements Cloneable {
 
     public String getTableName() {
         return tableName;
+    }
+
+    public void setExtendTables(List<String> extendTables) {
+        this.extendTables = extendTables;
+    }
+
+    public void setRefs(List<String> refs) {
+        this.refs = refs;
+    }
+
+    public List<String> getRefs() {
+        return refs;
+    }
+
+    public List<String> getExtendTables() {
+        return extendTables;
     }
 
     public synchronized void setTableName(String tableName) {

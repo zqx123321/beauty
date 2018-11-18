@@ -1,8 +1,11 @@
 package cn.ouctechnology.oodb.beauty;
 
+import cn.ouctechnology.oodb.beauty.criteria.Restrictions;
+import cn.ouctechnology.oodb.beauty.session.Session;
 import cn.ouctechnology.oodb.beauty.session.SessionFactory;
 import cn.ouctechnology.oodb.beauty.test.Person;
 import cn.ouctechnology.oodb.beauty.test.PersonDao;
+import cn.ouctechnology.oodb.beauty.test.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
