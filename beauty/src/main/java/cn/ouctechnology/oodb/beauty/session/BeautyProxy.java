@@ -3,7 +3,6 @@ package cn.ouctechnology.oodb.beauty.session;
 import cn.ouctechnology.oodb.beauty.annotation.*;
 import cn.ouctechnology.oodb.beauty.criteria.Criteria;
 import cn.ouctechnology.oodb.beauty.criteria.Criterion;
-import cn.ouctechnology.oodb.beauty.criteria.Projections;
 import cn.ouctechnology.oodb.beauty.criteria.Restrictions;
 import cn.ouctechnology.oodb.beauty.exception.BeautifulException;
 import cn.ouctechnology.oodb.beauty.util.BeanUtil;
@@ -59,6 +58,11 @@ public class BeautyProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
+        //垃圾回收的时候关闭session
+        if (method.getName().toLowerCase().equals("finalize")) {
+            session.close();
+            return null;
+        }
         if (genericClz != null && !methodSet.contains(method)) {
             return invokeBase(genericClz, session, method, args);
         }
@@ -159,6 +163,7 @@ public class BeautyProxy implements InvocationHandler {
     }
 
     private Object doSelect(Method method, String oql) {
+        NoCached noCached = method.getAnnotation(NoCached.class);
         logger.info("select:{}", oql);
         Query query = session.createQuery(oql);
         //返回值为list类型
@@ -169,23 +174,30 @@ public class BeautyProxy implements InvocationHandler {
                 ParameterizedType listGenericType = (ParameterizedType) method.getGenericReturnType();
                 Type typeArgument = listGenericType.getActualTypeArguments()[0];
                 Class clz = (Class) typeArgument;
+                if (noCached != null) return query.list(clz, true);
                 return query.list(clz);
             }
+            if (noCached != null) return query.list(true);
             return query.list();
         }
         //单值类型
         //复杂类型
         Class<?> returnType = method.getReturnType();
         if (returnType.getClassLoader() != null) {
+            if (noCached != null) return query.firstResult(returnType, true);
             return query.firstResult(returnType);
         }
         //简单类型
+        if (noCached != null) return query.firstResult(true);
         return query.firstResult();
     }
 
     private Object doUpdate(Method method, String oql) {
+        NoFlush noFlush = method.getAnnotation(NoFlush.class);
         logger.info("update:{}", oql);
-        int update = session.createQuery(oql).update();
+        int update = 0;
+        if (noFlush != null) update = session.createQuery(oql).update(true);
+        else update = session.createQuery(oql).update();
         Class<?> returnType = method.getReturnType();
         if (returnType == Integer.class || returnType == int.class) {
             return update;

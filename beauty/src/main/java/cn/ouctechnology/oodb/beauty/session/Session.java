@@ -3,9 +3,12 @@ package cn.ouctechnology.oodb.beauty.session;
 import cn.ouctechnology.oodb.beauty.annotation.Id;
 import cn.ouctechnology.oodb.beauty.annotation.Length;
 import cn.ouctechnology.oodb.beauty.annotation.Size;
+import cn.ouctechnology.oodb.beauty.cache.Cache;
+import cn.ouctechnology.oodb.beauty.cache.LRUCache;
 import cn.ouctechnology.oodb.beauty.criteria.Criteria;
 import cn.ouctechnology.oodb.beauty.criteria.Criterion;
 import cn.ouctechnology.oodb.beauty.exception.BeautifulException;
+import cn.ouctechnology.oodb.beauty.util.BeanUtil;
 import cn.ouctechnology.oodb.beauty.util.SerializationUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -20,10 +23,10 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static cn.ouctechnology.oodb.beauty.util.BeanUtil.getColumnList;
-import static cn.ouctechnology.oodb.beauty.util.BeanUtil.getValueList;
+import static cn.ouctechnology.oodb.beauty.util.BeanUtil.*;
 
 /**
  * @program: oodb
@@ -40,12 +43,19 @@ public class Session {
 
     private ByteBuffer readBuffer;
 
-    public Session(String domain, int port) {
+    //生产该session的Factory
+    private SessionFactory sessionFactory;
+
+    //session 上的默认缓存实现
+    private Cache<String, Map<String, Object>> cache = new LRUCache<>(10, 0);
+
+    public Session(String domain, int port, SessionFactory sessionFactory) {
         try {
             socketChannel = SocketChannel.open();
             socketChannel.connect(new InetSocketAddress(domain, port));
             writeBuffer = ByteBuffer.allocate(1024 * 1024);
             readBuffer = ByteBuffer.allocate(1024 * 1024);
+            this.sessionFactory = sessionFactory;
         } catch (IOException e) {
             e.printStackTrace();
             throw new BeautifulException(e);
@@ -58,6 +68,7 @@ public class Session {
     }
 
     void sendMessage(String msg) {
+
         writeBuffer.clear();
         writeBuffer.put(msg.getBytes());
 
@@ -97,6 +108,7 @@ public class Session {
 
     public void close() {
         sendMessage("quit");
+        cache.clear();
         IOUtils.closeQuietly(socketChannel.socket());
         IOUtils.closeQuietly(socketChannel);
 
@@ -234,6 +246,92 @@ public class Session {
     }
 
     public Object createOql(String oql) {
+        String tableUpdate = null;
+        if (oql.startsWith("select")) {
+            Object fromCache = getFromCache(oql);
+            if (fromCache != null) return fromCache;
+        } else {
+            tableUpdate = flushCache(oql, tableUpdate);
+        }
+        if (tableUpdate != null) {
+            clearCache(tableUpdate);
+            if (sessionFactory.isCached()) {
+                sessionFactory.clearCache(tableUpdate);
+            }
+        }
+        sendMessage(oql);
+        return getResponse();
+    }
+
+    public Object createOqlNoCache(String oql) {
+        String tableUpdate = null;
+        if (oql.startsWith("select")) {
+            sendMessage(oql);
+            return getResponse();
+        } else tableUpdate = flushCache(oql, tableUpdate);
+        if (tableUpdate != null) {
+            clearCache(tableUpdate);
+            if (sessionFactory.isCached()) {
+                sessionFactory.clearCache(tableUpdate);
+            }
+        }
+        sendMessage(oql);
+        return getResponse();
+    }
+
+    public Object createOqlNoFlush(String oql) {
+        if (oql.startsWith("select")) {
+            Object fromCache = getFromCache(oql);
+            if (fromCache != null) return fromCache;
+        }
+
+        sendMessage(oql);
+        return getResponse();
+    }
+
+    private Object getFromCache(String oql) {
+        String tableName = getTableNameFromSelect(oql);
+        //可以利用缓存
+        if (tableName != null) {
+            //先查一级缓存
+            Object sessionCache = BeanUtil.getFromCache(cache, tableName, oql);
+            if (sessionCache != null) {
+                logger.info("return from session cache...");
+                return sessionCache;
+            }
+            //再查二级缓存
+            if (sessionFactory.isCached()) {
+                Object factoryCache = BeanUtil.getFromCache(sessionFactory.getCache(), tableName, oql);
+                if (factoryCache != null) {
+                    logger.info("return from factory cache...");
+                    return factoryCache;
+                }
+            }
+            sendMessage(oql);
+            Object response = getResponse();
+            //放入二级缓存
+            if (sessionFactory.isCached()) {
+                putIntoCache(sessionFactory.getCache(), tableName, oql, response);
+            }
+            //放入二级缓存
+            putIntoCache(cache, tableName, oql, response);
+            return response;
+        }
+        return null;
+    }
+
+    private String flushCache(String oql, String tableUpdate) {
+        if (oql.startsWith("delete")) {
+            tableUpdate = BeanUtil.getTableNameFromDelete(oql);
+        } else if (oql.startsWith("update")) {
+            tableUpdate = BeanUtil.getTableNameFromUpdate(oql);
+        } else if (oql.startsWith("insert")) {
+            tableUpdate = BeanUtil.getTableNameFromInsert(oql);
+        }
+        return tableUpdate;
+    }
+
+    public Object createOqlNoCacheAndFlush(String oql) {
         sendMessage(oql);
         return getResponse();
     }
@@ -341,5 +439,22 @@ public class Session {
         String oql = sb.toString();
         logger.info("drop:{}", oql);
         return new Query(oql, this).update();
+    }
+
+    public Cache<String, Map<String, Object>> getCache() {
+        return cache;
+    }
+
+    public void clearCache() {
+        cache.clear();
+    }
+
+    public void clearCache(String tableName) {
+        Map<String, Object> objectMap = cache.get(tableName);
+        if (objectMap != null) objectMap.clear();
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

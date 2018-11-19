@@ -2,6 +2,8 @@ package cn.ouctechnology.oodb.beauty.session;
 
 
 import cn.ouctechnology.oodb.beauty.exception.BeautifulException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  * @description: TODO
  **/
 public class Query {
+    private Logger logger = LoggerFactory.getLogger(Query.class);
     private String oql;
     private Session session;
 
@@ -33,33 +36,39 @@ public class Query {
         return oql;
     }
 
-    public List list() {
-        session.sendMessage(oql);
-        Object response = session.getResponse();
-        return (List) response;
+    public List list(boolean... cache) {
+        if (!oql.startsWith("select")) throw new BeautifulException("the list must be select statement");
+        if (cache != null && cache.length > 0) {
+            Object value = session.createOqlNoCache(this.oql);
+            return (List) value;
+        }
+        Object value = session.createOql(this.oql);
+        return (List) value;
     }
 
-    public int update() {
-        session.sendMessage(oql);
-        String response = (String) session.getResponse();
+    public int update(boolean... flush) {
+        if (oql.startsWith("select")) throw new BeautifulException("the list must not be select statement");
+        String response = null;
+        if (flush != null && flush.length > 0) response = (String) session.createOqlNoFlush(oql);
+        else response = (String) session.createOql(oql);
         String rows = response.substring(0, response.indexOf(" "));
         return Integer.parseInt(rows);
     }
 
-    public Object firstResult() {
-        Map<String, Object> firstMap = (Map<String, Object>) list().get(0);
+    public Object firstResult(boolean... cache) {
+        Map<String, Object> firstMap = (Map<String, Object>) list(cache).get(0);
         return firstMap.entrySet().iterator().next().getValue();
     }
 
-    public <T> T firstResult(Class<T> clz) {
-        List<T> list = list(clz);
+    public <T> T firstResult(Class<T> clz, boolean... cache) {
+        List<T> list = list(clz, cache);
         if (list == null || list.size() == 0) return null;
         return list.get(0);
     }
 
-    public <T> List<T> list(Class<T> clz) {
+    public <T> List<T> list(Class<T> clz, boolean... cache) {
         //获取list对象
-        List<Map<String, Object>> resMaps = list();
+        List<Map<String, Object>> resMaps = list(cache);
         //获取setter方法
         return resMaps.stream().map(r -> {
             Map<String, Object> newMap = new HashMap<>();

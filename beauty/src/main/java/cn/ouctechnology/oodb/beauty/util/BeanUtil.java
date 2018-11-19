@@ -1,5 +1,6 @@
 package cn.ouctechnology.oodb.beauty.util;
 
+import cn.ouctechnology.oodb.beauty.cache.Cache;
 import cn.ouctechnology.oodb.beauty.exception.BeautifulException;
 
 import java.beans.BeanInfo;
@@ -7,8 +8,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @program: oodb
@@ -114,4 +114,76 @@ public class BeanUtil {
             throw new BeautifulException(e);
         }
     }
+
+    /**
+     * 多表查询不做缓存
+     */
+    public static String getTableNameFromSelect(String oql) {
+        if (!oql.startsWith("select")) return null;
+        if (oql.contains("join")) return null;
+        int from = oql.indexOf("from");
+        oql = oql.substring(from + 5);
+        int index = oql.indexOf(" ");
+        String tableName = oql.substring(0, index);
+        oql = oql.substring(index + 1);
+        int where = oql.indexOf("where");
+        int limit = oql.indexOf("limit");
+        int order = oql.indexOf("order");
+        int group = oql.indexOf("group");
+        List<Integer> list = Arrays.asList(where, limit, order, group);
+        Optional<Integer> min = list.stream().filter(l -> l != -1).min(Integer::compareTo);
+        int minIndex = oql.length();
+        if (min.isPresent()) {
+            minIndex = min.get();
+        }
+        oql = oql.substring(0, minIndex);
+        if (oql.contains(",")) return null;
+        return tableName;
+    }
+
+    public static String getTableNameFromUpdate(String oql) {
+        if (!oql.startsWith("update")) return null;
+        oql = oql.substring(7);
+        return oql.substring(0, oql.indexOf(" "));
+    }
+
+    public static String getTableNameFromDelete(String oql) {
+        if (!oql.startsWith("delete")) return null;
+        int from = oql.indexOf("from");
+        oql = oql.substring(from + 5);
+        int index = oql.indexOf(" ");
+        return oql.substring(0, index);
+    }
+
+    public static String getTableNameFromInsert(String oql) {
+        if (!oql.startsWith("insert")) return null;
+        int from = oql.indexOf("into");
+        oql = oql.substring(from + 5);
+        int index = oql.indexOf(" ");
+        return oql.substring(0, index);
+    }
+
+    public static Object getFromCache(Cache<String, Map<String, Object>> cache, String tableName, String oql) {
+        Map<String, Object> objectMap = cache.get(tableName);
+        if (objectMap != null) {
+            Object value = objectMap.get(oql);
+            //一级缓存有直接返回
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    public static void putIntoCache(Cache<String, Map<String, Object>> cache, String tableName, String oql, Object response) {
+        Map<String, Object> objectMap = cache.get(tableName);
+        if (objectMap == null) {
+            objectMap = new HashMap<>();
+            objectMap.put(oql, response);
+            cache.put(tableName, objectMap);
+        } else {
+            objectMap.put(oql, response);
+        }
+    }
+
 }

@@ -10,6 +10,7 @@ import org.dom4j.io.SAXReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @program: oodb
@@ -23,9 +24,11 @@ public class SessionFactory {
 
     private int port;
 
-    private String xmlPath;
-
     private volatile static SessionFactory instance;
+
+
+    //sessionFactory上的二级缓存
+    private BeautyCache cache;
 
 
     public void setDomain(String domain) {
@@ -36,8 +39,12 @@ public class SessionFactory {
         this.port = port;
     }
 
+    public void setCache(BeautyCache cache) {
+        this.cache = cache;
+    }
+
     //默认值
-    private SessionFactory() {
+    public SessionFactory() {
         this.domain = "localhost";
         this.port = 9999;
     }
@@ -53,6 +60,7 @@ public class SessionFactory {
      * @param path
      * @return
      */
+    @SuppressWarnings("all")
     public static SessionFactory getFactoryByXml(String path) {
         if (instance != null) return instance;
         InputStream inputStream;
@@ -100,10 +108,31 @@ public class SessionFactory {
 
     public void close() {
         instance = null;
+        cache = null;
     }
 
     public Session getSession() {
-        return new Session(domain, port);
+        return new Session(domain, port, this);
     }
 
+    public void closeSession(Session session) {
+        session.close();
+    }
+
+    public boolean isCached() {
+        return cache != null;
+    }
+
+    public BeautyCache getCache() {
+        return cache;
+    }
+
+    public void clearCache() {
+        cache.clear();
+    }
+
+    public void clearCache(String tableName) {
+        Map<String, Object> objectMap = cache.get(tableName);
+        if (objectMap != null) objectMap.clear();
+    }
 }

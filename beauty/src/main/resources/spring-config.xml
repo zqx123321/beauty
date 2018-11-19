@@ -7,12 +7,27 @@
     <bean id="sessionFactory" class="cn.ouctechnology.oodb.beauty.session.SessionFactory">
         <property name="domain" value="localhost"/>
         <property name="port" value="9999"/>
+        <property name="cache" ref="beautyCache"/>
     </bean>
 
     <!--配置注解扫描器-->
     <bean id="beautyScanner" class="cn.ouctechnology.oodb.beauty.session.BeautyScanner">
         <property name="basePackage" value="cn.ouctechnology.oodb.beauty.test"/>
         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!--配置session连接池-->
+    <bean id="sessionPool" class="cn.ouctechnology.oodb.beauty.conections.SessionPool">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="initialSize" value="1"/>
+        <property name="maxActive" value="3"/>
+        <property name="maxIdle" value="1000"/>
+    </bean>
+
+    <!--sessionFactory二级缓存-->
+    <bean id="beautyCache" class="cn.ouctechnology.oodb.beauty.session.BeautyCache">
+        <property name="cacheSize" value="50"/>
+        <property name="policy" value="lru"/>
     </bean>
 
 </beans>

@@ -175,6 +175,8 @@ public class LogicalPlan {
             }
 
         }
+        //防止一次性返回大量数据
+        if (limitNode == null) limitNode = new LogicalLimitNode(0, 100);
         return new LogicalPlan(
                 logicalTableNode
                 , aggregateNode

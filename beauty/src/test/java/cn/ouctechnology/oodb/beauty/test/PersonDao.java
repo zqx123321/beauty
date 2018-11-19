@@ -17,12 +17,14 @@ public interface PersonDao extends BaseBeauty<Person> {
     @Select("select a from person a")
     List<Person> list();
 
+    @NoCached
     @Select("select a from person a where a.id=#{id}")
     Person get(int id);
 
     @Update("update person a set a.name=#{name} where a.id=#{id}")
     int update(Person person);
 
+    @NoFlush
     @Insert("insert into person values(#{id}, #{name})")
     int insert(Person person);
 
