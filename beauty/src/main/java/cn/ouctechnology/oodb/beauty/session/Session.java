@@ -49,10 +49,10 @@ public class Session {
     //session 上的默认缓存实现
     private Cache<String, Map<String, Object>> cache = new LRUCache<>(10, 0);
 
-    public Session(String domain, int port, SessionFactory sessionFactory) {
+    public Session(String server, int port, SessionFactory sessionFactory) {
         try {
             socketChannel = SocketChannel.open();
-            socketChannel.connect(new InetSocketAddress(domain, port));
+            socketChannel.connect(new InetSocketAddress(server, port));
             writeBuffer = ByteBuffer.allocate(1024 * 1024);
             readBuffer = ByteBuffer.allocate(1024 * 1024);
             this.sessionFactory = sessionFactory;

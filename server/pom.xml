@@ -13,7 +13,6 @@
 
     <dependencies>
 
-
         <!--jackson-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -55,6 +54,6 @@
 
 
     </dependencies>
-    
+
 
 </project>

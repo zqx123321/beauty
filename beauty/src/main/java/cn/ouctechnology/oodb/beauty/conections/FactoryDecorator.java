@@ -22,8 +22,8 @@ public class FactoryDecorator extends SessionFactory {
         this.sessionPool = sessionPool;
     }
 
-    public FactoryDecorator(String domain, int port) {
-        super(domain, port);
+    public FactoryDecorator(String server, int port) {
+        super(server, port);
     }
 
     public FactoryDecorator() {

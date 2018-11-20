@@ -20,7 +20,7 @@ import java.util.Map;
  **/
 public class SessionFactory {
 
-    private String domain;
+    private String server;
 
     private int port;
 
@@ -31,8 +31,8 @@ public class SessionFactory {
     private BeautyCache cache;
 
 
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setServer(String server) {
+        this.server = server;
     }
 
     public void setPort(int port) {
@@ -45,12 +45,12 @@ public class SessionFactory {
 
     //默认值
     public SessionFactory() {
-        this.domain = "localhost";
+        this.server = "localhost";
         this.port = 9999;
     }
 
-    public SessionFactory(String domain, int port) {
-        this.domain = domain;
+    public SessionFactory(String server, int port) {
+        this.server = server;
         this.port = port;
     }
 
@@ -78,23 +78,27 @@ public class SessionFactory {
         SAXReader reader = new SAXReader();
         // 通过read方法读取一个文件 转换成Document对象
         try {
+            String server = "localhost";
+            int port = 9999;
             Document document = reader.read(inputStream);
             //获取根节点元素对象
             Element node = document.getRootElement();
-            Element server = node.element("server");
-            if (server == null) throw new BeautifulException("the xml error");
-            Element domainElement = server.element("domain");
-            if (domainElement == null) throw new BeautifulException("the xml error");
-            Element portElement = server.element("port");
-            if (portElement == null) throw new BeautifulException("the xml error");
-            String domain = domainElement.getText();
-            int port = Integer.parseInt(portElement.getText());
+            Element beauty = node.element("beauty");
+            if (beauty == null) throw new BeautifulException("the xml error");
+            Element serverElement = beauty.element("server");
+            if (serverElement != null) {
+                server = serverElement.getText();
+            }
+            Element portElement = beauty.element("port");
+            if (portElement != null) {
+                port = Integer.parseInt(portElement.getText());
+            }
             IOUtils.closeQuietly(inputStream);
             //创建单例对象
             if (instance == null) {
                 synchronized (SessionFactory.class) {
                     if (instance == null) {
-                        return new SessionFactory(domain, port);
+                        return new SessionFactory(server, port);
                     }
                 }
             }
@@ -112,7 +116,7 @@ public class SessionFactory {
     }
 
     public Session getSession() {
-        return new Session(domain, port, this);
+        return new Session(server, port, this);
     }
 
     public void closeSession(Session session) {

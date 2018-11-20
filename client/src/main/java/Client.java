@@ -1,6 +1,14 @@
+import org.apache.commons.io.IOUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -26,6 +34,9 @@ public class Client {
     private Lock printLock;
     private Condition printCondition;
     private boolean isPrinting;
+    private boolean connected = false;
+    private static String server = "localhost";
+    private static int port = 9999;
 
     class ClientListener implements Runnable {
 
@@ -44,8 +55,16 @@ public class Client {
                         }
                         res = SerializationUtil.deserialize(bytes);
                     }
+                    if (!connected && res instanceof String && res.equals("pong")) {
+                        connected = true;
+                        synchronized (Client.class) {
+                            Client.class.notify();
+                        }
+                        continue;
+                    }
                 } catch (IOException e) {
                     logger.error("从服务端获取消息出错：{}", e.getMessage());
+                    break;
                 }
                 //锁定终端
                 printLock.lock();
@@ -71,17 +90,12 @@ public class Client {
         }
     }
 
-    public Client(String host, Integer tcpPort) {
-        try {
-            socketChannel = SocketChannel.open();
-            socketChannel.connect(new InetSocketAddress(host, tcpPort));
-            logger.info("客户端创建成功：{}", socketChannel);
-        } catch (Exception e) {
-            logger.error("客户端创建出错：{}", e.getMessage());
-        }
+    public Client(String host, Integer tcpPort) throws IOException {
+
+        socketChannel = SocketChannel.open();
+        socketChannel.connect(new InetSocketAddress(host, tcpPort));
         readBuffer = ByteBuffer.allocate(1024 * 1024);
         writeBuffer = ByteBuffer.allocate(1024 * 1024);
-
         printLock = new ReentrantLock();
         printCondition = printLock.newCondition();
         isPrinting = false;
@@ -90,6 +104,21 @@ public class Client {
         //设置为守护线程
         received.setDaemon(true);
         received.start();
+        //测试是否连接正常
+        sendMessage("ping");
+        synchronized (Client.class) {
+            try {
+                Client.class.wait(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (connected)
+            logger.info("客户端创建成功：{}", socketChannel);
+        else {
+            logger.error("与服务器连接失败：{}", socketChannel);
+            throw new IOException("与服务器连接时发生错误");
+        }
     }
 
     public void sendMessage(String msg) {
@@ -136,7 +165,41 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        Client client = new Client("localhost", 9999);
-        client.start();
+        try {
+            init();
+            Client client = new Client(server, port);
+            client.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void init() {
+        File file = new File("beauty.xml");
+        if (!file.exists()) return;
+        // 创建saxReader对象
+        SAXReader reader = new SAXReader();
+        // 通过read方法读取一个文件 转换成Document对象
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+            Document document = reader.read(inputStream);
+            //获取根节点元素对象
+            Element node = document.getRootElement();
+            Element beauty = node.element("beauty");
+            if (beauty == null) throw new RuntimeException("the xml error");
+            Element portElement = beauty.element("port");
+            if (portElement != null) {
+                port = Integer.parseInt(portElement.getText());
+            }
+
+            Element serverElement = beauty.element("server");
+            if (serverElement != null) {
+                server = serverElement.getText();
+            }
+
+            IOUtils.closeQuietly(inputStream);
+        } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace();
+        }
     }
 }

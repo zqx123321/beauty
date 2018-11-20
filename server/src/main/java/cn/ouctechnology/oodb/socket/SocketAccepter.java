@@ -1,6 +1,9 @@
 package cn.ouctechnology.oodb.socket;
 
+import cn.ouctechnology.oodb.constant.Constants;
 import cn.ouctechnology.oodb.exception.DbException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -12,6 +15,8 @@ import java.nio.channels.SocketChannel;
  * 新开线程只是接受请求而不处理请求
  */
 public class SocketAccepter implements Runnable {
+
+    private Logger logger = LoggerFactory.getLogger(SocketAccepter.class);
 
     private int tcpPort;
 
@@ -36,12 +41,18 @@ public class SocketAccepter implements Runnable {
             //没有设置configureBlocking(false),此处的accept会阻塞
             try {
                 //accept是监听客户端请求
+                synchronized (Server.class) {
+                    if (Server.socketCount >= Constants.MAX_SOCKET_COUNT) {
+                        logger.error("the socket count has reached to the max");
+                        Server.class.wait();
+                    }
+                }
                 SocketChannel socketChannel = serverSocket.accept();
-                System.out.println("Socket accepted: " + socketChannel);
+                logger.info("Socket accepted: {}, socket count: {}", socketChannel, ++Server.socketCount);
                 //todo check if the queue can even accept more sockets.
                 new Thread(new SocketProcessor(socketChannel)).start();
 
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 throw new DbException(e);
             }

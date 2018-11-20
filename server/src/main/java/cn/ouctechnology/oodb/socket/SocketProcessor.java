@@ -5,6 +5,8 @@ import cn.ouctechnology.oodb.execute.OqlEngine;
 import cn.ouctechnology.oodb.reocrd.Tuple;
 import cn.ouctechnology.oodb.util.SerializationUtil;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
  * @description: TODO
  **/
 public class SocketProcessor implements Runnable {
+    private Logger logger = LoggerFactory.getLogger(SocketProcessor.class);
     private SocketChannel socketChannel;
     private ByteBuffer readByteBuffer;
     private ByteBuffer writeByteBuffer;
@@ -69,14 +72,25 @@ public class SocketProcessor implements Runnable {
             IOUtils.closeQuietly(socketChannel.socket());
             IOUtils.closeQuietly(socketChannel);
             isQuit = true;
+            synchronized (Server.class) {
+                Server.socketCount--;
+                logger.info("a client disconnect.....");
+                Server.class.notify();
+            }
         }
         return null;
     }
 
     private Object process(String message) {
         if (message == null) return null;
+        if (message.equals("ping")) return "pong";
         if (message.contains("quit")) {
             isQuit = true;
+            synchronized (Server.class) {
+                Server.socketCount--;
+                logger.info("a client disconnect.....");
+                Server.class.notify();
+            }
             return null;
         }
         Object response;
@@ -106,6 +120,11 @@ public class SocketProcessor implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
                 isQuit = true;
+                synchronized (Server.class) {
+                    Server.socketCount--;
+                    logger.info("a client disconnect.....");
+                    Server.class.notify();
+                }
             }
         }
     }

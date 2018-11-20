@@ -2,11 +2,21 @@ package cn.ouctechnology.oodb.socket;
 
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
+import cn.ouctechnology.oodb.constant.Constants;
+import cn.ouctechnology.oodb.exception.DbException;
 import cn.ouctechnology.oodb.execute.SyncExplain;
 import cn.ouctechnology.oodb.transcation.DeadlockDetector;
+import org.apache.commons.io.IOUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,6 +31,11 @@ import java.util.TimerTask;
 public class Server {
     private static Logger logger = LoggerFactory.getLogger(Server.class);
     private int tcpPort;
+
+    /**
+     * 当前连接数
+     */
+    public static int socketCount = 0;
 
     public Server(int tcpPort) {
         this.tcpPort = tcpPort;
@@ -37,6 +52,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
+        readConfig();
         Buffer.init();
         Catalog.initialCatalog();
         Server server = new Server(9999);
@@ -55,5 +71,57 @@ public class Server {
                 deadlockDetector.run();
             }
         }, 0, 30000);
+    }
+
+    /**
+     * 读取配置文件
+     */
+    private static void readConfig() {
+        File file = new File("config.xml");
+        if (!file.exists()) return;
+        // 创建saxReader对象
+        SAXReader reader = new SAXReader();
+        // 通过read方法读取一个文件 转换成Document对象
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+            Document document = reader.read(inputStream);
+            //获取根节点元素对象
+            Element node = document.getRootElement();
+            Element beauty = node.element("beauty");
+            if (beauty == null) throw new DbException("the xml error");
+            Element portElement = beauty.element("port");
+            if (portElement != null) {
+                Constants.SERVER_PORT = Integer.parseInt(portElement.getText());
+            }
+
+            Element pathElement = beauty.element("path");
+            if (pathElement != null) {
+                Constants.DB_PATH = pathElement.getText();
+            }
+
+            Element socketCountElement = beauty.element("socketCount");
+            if (socketCountElement != null) {
+                Constants.MAX_SOCKET_COUNT = Integer.parseInt(socketCountElement.getText());
+            }
+
+            Element blockSizeElement = beauty.element("blockSize");
+            if (blockSizeElement != null) {
+                Constants.BLOCK_SIZE = Integer.parseInt(blockSizeElement.getText());
+            }
+
+            Element blockCountElement = beauty.element("blockCount");
+            if (blockCountElement != null) {
+                Constants.MAX_NUM_OF_BLOCKS = Integer.parseInt(blockCountElement.getText());
+            }
+
+            Element indexNodeElement = beauty.element("indexNode");
+            if (indexNodeElement != null) {
+                Constants.MAX_NUM_OF_NODE = Integer.parseInt(indexNodeElement.getText());
+            }
+
+            IOUtils.closeQuietly(inputStream);
+        } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace();
+        }
     }
 }

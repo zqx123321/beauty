@@ -92,7 +92,7 @@ public class SessionPool implements InitializingBean, BeanDefinitionRegistryPost
     public SessionPool() {
         initialSize = 1;
         maxActive = 5;
-        maxIdle = 60;
+        maxIdle = 60000;
     }
 
     public Session getSession(long timeoutTime) throws InterruptedException {
@@ -182,20 +182,27 @@ public class SessionPool implements InitializingBean, BeanDefinitionRegistryPost
         SAXReader reader = new SAXReader();
         // 通过read方法读取一个文件 转换成Document对象
         try {
+            int initialSize = 1;
+            int maxActiveSize = 5;
+            int maxIdleSize = 60000;
             Document document = reader.read(inputStream);
             //获取根节点元素对象
             Element node = document.getRootElement();
             Element server = node.element("pool");
             if (server == null) throw new BeautifulException("the xml error");
             Element initialSizeElement = server.element("initialSize");
-            if (initialSizeElement == null) throw new BeautifulException("the xml error");
+            if (initialSizeElement != null) {
+                initialSize = Integer.parseInt(initialSizeElement.getText());
+            }
             Element maxActiveElement = server.element("maxActive");
-            if (maxActiveElement == null) throw new BeautifulException("the xml error");
+            if (maxActiveElement != null) {
+                maxActiveSize = Integer.parseInt(maxActiveElement.getText());
+            }
+
             Element maxIdleElement = server.element("maxIdle");
-            if (maxIdleElement == null) throw new BeautifulException("the xml error");
-            Integer initialSize = Integer.parseInt(initialSizeElement.getText());
-            Integer maxActiveSize = Integer.parseInt(maxActiveElement.getText());
-            Integer maxIdleSize = Integer.parseInt(maxIdleElement.getText());
+            if (maxIdleElement != null) {
+                maxIdleSize = Integer.parseInt(maxIdleElement.getText());
+            }
             IOUtils.closeQuietly(inputStream);
             //创建单例对象
             if (instance == null) {

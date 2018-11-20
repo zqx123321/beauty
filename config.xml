@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <beauty>
+        <port>9999</port>
+        <path>server/db/</path>
+        <socketCount>2</socketCount>
+        <blockSize>8192</blockSize>
+        <blockCount>50</blockCount>
+        <indexNode>50</indexNode>
+    </beauty>
+
+</configuration>

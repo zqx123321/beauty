@@ -60,10 +60,10 @@ public class PersonDaoTest extends SpringTest {
 //        }
 
         System.out.println(personDao.selectList(null));
-        Person person = new Person();
-        person.setName("hhhhh");
-        person.setId(33);
-        personDao.insert(person);
+//        Person person = new Person();
+//        person.setName("hhhhh");
+//        person.setId(33);
+//        personDao.insert(person);
         System.out.println(personDao.selectList(null));
 
         //System.out.println(personDao.findByNameOrId("hh2", 6));

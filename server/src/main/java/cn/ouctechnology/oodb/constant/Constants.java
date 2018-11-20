@@ -1,11 +1,5 @@
 package cn.ouctechnology.oodb.constant;
 
-import cn.ouctechnology.oodb.buffer.Block;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * @program: oodb
  * @author: ZQX
@@ -13,8 +7,24 @@ import java.util.Set;
  * @description: 封装常量类
  **/
 public class Constants {
+    /**
+     * 以下为可配置项目
+     */
     //数据库文件存放目录
-    public static final String DB_PATH = "server/db/";
+    public static String DB_PATH = "server/db/";
+    //服务器支持的最大连接数
+    public static int MAX_SOCKET_COUNT = 5;
+    //服务器端口号
+    public static int SERVER_PORT = 9999;
+    //一个缓冲区块的大小
+    public static int BLOCK_SIZE = 8 * 1024;
+    //缓冲区中可容纳的最大区块数量
+    public static int MAX_NUM_OF_BLOCKS = 50;
+    //索引二级缓存中最大的索引块数量
+    public static int MAX_NUM_OF_NODE = 50;
+    /**
+     * 以下为不可配置项
+     */
     //目录文件后缀
     public static final String CATALOG_SUFFIX = ".catalog";
     public static final String NO_GROUPING = "NO_GROUPING";
@@ -24,10 +34,6 @@ public class Constants {
     public static final int FAIL = -1;
     //在获取偏移量的时候没找到
     public static final int NOT_FOUND = -1;
-    //一个缓冲区块的大小
-    public static final int BLOCK_SIZE = 8 * 1024;
-    //缓冲区中可容纳的最大区块数量
-    public static final int MAX_NUM_OF_BLOCKS = 50;
     //INT类型所占字节数
     public static final int SIZE_INT = 4;
     //FLOAT类型所占字节数
@@ -44,8 +50,6 @@ public class Constants {
     public static final String ROWS_AFFECTED = " ROWS AFFECTED";
     //索引文件后缀
     public static final String INDEX_SUFFIX = ".index";
-    //索引二级缓存中最大的索引块数量
-    public static final int MAX_NUM_OF_NODE = 50;
     //用于读
     public static final int READ = 0;
     //用于写
