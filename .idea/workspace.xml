@@ -6,9 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="35488d3e-ebb8-4495-8cb4-3df131f3ce8f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="35488d3e-ebb8-4495-8cb4-3df131f3ce8f" name="Default Changelist" comment="" />
     <list id="44f83530-9940-46b9-82e8-ce14710a5cfe" name="Revert &quot;travis&quot;" comment="Revert &quot;travis&quot;&#10;&#10;This reverts commit f00fe22" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -132,6 +130,7 @@
           <entry key="tokens" value="4" />
           <entry key="txt" value="4" />
           <entry key="xml" value="84" />
+          <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -145,6 +144,7 @@
           <entry key="PLAIN_TEXT" value="74" />
           <entry key="UML" value="16" />
           <entry key="XML" value="85" />
+          <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.spring.core.usages.trigger">
@@ -165,11 +165,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="100">
               <caret line="4" column="14" lean-forward="true" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.travis.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -297,7 +306,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/util/where/WhereNode.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/transcation/DeadlockDetector.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/reocrd/Field.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/operator/SeqScan.java" />
@@ -348,6 +356,7 @@
         <option value="$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/criteria/Criteria.java" />
         <option value="$PROJECT_DIR$/server/src/main/java/cn/ouctechnology/oodb/constant/Constants.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
   </component>
@@ -424,24 +433,6 @@
               <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
               <item name="oodb" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="oodb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="oodb" type="462c0819:PsiDirectoryNode" />
-              <item name="beauty" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -488,7 +479,7 @@
     <property name="SearchEverywhereHistoryKey" value="Sess&#9;FILE&#9;file://D:/杂乱文件终章/oodb/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java&#10;TypeVariableImpl&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/sun/reflect/generics/reflectiveObjects/TypeVariableImpl.class&#10;ParameterizedTy&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/reflect/ParameterizedType.java&#10;ThreadLocal&#9;PSI&#9;JAVA://java.lang.ThreadLocal&#10;Map&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Map.java&#10;String&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/java/lang/String.class&#10;Group&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/test/java/cn/ouctechnology/oodb/operator/GroupTest.java&#10;Op&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/main/java/cn/ouctechnology/oodb/operator&#10;Buffer&#9;PSI&#9;JAVA://cn.ouctechnology.oodb.buffer.Buffer&#10;TerminalNodeImpl&#9;PSI&#9;JAVA://org.antlr.v4.runtime.tree.TerminalNodeImpl" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543997705787" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544000197384" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="extract.method.default.visibility" value="private" />
@@ -829,7 +820,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="761852000" />
+    <option name="totallyTimeSpent" value="764307000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -842,8 +833,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6587031" visible="true" weight="0.24962178" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6587031" visible="true" weight="0.24962178" />
       <window_info id="Structure" order="1" sideWeight="0.34129694" side_tool="true" weight="0.3214826" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -858,13 +850,13 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.27133107" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.6279864" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.0" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5015129" side_tool="true" weight="0.5887372" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.27986348" />
       <window_info anchor="bottom" x="63" y="295" width="1322" height="196" id="Run" order="11" sideWeight="0.49848714" weight="0.49146757" />
       <window_info anchor="bottom" id="Tool Output" order="12" weight="0.19795223" />
       <window_info anchor="bottom" id="ANTLR Preview" order="13" weight="0.07337884" />
-      <window_info anchor="bottom" id="Version Control" order="14" weight="0.5307167" />
+      <window_info anchor="bottom" id="Version Control" order="14" visible="true" weight="0.5307167" />
       <window_info anchor="bottom" id="Statistic" order="15" sideWeight="0.49924356" weight="0.5784983" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="1" visible="true" weight="0.0037821482" />
@@ -1011,13 +1003,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/criteria/Criterion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/beauty/src/test/resources/oodb.xml" />
     <entry file="file://$PROJECT_DIR$/beauty/src/main/java/cn/ouctechnology/oodb/beauty/conections/FactoryDecorator.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1368,6 +1353,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
           <caret line="4" column="14" lean-forward="true" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
         </state>
       </provider>
     </entry>
