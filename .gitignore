@@ -1,4 +1,6 @@
 beauty/target/
 beauty/src/test
-out
-db
+client/target/
+client/src/test
+server/target/
+server/src/test
