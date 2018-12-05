@@ -304,7 +304,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="336" />
     <option name="y" value="60" />
     <option name="width" value="683" />
@@ -648,7 +648,7 @@
     <property name="SearchEverywhereHistoryKey" value="Sess&#9;FILE&#9;file://D:/杂乱文件终章/oodb/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java&#10;TypeVariableImpl&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/sun/reflect/generics/reflectiveObjects/TypeVariableImpl.class&#10;ParameterizedTy&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/reflect/ParameterizedType.java&#10;ThreadLocal&#9;PSI&#9;JAVA://java.lang.ThreadLocal&#10;Map&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Map.java&#10;String&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/java/lang/String.class&#10;Group&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/test/java/cn/ouctechnology/oodb/operator/GroupTest.java&#10;Op&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/main/java/cn/ouctechnology/oodb/operator&#10;Buffer&#9;PSI&#9;JAVA://cn.ouctechnology.oodb.buffer.Buffer&#10;TerminalNodeImpl&#9;PSI&#9;JAVA://org.antlr.v4.runtime.tree.TerminalNodeImpl" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543983897906" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543984293598" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="extract.method.default.visibility" value="private" />
