@@ -99,7 +99,9 @@ public class Criteria {
     }
 
     public Object uniqueResult(Class clz) {
-        return list(clz).get(0);
+        List list = list(clz);
+        if (list == null || list.size() == 0) return null;
+        return list.get(0);
     }
 
     public String getOql() {

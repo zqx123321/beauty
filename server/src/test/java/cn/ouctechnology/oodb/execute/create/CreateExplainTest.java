@@ -44,7 +44,7 @@ public class CreateExplainTest {
 
     @Test
     public void testExtends() {
-        String sql = "create table student(score float) extends person primary key(id)";
+        String sql = "create table student(score float,id int) primary key(id)";
         OqlStatContext statContext = (OqlStatContext) OQLParserTest.getParseTree(sql);
         CreateStatContext createStatContext = statContext.getChild(CreateStatContext.class);
         CreateExplain.getCreateExplain(createStatContext).doCreate();
