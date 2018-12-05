@@ -1,4 +1,4 @@
-beauty/target
-test
+beauty/target/
+beauty/src/test
 out
 db
