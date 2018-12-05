@@ -16,7 +16,7 @@ public class ProjectTest extends BaseTest {
 
     @Test
     public void fetchNext() {
-        DbIterator test = new SeqScan("test","a");
+        DbIterator test = new SeqScan("test", "a");
         Project id = new Project(test, Arrays.asList("a.id", "a.age"));
         id.open();
         while (id.hasNext()) {

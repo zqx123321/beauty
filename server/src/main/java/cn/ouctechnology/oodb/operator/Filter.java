@@ -1,14 +1,14 @@
 package cn.ouctechnology.oodb.operator;
 
-import cn.ouctechnology.oodb.util.where.WhereNode;
 import cn.ouctechnology.oodb.reocrd.Tuple;
 import cn.ouctechnology.oodb.util.JudgeUtil;
+import cn.ouctechnology.oodb.util.where.WhereNode;
 
 /**
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-29 20:25
- * @description: TODO
+ * @description: 选择操作
  **/
 public class Filter extends Operator {
 

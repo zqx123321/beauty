@@ -30,13 +30,6 @@ public class UpdateExplain {
 
     private OQLParser.WhereClauseContext whereClause;
 
-    public String doUpdate() {
-        Tuple tuple = buildTuple();
-        WhereNode whereTree = WhereClauseUtil.getWhereTree(whereClause);
-        int update = Record.update(tableName, tableAlias, tuple, whereTree);
-        return update + ROWS_AFFECTED;
-    }
-
     public static UpdateExplain getUpdateExplain(OQLParser.UpdateStatContext update) {
         OQLParser.UpdateClauseContext updateClause = update.getChild(OQLParser.UpdateClauseContext.class);
         String tableName = updateClause.getChild(OQLParser.SchemaNameContext.class).getText();
@@ -50,6 +43,13 @@ public class UpdateExplain {
                 .updateClause(updateClause)
                 .whereClause(whereClause)
                 .build();
+    }
+
+    public String doUpdate() {
+        Tuple tuple = buildTuple();
+        WhereNode whereTree = WhereClauseUtil.getWhereTree(whereClause);
+        int update = Record.update(tableName, tableAlias, tuple, whereTree);
+        return update + ROWS_AFFECTED;
     }
 
     private Tuple buildTuple() {

@@ -13,7 +13,7 @@ import static cn.ouctechnology.oodb.constant.Constants.TUPLE_AVAILABLE;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-29 20:01
- * @description: TODO
+ * @description: 顺序扫描
  **/
 public class SeqScan implements DbIterator {
 

@@ -1,9 +1,6 @@
 package cn.ouctechnology.oodb.operator;
 
 import cn.ouctechnology.oodb.BaseTest;
-import cn.ouctechnology.oodb.util.where.Op;
-import cn.ouctechnology.oodb.reocrd.Field;
-import cn.ouctechnology.oodb.reocrd.Tuple;
 import org.junit.Test;
 
 /**

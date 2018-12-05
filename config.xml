@@ -5,10 +5,11 @@
     <beauty>
         <port>9999</port>
         <path>server/db/</path>
-        <socketCount>2</socketCount>
+        <socketCount>5</socketCount>
         <blockSize>8192</blockSize>
         <blockCount>50</blockCount>
         <indexNode>50</indexNode>
+        <syncTime>3000</syncTime>
     </beauty>
 
 </configuration>

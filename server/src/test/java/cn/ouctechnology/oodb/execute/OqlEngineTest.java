@@ -18,12 +18,6 @@ import java.util.Scanner;
  **/
 public class OqlEngineTest extends BaseTest {
 
-    @Test
-    public void execute() {
-        String oql = "create table person(id int,name char(20),age float)";
-        System.out.println(OqlEngine.execute(oql));
-    }
-
     public static void main(String[] args) throws IOException {
         Catalog.initialCatalog();
         Buffer.init();
@@ -43,6 +37,11 @@ public class OqlEngineTest extends BaseTest {
         Buffer.close();
     }
 
+    @Test
+    public void execute() {
+        String oql = "create table person(id int,name char(20),age float)";
+        System.out.println(OqlEngine.execute(oql));
+    }
 
     @Test
     public void testInsertPush() {

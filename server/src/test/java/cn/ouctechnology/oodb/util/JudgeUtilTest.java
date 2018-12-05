@@ -1,14 +1,5 @@
 package cn.ouctechnology.oodb.util;
 
-import cn.ouctechnology.oodb.parser.OQLLexer;
-import cn.ouctechnology.oodb.parser.OQLParser;
-import cn.ouctechnology.oodb.reocrd.Tuple;
-import cn.ouctechnology.oodb.util.where.WhereNode;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.Test;
-
 /**
  * @program: oodb
  * @author: ZQX

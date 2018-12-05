@@ -18,7 +18,7 @@ public class PrintTableTest {
         List<Map<String, Object>> data = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Map<String, Object> aData = new HashMap<>();
-            aData.put("name", "dad" + i);
+            aData.put("name", "tom" + i);
             aData.put("id", i);
 
             Map<String, Object> sunData = new HashMap<>();
@@ -32,7 +32,7 @@ public class PrintTableTest {
 
 
             List<Map<String, Object>> list = new ArrayList<>();
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 3; j++) {
                 Map<String, Object> subData = new HashMap<>();
                 subData.put("name", "张三" + i + j);
                 subData.put("id", i + j + 9);

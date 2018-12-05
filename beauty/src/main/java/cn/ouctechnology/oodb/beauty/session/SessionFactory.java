@@ -16,32 +16,16 @@ import java.util.Map;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-12 12:08
- * @description: TODO
+ * @description: session工厂，用于生产session
  **/
 public class SessionFactory {
 
-    private String server;
-
-    private int port;
-
     private volatile static SessionFactory instance;
-
-
+    private String server;
+    private int port;
     //sessionFactory上的二级缓存
     private BeautyCache cache;
 
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public void setCache(BeautyCache cache) {
-        this.cache = cache;
-    }
 
     //默认值
     public SessionFactory() {
@@ -110,6 +94,14 @@ public class SessionFactory {
 
     }
 
+    public void setServer(String server) {
+        this.server = server;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public void close() {
         instance = null;
         cache = null;
@@ -131,10 +123,22 @@ public class SessionFactory {
         return cache;
     }
 
+    public void setCache(BeautyCache cache) {
+        this.cache = cache;
+    }
+
+    /**
+     * 刷新所有的二级缓存
+     */
     public void clearCache() {
         cache.clear();
     }
 
+    /**
+     * 刷新指定表的二级缓存
+     *
+     * @param tableName
+     */
     public void clearCache(String tableName) {
         Map<String, Object> objectMap = cache.get(tableName);
         if (objectMap != null) objectMap.clear();

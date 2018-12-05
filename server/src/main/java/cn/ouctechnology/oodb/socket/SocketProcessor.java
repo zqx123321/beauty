@@ -51,6 +51,11 @@ public class SocketProcessor implements Runnable {
         }
     }
 
+    /**
+     * 读取客户端发送过来的数据
+     *
+     * @return
+     */
     private String read() {
         readByteBuffer.clear();
         //从channel中读取数据
@@ -81,8 +86,15 @@ public class SocketProcessor implements Runnable {
         return null;
     }
 
+    /**
+     * 处理数据
+     *
+     * @param message
+     * @return
+     */
     private Object process(String message) {
         if (message == null) return null;
+        //回应连接
         if (message.equals("ping")) return "pong";
         if (message.contains("quit")) {
             isQuit = true;
@@ -95,6 +107,7 @@ public class SocketProcessor implements Runnable {
         }
         Object response;
         try {
+            //执行OQL
             response = OqlEngine.execute(message);
             if (response instanceof List) {
                 List<Tuple> resList = (List<Tuple>) response;
@@ -111,6 +124,7 @@ public class SocketProcessor implements Runnable {
         if (response == null) return;
 
         writeByteBuffer.clear();
+        //序列化Map列表
         writeByteBuffer.put(SerializationUtil.serialize(response));
         writeByteBuffer.flip();
 

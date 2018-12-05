@@ -4,7 +4,7 @@ package cn.ouctechnology.oodb.beauty.criteria;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 09:42
- * @description: TODO
+ * @description: property=value型简单表达式
  **/
 public class SimpleExpression implements Criterion {
 

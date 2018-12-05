@@ -1,12 +1,12 @@
 package cn.ouctechnology.oodb.util;
 
+import cn.ouctechnology.oodb.reocrd.Field;
+import cn.ouctechnology.oodb.reocrd.Tuple;
+import cn.ouctechnology.oodb.util.compartor.ComparatorFactory;
 import cn.ouctechnology.oodb.util.where.InnerNode;
 import cn.ouctechnology.oodb.util.where.LeafNode;
 import cn.ouctechnology.oodb.util.where.Op;
 import cn.ouctechnology.oodb.util.where.WhereNode;
-import cn.ouctechnology.oodb.reocrd.Field;
-import cn.ouctechnology.oodb.reocrd.Tuple;
-import cn.ouctechnology.oodb.util.compartor.ComparatorFactory;
 
 /**
  * @program: db

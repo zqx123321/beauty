@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-15 10:07
- * @description: TODO
+ * @description: 检测死锁
  **/
 public class DeadlockDetector implements Runnable {
 
@@ -39,6 +39,7 @@ public class DeadlockDetector implements Runnable {
 
         while (TransactionMap.getThreadMap().keySet().size() > 0) {
             logger.info("detect dead lock.....");
+            //直接使用ThreadMXBean提供的API
             long[] threadIds = threadMXBean.findDeadlockedThreads();
             if (threadIds == null || threadIds.length == 0) {
                 logger.info("no dead lock....");

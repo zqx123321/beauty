@@ -4,7 +4,9 @@ import cn.ouctechnology.oodb.reocrd.Tuple;
 
 import java.util.List;
 
-
+/**
+ * 投影操作
+ */
 public class Project extends Operator {
 
     private DbIterator child;

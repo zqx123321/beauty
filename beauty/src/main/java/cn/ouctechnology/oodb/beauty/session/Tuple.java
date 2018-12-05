@@ -7,7 +7,7 @@ import java.util.Map;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-12 17:05
- * @description: TODO
+ * @description: 服务器传回的数据为Tuple列表
  **/
 @SuppressWarnings("all")
 public class Tuple {

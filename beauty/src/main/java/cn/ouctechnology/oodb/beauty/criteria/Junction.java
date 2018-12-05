@@ -9,7 +9,7 @@ import java.util.List;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 09:44
- * @description: TODO
+ * @description: 多条件表达式
  **/
 public class Junction implements Criterion {
     private final Nature nature;

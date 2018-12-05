@@ -8,7 +8,7 @@ import java.util.*;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-31 16:59
- * @description: TODO
+ * @description: 分组运算
  **/
 public class Group extends Operator {
     private DbIterator child;

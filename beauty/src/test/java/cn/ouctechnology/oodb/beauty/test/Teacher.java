@@ -1,5 +1,6 @@
 package cn.ouctechnology.oodb.beauty.test;
 
+import cn.ouctechnology.oodb.beauty.annotation.Id;
 import cn.ouctechnology.oodb.beauty.annotation.Length;
 import cn.ouctechnology.oodb.beauty.annotation.Size;
 
@@ -12,24 +13,15 @@ import java.util.List;
  * @description: TODO
  **/
 public class Teacher {
-    private int id;
+    @Id(Id.Policy.AUTO_INCREMENT)
+    private Integer id;
 
     @Length(20)
     private String name;
 
     @Size(5)
-    private List<Float> student;
+    private List<Integer> students;
 
-    @Size(5)
-    private List<Dept> dept;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -39,20 +31,20 @@ public class Teacher {
         this.name = name;
     }
 
-    public List<Float> getStudent() {
-        return student;
+    public Integer getId() {
+        return id;
     }
 
-    public void setStudent(List<Float> student) {
-        this.student = student;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public List<Dept> getDept() {
-        return dept;
+    public List<Integer> getStudents() {
+        return students;
     }
 
-    public void setDept(List<Dept> dept) {
-        this.dept = dept;
+    public void setStudents(List<Integer> students) {
+        this.students = students;
     }
 
     @Override
@@ -60,8 +52,7 @@ public class Teacher {
         return "Teacher{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", student=" + student +
-                ", dept=" + dept +
+                ", students=" + students +
                 '}';
     }
 }

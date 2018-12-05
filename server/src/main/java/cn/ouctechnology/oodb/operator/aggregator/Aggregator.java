@@ -12,6 +12,19 @@ import java.util.Map;
 
 public interface Aggregator {
 
+    static Aggregator getAggregator(Type type, String groupField, String afield, Op what) {
+        switch (type) {
+            case INT:
+                return new IntegerAggregator(groupField, afield, what);
+            case FLOAT:
+                return new FloatAggregator(groupField, afield, what);
+            case CHAR:
+                return new StringAggregator(groupField, afield, what);
+            default:
+                throw new DbException("the operator is not supported");
+        }
+    }
+
     void mergeTupleIntoGroup(Tuple tup);
 
     DbIterator iterator();
@@ -21,12 +34,6 @@ public interface Aggregator {
     enum Op implements Serializable {
         MIN("min"), MAX("max"), SUM("sum"), AVG("avg"), COUNT("count");
 
-        private String name;
-
-        Op(String name) {
-            this.name = name;
-        }
-
         private static Map<String, Op> enumMap;
 
         static {
@@ -34,6 +41,12 @@ public interface Aggregator {
             for (Op value : values()) {
                 enumMap.put(value.name, value);
             }
+        }
+
+        private String name;
+
+        Op(String name) {
+            this.name = name;
         }
 
         public static Op getEnum(String name) {
@@ -62,19 +75,6 @@ public interface Aggregator {
             if (this == COUNT)
                 return "count";
             throw new IllegalStateException("impossible to reach here");
-        }
-    }
-
-    static Aggregator getAggregator(Type type, String groupField, String afield, Op what) {
-        switch (type) {
-            case INT:
-                return new IntegerAggregator(groupField, afield, what);
-            case FLOAT:
-                return new FloatAggregator(groupField, afield, what);
-            case CHAR:
-                return new StringAggregator(groupField, afield, what);
-            default:
-                throw new DbException("the operator is not supported");
         }
     }
 

@@ -107,6 +107,10 @@ public class Tuple implements Serializable {
         return values;
     }
 
+    public void setValues(Map<String, Object> values) {
+        this.values = values;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,9 +122,5 @@ public class Tuple implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(values);
-    }
-
-    public void setValues(Map<String, Object> values) {
-        this.values = values;
     }
 }

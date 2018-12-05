@@ -42,6 +42,7 @@ public class SocketAccepter implements Runnable {
             try {
                 //accept是监听客户端请求
                 synchronized (Server.class) {
+                    //检测连接数是否已达上限
                     if (Server.socketCount >= Constants.MAX_SOCKET_COUNT) {
                         logger.error("the socket count has reached to the max");
                         Server.class.wait();
@@ -50,6 +51,7 @@ public class SocketAccepter implements Runnable {
                 SocketChannel socketChannel = serverSocket.accept();
                 logger.info("Socket accepted: {}, socket count: {}", socketChannel, ++Server.socketCount);
                 //todo check if the queue can even accept more sockets.
+                //启动新线程处理请求
                 new Thread(new SocketProcessor(socketChannel)).start();
 
             } catch (IOException | InterruptedException e) {

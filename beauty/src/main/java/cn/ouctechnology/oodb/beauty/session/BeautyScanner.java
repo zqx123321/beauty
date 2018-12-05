@@ -19,10 +19,11 @@ import static org.springframework.util.Assert.notNull;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-14 10:41
- * @description: TODO
+ * @description: Beauty扫描器，扫描指定包下所有带有@Beauty注解的接口，使用JDK动态代理进行包装，放入Spring容器中
  **/
 public class BeautyScanner implements BeanDefinitionRegistryPostProcessor, InitializingBean {
 
+    //扫描包
     private String basePackage;
 
     private SessionFactory sessionFactory;
@@ -47,6 +48,7 @@ public class BeautyScanner implements BeanDefinitionRegistryPostProcessor, Initi
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
         Reflections reflections = new Reflections(basePackage);
+        //扫描包下所有带有@Beauty注解的接口
         Set<Class<?>> classSet = reflections.getTypesAnnotatedWith(Beauty.class);
         Session session = sessionFactory.getSession();
         for (Class<?> clz : classSet) {

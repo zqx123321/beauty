@@ -1,14 +1,8 @@
 package cn.ouctechnology.oodb.catalog;
 
-import cn.ouctechnology.oodb.catalog.attribute.Attribute;
-import cn.ouctechnology.oodb.catalog.attribute.CharAttribute;
-import cn.ouctechnology.oodb.catalog.attribute.IntAttribute;
-import cn.ouctechnology.oodb.catalog.attribute.ObjectAttribute;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @program: oodb

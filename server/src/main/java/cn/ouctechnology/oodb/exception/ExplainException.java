@@ -6,7 +6,7 @@ package cn.ouctechnology.oodb.exception;
  * @create: 2018-10-18 14:52
  * @description: TODO
  **/
-public class ExplainException extends RuntimeException{
+public class ExplainException extends RuntimeException {
     public ExplainException() {
         super();
     }

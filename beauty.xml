@@ -3,7 +3,7 @@
 <configuration>
 
     <beauty>
-        <port>9998</port>
+        <port>9999</port>
         <server>localhost</server>
     </beauty>
 

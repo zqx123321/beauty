@@ -7,7 +7,7 @@ import java.util.List;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 12:28
- * @description: TODO
+ * @description: 投影列表
  **/
 public class ProjectionList implements Projection {
     private List<Projection> elements = new ArrayList<Projection>();

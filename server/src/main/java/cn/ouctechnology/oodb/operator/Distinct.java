@@ -9,7 +9,7 @@ import java.util.Set;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-05 10:52
- * @description: TODO
+ * @description: 去重操作
  **/
 public class Distinct extends Operator {
     private Set<Integer> hashCodeSet;

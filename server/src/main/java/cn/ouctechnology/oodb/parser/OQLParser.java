@@ -19,13 +19,6 @@ import java.util.List;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class OQLParser extends Parser {
-    static {
-        RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION);
-    }
-
-    protected static final DFA[] _decisionToDFA;
-    protected static final PredictionContextCache _sharedContextCache =
-            new PredictionContextCache();
     public static final int
             SELECT = 1, CREATE = 2, UPDATE = 3, DELETE = 4, INSERT = 5, FROM = 6, AS = 7, LEFT = 8,
             RIGHT = 9, OUTER = 10, JOIN = 11, INNER = 12, DISTINCT = 13, OBJECT = 14, NEW = 15,
@@ -80,5408 +73,11 @@ public class OQLParser extends Parser {
             "dropStat", "showStat", "createIndexStat", "dropIndexStat", "syncStat",
             "beginTranStat", "commitStat", "rollBackStat"
     };
-
-    private static final String[] _LITERAL_NAMES = {
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, "'*'", "'/'", "'+'", "'-'", "'='", "'>'", "'<'", "'>='",
-            "'<='", null, "'.'", "'('", "')'", "'['", "']'", "','", "';'", "':'",
-            "''.''"
-    };
-    private static final String[] _SYMBOLIC_NAMES = {
-            null, "SELECT", "CREATE", "UPDATE", "DELETE", "INSERT", "FROM", "AS",
-            "LEFT", "RIGHT", "OUTER", "JOIN", "INNER", "DISTINCT", "OBJECT", "NEW",
-            "AVG", "SUM", "MAX", "MIN", "COUNT", "WHERE", "GROUP", "BY", "ORDER",
-            "HAVING", "DESC", "ASC", "NOT", "SET", "BETWEEN", "IS", "NULL", "ESCAPE",
-            "AND", "OR", "LIKE", "IN", "INTO", "VALUES", "PRIMARY", "KEY", "LISTOF",
-            "EXTENDS", "EMPTY", "MEMBER", "OF", "ALL", "ANY", "SOME", "INT", "FLOAT",
-            "CHAR", "SETOF", "REF", "TABLE", "EXISTS", "AUTO_INCREMENT", "UNIQUE",
-            "LIMIT", "DROP", "CASCADE", "ON", "SHOW", "TABLES", "FINAL", "INDEX",
-            "SYNC", "BEGIN", "TRANSACTION", "COMMIT", "ROLL", "BACK", "ASSIGN", "UUID",
-            "MUL", "DIV", "PLUS", "MINUS", "EQ", "GR", "LS", "GE", "LE", "NE", "DOT",
-            "LBRACKET", "RBRACKET", "LFRACKET", "RFRACKET", "COMMA", "SEMI", "COLON",
-            "TRIMCHARACTER", "STRINGLITERAL", "WORD", "NAMEDPARAMETER", "WS", "COMMENT",
-            "LINECOMMENT", "ESCAPECHARACTER", "INTNUMERAL", "FLOATNUMERAL"
-    };
-    public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
-
     /**
      * @deprecated Use {@link #VOCABULARY} instead.
      */
     @Deprecated
     public static final String[] tokenNames;
-
-    static {
-        tokenNames = new String[_SYMBOLIC_NAMES.length];
-        for (int i = 0; i < tokenNames.length; i++) {
-            tokenNames[i] = VOCABULARY.getLiteralName(i);
-            if (tokenNames[i] == null) {
-                tokenNames[i] = VOCABULARY.getSymbolicName(i);
-            }
-
-            if (tokenNames[i] == null) {
-                tokenNames[i] = "<INVALID>";
-            }
-        }
-    }
-
-    @Override
-    @Deprecated
-    public String[] getTokenNames() {
-        return tokenNames;
-    }
-
-    @Override
-
-    public Vocabulary getVocabulary() {
-        return VOCABULARY;
-    }
-
-    @Override
-    public String getGrammarFileName() {
-        return "OQL.g4";
-    }
-
-    @Override
-    public String[] getRuleNames() {
-        return ruleNames;
-    }
-
-    @Override
-    public String getSerializedATN() {
-        return _serializedATN;
-    }
-
-    @Override
-    public ATN getATN() {
-        return _ATN;
-    }
-
-    public OQLParser(TokenStream input) {
-        super(input);
-        _interp = new ParserATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
-    }
-
-    public static class OqlStatContext extends EnhancedParserRuleContext {
-        public OqlStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_oqlStat;
-        }
-
-        public OqlStatContext() {
-        }
-
-        public void copyFrom(OqlStatContext ctx) {
-            super.copyFrom(ctx);
-        }
-
-        public Object doExecute() {
-            throw new UnsupportedOperationException("the method is not implement");
-        }
-    }
-
-    public static class RollBackStatementContext extends OqlStatContext {
-        public RollBackStatContext rollBackStat() {
-            return getRuleContext(RollBackStatContext.class, 0);
-        }
-
-        public RollBackStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            Transaction.rollback();
-            return "roll back successfully";
-        }
-    }
-
-    public static class BeginTranStatementContext extends OqlStatContext {
-        public BeginTranStatContext beginTranStat() {
-            return getRuleContext(BeginTranStatContext.class, 0);
-        }
-
-        public BeginTranStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            Transaction.start();
-            return "the transaction has started";
-        }
-    }
-
-    public static class CreateStatementContext extends OqlStatContext {
-        public CreateStatContext createStat() {
-            return getRuleContext(CreateStatContext.class, 0);
-        }
-
-        public CreateStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            CreateStatContext stat = this.createStat();
-            return CreateExplain.getCreateExplain(stat).doCreate();
-        }
-
-    }
-
-    public static class DeleteStatementContext extends OqlStatContext {
-        public DeleteStatContext deleteStat() {
-            return getRuleContext(DeleteStatContext.class, 0);
-        }
-
-        public DeleteStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            DeleteStatContext deleteStatContext = this.deleteStat();
-            return DeleteExplain.getDeleteExplain(deleteStatContext).doDelete();
-        }
-    }
-
-    public static class InsertStatementContext extends OqlStatContext {
-        public InsertStatContext insertStat() {
-            return getRuleContext(InsertStatContext.class, 0);
-        }
-
-        public InsertStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            InsertStatContext insertStatContext = this.insertStat();
-            return InsertExplain.getInsertExplain(insertStatContext).doInsert();
-        }
-    }
-
-    public static class CreateIndexStatementContext extends OqlStatContext {
-        public CreateIndexStatContext createIndexStat() {
-            return getRuleContext(CreateIndexStatContext.class, 0);
-        }
-
-        public CreateIndexStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            CreateIndexStatContext indexStat = this.createIndexStat();
-            return CreateIndexExplain.getCreateIndexExplain(indexStat).doCreate();
-        }
-    }
-
-    public static class DropIndexStatementContext extends OqlStatContext {
-        public DropIndexStatContext dropIndexStat() {
-            return getRuleContext(DropIndexStatContext.class, 0);
-        }
-
-        public DropIndexStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            DropIndexStatContext dropIndexStatContext = this.dropIndexStat();
-            return DropIndexExplain.getDropIndexExplain(dropIndexStatContext).doDrop();
-        }
-    }
-
-    public static class SyncStatementContext extends OqlStatContext {
-        public SyncStatContext syncStat() {
-            return getRuleContext(SyncStatContext.class, 0);
-        }
-
-        public SyncStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            return SyncExplain.sync();
-        }
-    }
-
-    public static class UpdateStatementContext extends OqlStatContext {
-        public UpdateStatContext updateStat() {
-            return getRuleContext(UpdateStatContext.class, 0);
-        }
-
-        public UpdateStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            UpdateStatContext updateStatContext = this.updateStat();
-            return UpdateExplain.getUpdateExplain(updateStatContext).doUpdate();
-        }
-    }
-
-    public static class CommitStatementContext extends OqlStatContext {
-        public CommitStatContext commitStat() {
-            return getRuleContext(CommitStatContext.class, 0);
-        }
-
-        public CommitStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            Transaction.commit();
-            return "commit successfully";
-        }
-    }
-
-    public static class SelectStatementContext extends OqlStatContext {
-        public SelectStatContext selectStat() {
-            return getRuleContext(SelectStatContext.class, 0);
-        }
-
-        public SelectStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            SelectStatContext selectStatContext = this.selectStat();
-            return SelectExplain.getSelectExplain(selectStatContext).doSelect();
-        }
-
-    }
-
-    public static class DropStatementContext extends OqlStatContext {
-        public DropStatContext dropStat() {
-            return getRuleContext(DropStatContext.class, 0);
-        }
-
-        public DropStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            DropStatContext dropStatContext = this.dropStat();
-            return DropExplain.getDropStatContext(dropStatContext).doDrop();
-        }
-    }
-
-    public static class ShowStatementContext extends OqlStatContext {
-        public ShowStatContext showStat() {
-            return getRuleContext(ShowStatContext.class, 0);
-        }
-
-        public ShowStatementContext(OqlStatContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object doExecute() {
-            return ShowExplain.doShow();
-        }
-    }
-
-    public final OqlStatContext oqlStat() throws RecognitionException {
-        OqlStatContext _localctx = new OqlStatContext(_ctx, getState());
-        enterRule(_localctx, 0, RULE_oqlStat);
-        try {
-            setState(157);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 0, _ctx)) {
-                case 1:
-                    _localctx = new SelectStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(144);
-                    selectStat();
-                }
-                break;
-                case 2:
-                    _localctx = new CreateStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(145);
-                    createStat();
-                }
-                break;
-                case 3:
-                    _localctx = new InsertStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 3);
-                {
-                    setState(146);
-                    insertStat();
-                }
-                break;
-                case 4:
-                    _localctx = new UpdateStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 4);
-                {
-                    setState(147);
-                    updateStat();
-                }
-                break;
-                case 5:
-                    _localctx = new DeleteStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 5);
-                {
-                    setState(148);
-                    deleteStat();
-                }
-                break;
-                case 6:
-                    _localctx = new DropStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 6);
-                {
-                    setState(149);
-                    dropStat();
-                }
-                break;
-                case 7:
-                    _localctx = new ShowStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 7);
-                {
-                    setState(150);
-                    showStat();
-                }
-                break;
-                case 8:
-                    _localctx = new CreateIndexStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 8);
-                {
-                    setState(151);
-                    createIndexStat();
-                }
-                break;
-                case 9:
-                    _localctx = new DropIndexStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 9);
-                {
-                    setState(152);
-                    dropIndexStat();
-                }
-                break;
-                case 10:
-                    _localctx = new SyncStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 10);
-                {
-                    setState(153);
-                    syncStat();
-                }
-                break;
-                case 11:
-                    _localctx = new BeginTranStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 11);
-                {
-                    setState(154);
-                    beginTranStat();
-                }
-                break;
-                case 12:
-                    _localctx = new CommitStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 12);
-                {
-                    setState(155);
-                    commitStat();
-                }
-                break;
-                case 13:
-                    _localctx = new RollBackStatementContext(_localctx);
-                    enterOuterAlt(_localctx, 13);
-                {
-                    setState(156);
-                    rollBackStat();
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SelectStatContext extends EnhancedParserRuleContext {
-        public TerminalNode SELECT() {
-            return getToken(OQLParser.SELECT, 0);
-        }
-
-        public SelectClauseContext selectClause() {
-            return getRuleContext(SelectClauseContext.class, 0);
-        }
-
-        public FromClauseContext fromClause() {
-            return getRuleContext(FromClauseContext.class, 0);
-        }
-
-        public TerminalNode DISTINCT() {
-            return getToken(OQLParser.DISTINCT, 0);
-        }
-
-        public WhereClauseContext whereClause() {
-            return getRuleContext(WhereClauseContext.class, 0);
-        }
-
-        public GroupByClauseContext groupByClause() {
-            return getRuleContext(GroupByClauseContext.class, 0);
-        }
-
-        public OrderByClauseContext orderByClause() {
-            return getRuleContext(OrderByClauseContext.class, 0);
-        }
-
-        public LimitClauseContext limitClause() {
-            return getRuleContext(LimitClauseContext.class, 0);
-        }
-
-        public SelectStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_selectStat;
-        }
-    }
-
-    public final SelectStatContext selectStat() throws RecognitionException {
-        SelectStatContext _localctx = new SelectStatContext(_ctx, getState());
-        enterRule(_localctx, 2, RULE_selectStat);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(159);
-                match(SELECT);
-                setState(161);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == DISTINCT) {
-                    {
-                        setState(160);
-                        match(DISTINCT);
-                    }
-                }
-
-                setState(163);
-                selectClause();
-                setState(164);
-                fromClause();
-                setState(166);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == WHERE) {
-                    {
-                        setState(165);
-                        whereClause();
-                    }
-                }
-
-                setState(169);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == GROUP) {
-                    {
-                        setState(168);
-                        groupByClause();
-                    }
-                }
-
-                setState(172);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == ORDER) {
-                    {
-                        setState(171);
-                        orderByClause();
-                    }
-                }
-
-                setState(175);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == LIMIT) {
-                    {
-                        setState(174);
-                        limitClause();
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SelectClauseContext extends EnhancedParserRuleContext {
-        public List<SelectExprContext> selectExpr() {
-            return getRuleContexts(SelectExprContext.class);
-        }
-
-        public SelectExprContext selectExpr(int i) {
-            return getRuleContext(SelectExprContext.class, i);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public SelectClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_selectClause;
-        }
-    }
-
-    public final SelectClauseContext selectClause() throws RecognitionException {
-        SelectClauseContext _localctx = new SelectClauseContext(_ctx, getState());
-        enterRule(_localctx, 4, RULE_selectClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(177);
-                selectExpr();
-                setState(182);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(178);
-                            match(COMMA);
-                            setState(179);
-                            selectExpr();
-                        }
-                    }
-                    setState(184);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SelectExprContext extends EnhancedParserRuleContext {
-        public SelectExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_selectExpr;
-        }
-
-        public SelectExprContext() {
-        }
-
-        public void copyFrom(SelectExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class SelectPathExprContext extends SelectExprContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public SelectPathExprContext(SelectExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class SelectAggregateExprContext extends SelectExprContext {
-        public AggregateExprContext aggregateExpr() {
-            return getRuleContext(AggregateExprContext.class, 0);
-        }
-
-        public SelectAggregateExprContext(SelectExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final SelectExprContext selectExpr() throws RecognitionException {
-        SelectExprContext _localctx = new SelectExprContext(_ctx, getState());
-        enterRule(_localctx, 6, RULE_selectExpr);
-        try {
-            setState(187);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case WORD:
-                    _localctx = new SelectPathExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(185);
-                    pathExpr();
-                }
-                break;
-                case AVG:
-                case SUM:
-                case MAX:
-                case MIN:
-                case COUNT:
-                    _localctx = new SelectAggregateExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(186);
-                    aggregateExpr();
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class FromClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode FROM() {
-            return getToken(OQLParser.FROM, 0);
-        }
-
-        public List<FromItemContext> fromItem() {
-            return getRuleContexts(FromItemContext.class);
-        }
-
-        public FromItemContext fromItem(int i) {
-            return getRuleContext(FromItemContext.class, i);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public FromClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_fromClause;
-        }
-    }
-
-    public final FromClauseContext fromClause() throws RecognitionException {
-        FromClauseContext _localctx = new FromClauseContext(_ctx, getState());
-        enterRule(_localctx, 8, RULE_fromClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(189);
-                match(FROM);
-                setState(190);
-                fromItem();
-                setState(195);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(191);
-                            match(COMMA);
-                            setState(192);
-                            fromItem();
-                        }
-                    }
-                    setState(197);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class FromItemContext extends EnhancedParserRuleContext {
-        public SchemaNameContext schemaName() {
-            return getRuleContext(SchemaNameContext.class, 0);
-        }
-
-        public IdContext id() {
-            return getRuleContext(IdContext.class, 0);
-        }
-
-        public TerminalNode AS() {
-            return getToken(OQLParser.AS, 0);
-        }
-
-        public List<JoinContext> join() {
-            return getRuleContexts(JoinContext.class);
-        }
-
-        public JoinContext join(int i) {
-            return getRuleContext(JoinContext.class, i);
-        }
-
-        public FromItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_fromItem;
-        }
-    }
-
-    public final FromItemContext fromItem() throws RecognitionException {
-        FromItemContext _localctx = new FromItemContext(_ctx, getState());
-        enterRule(_localctx, 10, RULE_fromItem);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(198);
-                schemaName();
-                setState(200);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == AS) {
-                    {
-                        setState(199);
-                        match(AS);
-                    }
-                }
-
-                setState(202);
-                id();
-                setState(206);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == JOIN) {
-                    {
-                        {
-                            setState(203);
-                            join();
-                        }
-                    }
-                    setState(208);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class JoinContext extends EnhancedParserRuleContext {
-        public TerminalNode JOIN() {
-            return getToken(OQLParser.JOIN, 0);
-        }
-
-        public SchemaNameContext schemaName() {
-            return getRuleContext(SchemaNameContext.class, 0);
-        }
-
-        public IdContext id() {
-            return getRuleContext(IdContext.class, 0);
-        }
-
-        public TerminalNode ON() {
-            return getToken(OQLParser.ON, 0);
-        }
-
-        public ConditionalExprContext conditionalExpr() {
-            return getRuleContext(ConditionalExprContext.class, 0);
-        }
-
-        public TerminalNode AS() {
-            return getToken(OQLParser.AS, 0);
-        }
-
-        public JoinContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_join;
-        }
-    }
-
-    public final JoinContext join() throws RecognitionException {
-        JoinContext _localctx = new JoinContext(_ctx, getState());
-        enterRule(_localctx, 12, RULE_join);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(209);
-                match(JOIN);
-                setState(210);
-                schemaName();
-                setState(212);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == AS) {
-                    {
-                        setState(211);
-                        match(AS);
-                    }
-                }
-
-                setState(214);
-                id();
-                setState(215);
-                match(ON);
-                setState(216);
-                conditionalExpr();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class PathExprContext extends EnhancedParserRuleContext {
-        public IdContext id() {
-            return getRuleContext(IdContext.class, 0);
-        }
-
-        public List<TerminalNode> DOT() {
-            return getTokens(OQLParser.DOT);
-        }
-
-        public TerminalNode DOT(int i) {
-            return getToken(OQLParser.DOT, i);
-        }
-
-        public List<FieldContext> field() {
-            return getRuleContexts(FieldContext.class);
-        }
-
-        public FieldContext field(int i) {
-            return getRuleContext(FieldContext.class, i);
-        }
-
-        public PathExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_pathExpr;
-        }
-    }
-
-    public final PathExprContext pathExpr() throws RecognitionException {
-        PathExprContext _localctx = new PathExprContext(_ctx, getState());
-        enterRule(_localctx, 14, RULE_pathExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(218);
-                id();
-                setState(223);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == DOT) {
-                    {
-                        {
-                            setState(219);
-                            match(DOT);
-                            setState(220);
-                            field();
-                        }
-                    }
-                    setState(225);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class LimitClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode LIMIT() {
-            return getToken(OQLParser.LIMIT, 0);
-        }
-
-        public List<TerminalNode> INTNUMERAL() {
-            return getTokens(OQLParser.INTNUMERAL);
-        }
-
-        public TerminalNode INTNUMERAL(int i) {
-            return getToken(OQLParser.INTNUMERAL, i);
-        }
-
-        public TerminalNode COMMA() {
-            return getToken(OQLParser.COMMA, 0);
-        }
-
-        public LimitClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_limitClause;
-        }
-    }
-
-    public final LimitClauseContext limitClause() throws RecognitionException {
-        LimitClauseContext _localctx = new LimitClauseContext(_ctx, getState());
-        enterRule(_localctx, 16, RULE_limitClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(226);
-                match(LIMIT);
-                setState(227);
-                match(INTNUMERAL);
-                setState(230);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == COMMA) {
-                    {
-                        setState(228);
-                        match(COMMA);
-                        setState(229);
-                        match(INTNUMERAL);
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class AggregateExprContext extends EnhancedParserRuleContext {
-        public AggregateExprFunctionNameContext aggregateExprFunctionName() {
-            return getRuleContext(AggregateExprFunctionNameContext.class, 0);
-        }
-
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public AggregateExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_aggregateExpr;
-        }
-    }
-
-    public final AggregateExprContext aggregateExpr() throws RecognitionException {
-        AggregateExprContext _localctx = new AggregateExprContext(_ctx, getState());
-        enterRule(_localctx, 18, RULE_aggregateExpr);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(232);
-                aggregateExprFunctionName();
-                setState(233);
-                match(LBRACKET);
-                setState(234);
-                pathExpr();
-                setState(235);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class AggregateExprFunctionNameContext extends EnhancedParserRuleContext {
-        public TerminalNode AVG() {
-            return getToken(OQLParser.AVG, 0);
-        }
-
-        public TerminalNode MAX() {
-            return getToken(OQLParser.MAX, 0);
-        }
-
-        public TerminalNode MIN() {
-            return getToken(OQLParser.MIN, 0);
-        }
-
-        public TerminalNode SUM() {
-            return getToken(OQLParser.SUM, 0);
-        }
-
-        public TerminalNode COUNT() {
-            return getToken(OQLParser.COUNT, 0);
-        }
-
-        public AggregateExprFunctionNameContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_aggregateExprFunctionName;
-        }
-    }
-
-    public final AggregateExprFunctionNameContext aggregateExprFunctionName() throws RecognitionException {
-        AggregateExprFunctionNameContext _localctx = new AggregateExprFunctionNameContext(_ctx, getState());
-        enterRule(_localctx, 20, RULE_aggregateExprFunctionName);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(237);
-                _la = _input.LA(1);
-                if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AVG) | (1L << SUM) | (1L << MAX) | (1L << MIN) | (1L << COUNT))) != 0))) {
-                    _errHandler.recoverInline(this);
-                } else {
-                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                    _errHandler.reportMatch(this);
-                    consume();
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class WhereClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode WHERE() {
-            return getToken(OQLParser.WHERE, 0);
-        }
-
-        public ConditionalExprContext conditionalExpr() {
-            return getRuleContext(ConditionalExprContext.class, 0);
-        }
-
-        public WhereClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_whereClause;
-        }
-    }
-
-    public final WhereClauseContext whereClause() throws RecognitionException {
-        WhereClauseContext _localctx = new WhereClauseContext(_ctx, getState());
-        enterRule(_localctx, 22, RULE_whereClause);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(239);
-                match(WHERE);
-                setState(240);
-                conditionalExpr();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class GroupByClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode GROUP() {
-            return getToken(OQLParser.GROUP, 0);
-        }
-
-        public TerminalNode BY() {
-            return getToken(OQLParser.BY, 0);
-        }
-
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public HavingClauseContext havingClause() {
-            return getRuleContext(HavingClauseContext.class, 0);
-        }
-
-        public GroupByClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_groupByClause;
-        }
-    }
-
-    public final GroupByClauseContext groupByClause() throws RecognitionException {
-        GroupByClauseContext _localctx = new GroupByClauseContext(_ctx, getState());
-        enterRule(_localctx, 24, RULE_groupByClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(242);
-                match(GROUP);
-                setState(243);
-                match(BY);
-                setState(244);
-                pathExpr();
-                setState(246);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == HAVING) {
-                    {
-                        setState(245);
-                        havingClause();
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class HavingClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode HAVING() {
-            return getToken(OQLParser.HAVING, 0);
-        }
-
-        public ConditionalExprContext conditionalExpr() {
-            return getRuleContext(ConditionalExprContext.class, 0);
-        }
-
-        public HavingClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_havingClause;
-        }
-    }
-
-    public final HavingClauseContext havingClause() throws RecognitionException {
-        HavingClauseContext _localctx = new HavingClauseContext(_ctx, getState());
-        enterRule(_localctx, 26, RULE_havingClause);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(248);
-                match(HAVING);
-                setState(249);
-                conditionalExpr();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class OrderByClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode ORDER() {
-            return getToken(OQLParser.ORDER, 0);
-        }
-
-        public TerminalNode BY() {
-            return getToken(OQLParser.BY, 0);
-        }
-
-        public List<OrderByItemContext> orderByItem() {
-            return getRuleContexts(OrderByItemContext.class);
-        }
-
-        public OrderByItemContext orderByItem(int i) {
-            return getRuleContext(OrderByItemContext.class, i);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public OrderByClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_orderByClause;
-        }
-    }
-
-    public final OrderByClauseContext orderByClause() throws RecognitionException {
-        OrderByClauseContext _localctx = new OrderByClauseContext(_ctx, getState());
-        enterRule(_localctx, 28, RULE_orderByClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(251);
-                match(ORDER);
-                setState(252);
-                match(BY);
-                setState(253);
-                orderByItem();
-                setState(258);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(254);
-                            match(COMMA);
-                            setState(255);
-                            orderByItem();
-                        }
-                    }
-                    setState(260);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class OrderByItemContext extends EnhancedParserRuleContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public TerminalNode DESC() {
-            return getToken(OQLParser.DESC, 0);
-        }
-
-        public TerminalNode ASC() {
-            return getToken(OQLParser.ASC, 0);
-        }
-
-        public OrderByItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_orderByItem;
-        }
-    }
-
-    public final OrderByItemContext orderByItem() throws RecognitionException {
-        OrderByItemContext _localctx = new OrderByItemContext(_ctx, getState());
-        enterRule(_localctx, 30, RULE_orderByItem);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(261);
-                pathExpr();
-                setState(266);
-                _errHandler.sync(this);
-                switch (_input.LA(1)) {
-                    case EOF:
-                    case ASC:
-                    case LIMIT:
-                    case COMMA: {
-                        setState(263);
-                        _errHandler.sync(this);
-                        _la = _input.LA(1);
-                        if (_la == ASC) {
-                            {
-                                setState(262);
-                                match(ASC);
-                            }
-                        }
-
-                    }
-                    break;
-                    case DESC: {
-                        setState(265);
-                        match(DESC);
-                    }
-                    break;
-                    default:
-                        throw new NoViableAltException(this);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ConditionalExprContext extends EnhancedParserRuleContext {
-        public List<ConditionalTermContext> conditionalTerm() {
-            return getRuleContexts(ConditionalTermContext.class);
-        }
-
-        public ConditionalTermContext conditionalTerm(int i) {
-            return getRuleContext(ConditionalTermContext.class, i);
-        }
-
-        public List<TerminalNode> OR() {
-            return getTokens(OQLParser.OR);
-        }
-
-        public TerminalNode OR(int i) {
-            return getToken(OQLParser.OR, i);
-        }
-
-        public ConditionalExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_conditionalExpr;
-        }
-    }
-
-    public final ConditionalExprContext conditionalExpr() throws RecognitionException {
-        ConditionalExprContext _localctx = new ConditionalExprContext(_ctx, getState());
-        enterRule(_localctx, 32, RULE_conditionalExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                {
-                    setState(268);
-                    conditionalTerm();
-                }
-                setState(273);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == OR) {
-                    {
-                        {
-                            setState(269);
-                            match(OR);
-                            setState(270);
-                            conditionalTerm();
-                        }
-                    }
-                    setState(275);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ConditionalTermContext extends EnhancedParserRuleContext {
-        public List<ConditionalFactorContext> conditionalFactor() {
-            return getRuleContexts(ConditionalFactorContext.class);
-        }
-
-        public ConditionalFactorContext conditionalFactor(int i) {
-            return getRuleContext(ConditionalFactorContext.class, i);
-        }
-
-        public List<TerminalNode> AND() {
-            return getTokens(OQLParser.AND);
-        }
-
-        public TerminalNode AND(int i) {
-            return getToken(OQLParser.AND, i);
-        }
-
-        public ConditionalTermContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_conditionalTerm;
-        }
-    }
-
-    public final ConditionalTermContext conditionalTerm() throws RecognitionException {
-        ConditionalTermContext _localctx = new ConditionalTermContext(_ctx, getState());
-        enterRule(_localctx, 34, RULE_conditionalTerm);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                {
-                    setState(276);
-                    conditionalFactor();
-                }
-                setState(281);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == AND) {
-                    {
-                        {
-                            setState(277);
-                            match(AND);
-                            setState(278);
-                            conditionalFactor();
-                        }
-                    }
-                    setState(283);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ConditionalFactorContext extends EnhancedParserRuleContext {
-        public ConditionalFactorContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_conditionalFactor;
-        }
-
-        public ConditionalFactorContext() {
-        }
-
-        public void copyFrom(ConditionalFactorContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class ConditionalFactorSimpleCondExprContext extends ConditionalFactorContext {
-        public SimpleCondExprContext simpleCondExpr() {
-            return getRuleContext(SimpleCondExprContext.class, 0);
-        }
-
-        public ConditionalFactorSimpleCondExprContext(ConditionalFactorContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ConditionalFactorExprContext extends ConditionalFactorContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public ConditionalExprContext conditionalExpr() {
-            return getRuleContext(ConditionalExprContext.class, 0);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public ConditionalFactorExprContext(ConditionalFactorContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final ConditionalFactorContext conditionalFactor() throws RecognitionException {
-        ConditionalFactorContext _localctx = new ConditionalFactorContext(_ctx, getState());
-        enterRule(_localctx, 36, RULE_conditionalFactor);
-        try {
-            setState(289);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 20, _ctx)) {
-                case 1:
-                    _localctx = new ConditionalFactorSimpleCondExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(284);
-                    simpleCondExpr();
-                }
-                break;
-                case 2:
-                    _localctx = new ConditionalFactorExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(285);
-                    match(LBRACKET);
-                    setState(286);
-                    conditionalExpr();
-                    setState(287);
-                    match(RBRACKET);
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SimpleCondExprContext extends EnhancedParserRuleContext {
-        public SimpleCondExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_simpleCondExpr;
-        }
-
-        public SimpleCondExprContext() {
-        }
-
-        public void copyFrom(SimpleCondExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class SimpleLikeExprContext extends SimpleCondExprContext {
-        public LikeExprContext likeExpr() {
-            return getRuleContext(LikeExprContext.class, 0);
-        }
-
-        public SimpleLikeExprContext(SimpleCondExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class SimpleInExprContext extends SimpleCondExprContext {
-        public InExprContext inExpr() {
-            return getRuleContext(InExprContext.class, 0);
-        }
-
-        public SimpleInExprContext(SimpleCondExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class SimpleComparisonExprContext extends SimpleCondExprContext {
-        public ComparisonExprContext comparisonExpr() {
-            return getRuleContext(ComparisonExprContext.class, 0);
-        }
-
-        public SimpleComparisonExprContext(SimpleCondExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class SimpleBetweenExprContext extends SimpleCondExprContext {
-        public BetweenExprContext betweenExpr() {
-            return getRuleContext(BetweenExprContext.class, 0);
-        }
-
-        public SimpleBetweenExprContext(SimpleCondExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final SimpleCondExprContext simpleCondExpr() throws RecognitionException {
-        SimpleCondExprContext _localctx = new SimpleCondExprContext(_ctx, getState());
-        enterRule(_localctx, 38, RULE_simpleCondExpr);
-        try {
-            setState(295);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 21, _ctx)) {
-                case 1:
-                    _localctx = new SimpleComparisonExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(291);
-                    comparisonExpr();
-                }
-                break;
-                case 2:
-                    _localctx = new SimpleBetweenExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(292);
-                    betweenExpr();
-                }
-                break;
-                case 3:
-                    _localctx = new SimpleLikeExprContext(_localctx);
-                    enterOuterAlt(_localctx, 3);
-                {
-                    setState(293);
-                    likeExpr();
-                }
-                break;
-                case 4:
-                    _localctx = new SimpleInExprContext(_localctx);
-                    enterOuterAlt(_localctx, 4);
-                {
-                    setState(294);
-                    inExpr();
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class BetweenExprContext extends EnhancedParserRuleContext {
-        public BetweenExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_betweenExpr;
-        }
-
-        public BetweenExprContext() {
-        }
-
-        public void copyFrom(BetweenExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class BetweenStringExprContext extends BetweenExprContext {
-        public List<StringExprContext> stringExpr() {
-            return getRuleContexts(StringExprContext.class);
-        }
-
-        public StringExprContext stringExpr(int i) {
-            return getRuleContext(StringExprContext.class, i);
-        }
-
-        public TerminalNode BETWEEN() {
-            return getToken(OQLParser.BETWEEN, 0);
-        }
-
-        public TerminalNode AND() {
-            return getToken(OQLParser.AND, 0);
-        }
-
-        public TerminalNode NOT() {
-            return getToken(OQLParser.NOT, 0);
-        }
-
-        public BetweenStringExprContext(BetweenExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class BetweenArithmeticExprContext extends BetweenExprContext {
-        public List<ArithmeticExprContext> arithmeticExpr() {
-            return getRuleContexts(ArithmeticExprContext.class);
-        }
-
-        public ArithmeticExprContext arithmeticExpr(int i) {
-            return getRuleContext(ArithmeticExprContext.class, i);
-        }
-
-        public TerminalNode BETWEEN() {
-            return getToken(OQLParser.BETWEEN, 0);
-        }
-
-        public TerminalNode AND() {
-            return getToken(OQLParser.AND, 0);
-        }
-
-        public TerminalNode NOT() {
-            return getToken(OQLParser.NOT, 0);
-        }
-
-        public BetweenArithmeticExprContext(BetweenExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final BetweenExprContext betweenExpr() throws RecognitionException {
-        BetweenExprContext _localctx = new BetweenExprContext(_ctx, getState());
-        enterRule(_localctx, 40, RULE_betweenExpr);
-        int _la;
-        try {
-            setState(315);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 24, _ctx)) {
-                case 1:
-                    _localctx = new BetweenArithmeticExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(297);
-                    arithmeticExpr();
-                    setState(299);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                    if (_la == NOT) {
-                        {
-                            setState(298);
-                            match(NOT);
-                        }
-                    }
-
-                    setState(301);
-                    match(BETWEEN);
-                    setState(302);
-                    arithmeticExpr();
-                    setState(303);
-                    match(AND);
-                    setState(304);
-                    arithmeticExpr();
-                }
-                break;
-                case 2:
-                    _localctx = new BetweenStringExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(306);
-                    stringExpr();
-                    setState(308);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                    if (_la == NOT) {
-                        {
-                            setState(307);
-                            match(NOT);
-                        }
-                    }
-
-                    setState(310);
-                    match(BETWEEN);
-                    setState(311);
-                    stringExpr();
-                    setState(312);
-                    match(AND);
-                    setState(313);
-                    stringExpr();
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InExprContext extends EnhancedParserRuleContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public TerminalNode IN() {
-            return getToken(OQLParser.IN, 0);
-        }
-
-        public InExprRightPartContext inExprRightPart() {
-            return getRuleContext(InExprRightPartContext.class, 0);
-        }
-
-        public TerminalNode NOT() {
-            return getToken(OQLParser.NOT, 0);
-        }
-
-        public InExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_inExpr;
-        }
-    }
-
-    public final InExprContext inExpr() throws RecognitionException {
-        InExprContext _localctx = new InExprContext(_ctx, getState());
-        enterRule(_localctx, 42, RULE_inExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(317);
-                pathExpr();
-                setState(319);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == NOT) {
-                    {
-                        setState(318);
-                        match(NOT);
-                    }
-                }
-
-                setState(321);
-                match(IN);
-                setState(322);
-                inExprRightPart();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InExprRightPartContext extends EnhancedParserRuleContext {
-        public InExprRightPartContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_inExprRightPart;
-        }
-
-        public InExprRightPartContext() {
-        }
-
-        public void copyFrom(InExprRightPartContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class InExprItemContext extends InExprRightPartContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public List<InItemContext> inItem() {
-            return getRuleContexts(InItemContext.class);
-        }
-
-        public InItemContext inItem(int i) {
-            return getRuleContext(InItemContext.class, i);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public InExprItemContext(InExprRightPartContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final InExprRightPartContext inExprRightPart() throws RecognitionException {
-        InExprRightPartContext _localctx = new InExprRightPartContext(_ctx, getState());
-        enterRule(_localctx, 44, RULE_inExprRightPart);
-        int _la;
-        try {
-            _localctx = new InExprItemContext(_localctx);
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(324);
-                match(LBRACKET);
-                setState(325);
-                inItem();
-                setState(330);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(326);
-                            match(COMMA);
-                            setState(327);
-                            inItem();
-                        }
-                    }
-                    setState(332);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(333);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InItemContext extends EnhancedParserRuleContext {
-        public LiteralContext literal() {
-            return getRuleContext(LiteralContext.class, 0);
-        }
-
-        public InItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_inItem;
-        }
-    }
-
-    public final InItemContext inItem() throws RecognitionException {
-        InItemContext _localctx = new InItemContext(_ctx, getState());
-        enterRule(_localctx, 46, RULE_inItem);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(335);
-                literal();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class LikeExprContext extends EnhancedParserRuleContext {
-        public StringExprContext stringExpr() {
-            return getRuleContext(StringExprContext.class, 0);
-        }
-
-        public TerminalNode LIKE() {
-            return getToken(OQLParser.LIKE, 0);
-        }
-
-        public PatternValueContext patternValue() {
-            return getRuleContext(PatternValueContext.class, 0);
-        }
-
-        public TerminalNode NOT() {
-            return getToken(OQLParser.NOT, 0);
-        }
-
-        public LikeExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_likeExpr;
-        }
-    }
-
-    public final LikeExprContext likeExpr() throws RecognitionException {
-        LikeExprContext _localctx = new LikeExprContext(_ctx, getState());
-        enterRule(_localctx, 48, RULE_likeExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(337);
-                stringExpr();
-                setState(339);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == NOT) {
-                    {
-                        setState(338);
-                        match(NOT);
-                    }
-                }
-
-                setState(341);
-                match(LIKE);
-                setState(342);
-                patternValue();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ComparisonExprContext extends EnhancedParserRuleContext {
-        public ComparisonExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_comparisonExpr;
-        }
-
-        public ComparisonExprContext() {
-        }
-
-        public void copyFrom(ComparisonExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class ComparisonListExprContext extends ComparisonExprContext {
-        public List<ListExprContext> listExpr() {
-            return getRuleContexts(ListExprContext.class);
-        }
-
-        public ListExprContext listExpr(int i) {
-            return getRuleContext(ListExprContext.class, i);
-        }
-
-        public ComparisonOperatorContext comparisonOperator() {
-            return getRuleContext(ComparisonOperatorContext.class, 0);
-        }
-
-        public ComparisonListExprContext(ComparisonExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ComparisonAggregateExprContext extends ComparisonExprContext {
-        public AggregateExprContext aggregateExpr() {
-            return getRuleContext(AggregateExprContext.class, 0);
-        }
-
-        public ComparisonOperatorContext comparisonOperator() {
-            return getRuleContext(ComparisonOperatorContext.class, 0);
-        }
-
-        public ArithmeticExprContext arithmeticExpr() {
-            return getRuleContext(ArithmeticExprContext.class, 0);
-        }
-
-        public ComparisonAggregateExprContext(ComparisonExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ComparisonEntityExprContext extends ComparisonExprContext {
-        public List<EntityExprContext> entityExpr() {
-            return getRuleContexts(EntityExprContext.class);
-        }
-
-        public EntityExprContext entityExpr(int i) {
-            return getRuleContext(EntityExprContext.class, i);
-        }
-
-        public ComparisonOperatorContext comparisonOperator() {
-            return getRuleContext(ComparisonOperatorContext.class, 0);
-        }
-
-        public ComparisonEntityExprContext(ComparisonExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ComparisonArithmeticExprContext extends ComparisonExprContext {
-        public List<ArithmeticExprContext> arithmeticExpr() {
-            return getRuleContexts(ArithmeticExprContext.class);
-        }
-
-        public ArithmeticExprContext arithmeticExpr(int i) {
-            return getRuleContext(ArithmeticExprContext.class, i);
-        }
-
-        public ComparisonOperatorContext comparisonOperator() {
-            return getRuleContext(ComparisonOperatorContext.class, 0);
-        }
-
-        public ComparisonArithmeticExprContext(ComparisonExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ComparisonStringExprContext extends ComparisonExprContext {
-        public List<StringExprContext> stringExpr() {
-            return getRuleContexts(StringExprContext.class);
-        }
-
-        public StringExprContext stringExpr(int i) {
-            return getRuleContext(StringExprContext.class, i);
-        }
-
-        public ComparisonOperatorContext comparisonOperator() {
-            return getRuleContext(ComparisonOperatorContext.class, 0);
-        }
-
-        public ComparisonStringExprContext(ComparisonExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final ComparisonExprContext comparisonExpr() throws RecognitionException {
-        ComparisonExprContext _localctx = new ComparisonExprContext(_ctx, getState());
-        enterRule(_localctx, 50, RULE_comparisonExpr);
-        try {
-            setState(364);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 28, _ctx)) {
-                case 1:
-                    _localctx = new ComparisonStringExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(344);
-                    stringExpr();
-                    setState(345);
-                    comparisonOperator();
-                    setState(346);
-                    stringExpr();
-                }
-                break;
-                case 2:
-                    _localctx = new ComparisonArithmeticExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(348);
-                    arithmeticExpr();
-                    setState(349);
-                    comparisonOperator();
-                    setState(350);
-                    arithmeticExpr();
-                }
-                break;
-                case 3:
-                    _localctx = new ComparisonAggregateExprContext(_localctx);
-                    enterOuterAlt(_localctx, 3);
-                {
-                    setState(352);
-                    aggregateExpr();
-                    setState(353);
-                    comparisonOperator();
-                    setState(354);
-                    arithmeticExpr();
-                }
-                break;
-                case 4:
-                    _localctx = new ComparisonEntityExprContext(_localctx);
-                    enterOuterAlt(_localctx, 4);
-                {
-                    setState(356);
-                    entityExpr();
-                    setState(357);
-                    comparisonOperator();
-                    setState(358);
-                    entityExpr();
-                }
-                break;
-                case 5:
-                    _localctx = new ComparisonListExprContext(_localctx);
-                    enterOuterAlt(_localctx, 5);
-                {
-                    setState(360);
-                    listExpr();
-                    setState(361);
-                    comparisonOperator();
-                    setState(362);
-                    listExpr();
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ComparisonOperatorContext extends EnhancedParserRuleContext {
-        public TerminalNode EQ() {
-            return getToken(OQLParser.EQ, 0);
-        }
-
-        public TerminalNode GR() {
-            return getToken(OQLParser.GR, 0);
-        }
-
-        public TerminalNode GE() {
-            return getToken(OQLParser.GE, 0);
-        }
-
-        public TerminalNode LS() {
-            return getToken(OQLParser.LS, 0);
-        }
-
-        public TerminalNode LE() {
-            return getToken(OQLParser.LE, 0);
-        }
-
-        public TerminalNode NE() {
-            return getToken(OQLParser.NE, 0);
-        }
-
-        public ComparisonOperatorContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_comparisonOperator;
-        }
-    }
-
-    public final ComparisonOperatorContext comparisonOperator() throws RecognitionException {
-        ComparisonOperatorContext _localctx = new ComparisonOperatorContext(_ctx, getState());
-        enterRule(_localctx, 52, RULE_comparisonOperator);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(366);
-                _la = _input.LA(1);
-                if (!(((((_la - 79)) & ~0x3f) == 0 && ((1L << (_la - 79)) & ((1L << (EQ - 79)) | (1L << (GR - 79)) | (1L << (LS - 79)) | (1L << (GE - 79)) | (1L << (LE - 79)) | (1L << (NE - 79)))) != 0))) {
-                    _errHandler.recoverInline(this);
-                } else {
-                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                    _errHandler.reportMatch(this);
-                    consume();
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ArithmeticExprContext extends EnhancedParserRuleContext {
-        public ArithmeticExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_arithmeticExpr;
-        }
-
-        public ArithmeticExprContext() {
-        }
-
-        public void copyFrom(ArithmeticExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class ArithmeticPathExprContext extends ArithmeticExprContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public ArithmeticPathExprContext(ArithmeticExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ArithmeticSimpleArithmeticExprContext extends ArithmeticExprContext {
-        public SimpleArithmeticExprContext simpleArithmeticExpr() {
-            return getRuleContext(SimpleArithmeticExprContext.class, 0);
-        }
-
-        public ArithmeticSimpleArithmeticExprContext(ArithmeticExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final ArithmeticExprContext arithmeticExpr() throws RecognitionException {
-        ArithmeticExprContext _localctx = new ArithmeticExprContext(_ctx, getState());
-        enterRule(_localctx, 54, RULE_arithmeticExpr);
-        try {
-            setState(370);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case WORD:
-                    _localctx = new ArithmeticPathExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(368);
-                    pathExpr();
-                }
-                break;
-                case PLUS:
-                case MINUS:
-                case LBRACKET:
-                case INTNUMERAL:
-                case FLOATNUMERAL:
-                    _localctx = new ArithmeticSimpleArithmeticExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(369);
-                    simpleArithmeticExpr();
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SimpleArithmeticExprContext extends EnhancedParserRuleContext {
-        public List<ArithmeticTermContext> arithmeticTerm() {
-            return getRuleContexts(ArithmeticTermContext.class);
-        }
-
-        public ArithmeticTermContext arithmeticTerm(int i) {
-            return getRuleContext(ArithmeticTermContext.class, i);
-        }
-
-        public List<TerminalNode> PLUS() {
-            return getTokens(OQLParser.PLUS);
-        }
-
-        public TerminalNode PLUS(int i) {
-            return getToken(OQLParser.PLUS, i);
-        }
-
-        public List<TerminalNode> MINUS() {
-            return getTokens(OQLParser.MINUS);
-        }
-
-        public TerminalNode MINUS(int i) {
-            return getToken(OQLParser.MINUS, i);
-        }
-
-        public SimpleArithmeticExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_simpleArithmeticExpr;
-        }
-    }
-
-    public final SimpleArithmeticExprContext simpleArithmeticExpr() throws RecognitionException {
-        SimpleArithmeticExprContext _localctx = new SimpleArithmeticExprContext(_ctx, getState());
-        enterRule(_localctx, 56, RULE_simpleArithmeticExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                {
-                    setState(372);
-                    arithmeticTerm();
-                }
-                setState(377);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == PLUS || _la == MINUS) {
-                    {
-                        {
-                            setState(373);
-                            _la = _input.LA(1);
-                            if (!(_la == PLUS || _la == MINUS)) {
-                                _errHandler.recoverInline(this);
-                            } else {
-                                if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                                _errHandler.reportMatch(this);
-                                consume();
-                            }
-                            setState(374);
-                            arithmeticTerm();
-                        }
-                    }
-                    setState(379);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ArithmeticTermContext extends EnhancedParserRuleContext {
-        public List<ArithmeticFactorContext> arithmeticFactor() {
-            return getRuleContexts(ArithmeticFactorContext.class);
-        }
-
-        public ArithmeticFactorContext arithmeticFactor(int i) {
-            return getRuleContext(ArithmeticFactorContext.class, i);
-        }
-
-        public List<TerminalNode> MUL() {
-            return getTokens(OQLParser.MUL);
-        }
-
-        public TerminalNode MUL(int i) {
-            return getToken(OQLParser.MUL, i);
-        }
-
-        public List<TerminalNode> DIV() {
-            return getTokens(OQLParser.DIV);
-        }
-
-        public TerminalNode DIV(int i) {
-            return getToken(OQLParser.DIV, i);
-        }
-
-        public ArithmeticTermContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_arithmeticTerm;
-        }
-    }
-
-    public final ArithmeticTermContext arithmeticTerm() throws RecognitionException {
-        ArithmeticTermContext _localctx = new ArithmeticTermContext(_ctx, getState());
-        enterRule(_localctx, 58, RULE_arithmeticTerm);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                {
-                    setState(380);
-                    arithmeticFactor();
-                }
-                setState(385);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == MUL || _la == DIV) {
-                    {
-                        {
-                            setState(381);
-                            _la = _input.LA(1);
-                            if (!(_la == MUL || _la == DIV)) {
-                                _errHandler.recoverInline(this);
-                            } else {
-                                if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                                _errHandler.reportMatch(this);
-                                consume();
-                            }
-                            setState(382);
-                            arithmeticFactor();
-                        }
-                    }
-                    setState(387);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ArithmeticFactorContext extends EnhancedParserRuleContext {
-        public ArithmeticPrimaryContext arithmeticPrimary() {
-            return getRuleContext(ArithmeticPrimaryContext.class, 0);
-        }
-
-        public TerminalNode PLUS() {
-            return getToken(OQLParser.PLUS, 0);
-        }
-
-        public TerminalNode MINUS() {
-            return getToken(OQLParser.MINUS, 0);
-        }
-
-        public ArithmeticFactorContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_arithmeticFactor;
-        }
-    }
-
-    public final ArithmeticFactorContext arithmeticFactor() throws RecognitionException {
-        ArithmeticFactorContext _localctx = new ArithmeticFactorContext(_ctx, getState());
-        enterRule(_localctx, 60, RULE_arithmeticFactor);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(389);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == PLUS || _la == MINUS) {
-                    {
-                        setState(388);
-                        _la = _input.LA(1);
-                        if (!(_la == PLUS || _la == MINUS)) {
-                            _errHandler.recoverInline(this);
-                        } else {
-                            if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                            _errHandler.reportMatch(this);
-                            consume();
-                        }
-                    }
-                }
-
-                setState(391);
-                arithmeticPrimary();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ArithmeticPrimaryContext extends EnhancedParserRuleContext {
-        public ArithmeticPrimaryContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_arithmeticPrimary;
-        }
-
-        public ArithmeticPrimaryContext() {
-        }
-
-        public void copyFrom(ArithmeticPrimaryContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class AriPriSimpleArithmeticExprContext extends ArithmeticPrimaryContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public SimpleArithmeticExprContext simpleArithmeticExpr() {
-            return getRuleContext(SimpleArithmeticExprContext.class, 0);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public AriPriSimpleArithmeticExprContext(ArithmeticPrimaryContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class AriPriNumericLiteralContext extends ArithmeticPrimaryContext {
-        public NumericLiteralContext numericLiteral() {
-            return getRuleContext(NumericLiteralContext.class, 0);
-        }
-
-        public AriPriNumericLiteralContext(ArithmeticPrimaryContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final ArithmeticPrimaryContext arithmeticPrimary() throws RecognitionException {
-        ArithmeticPrimaryContext _localctx = new ArithmeticPrimaryContext(_ctx, getState());
-        enterRule(_localctx, 62, RULE_arithmeticPrimary);
-        try {
-            setState(398);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case INTNUMERAL:
-                case FLOATNUMERAL:
-                    _localctx = new AriPriNumericLiteralContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(393);
-                    numericLiteral();
-                }
-                break;
-                case LBRACKET:
-                    _localctx = new AriPriSimpleArithmeticExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(394);
-                    match(LBRACKET);
-                    setState(395);
-                    simpleArithmeticExpr();
-                    setState(396);
-                    match(RBRACKET);
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class StringExprContext extends EnhancedParserRuleContext {
-        public StringExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_stringExpr;
-        }
-
-        public StringExprContext() {
-        }
-
-        public void copyFrom(StringExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class StringPriContext extends StringExprContext {
-        public StringPrimaryContext stringPrimary() {
-            return getRuleContext(StringPrimaryContext.class, 0);
-        }
-
-        public StringPriContext(StringExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final StringExprContext stringExpr() throws RecognitionException {
-        StringExprContext _localctx = new StringExprContext(_ctx, getState());
-        enterRule(_localctx, 64, RULE_stringExpr);
-        try {
-            _localctx = new StringPriContext(_localctx);
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(400);
-                stringPrimary();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class StringPrimaryContext extends EnhancedParserRuleContext {
-        public StringPrimaryContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_stringPrimary;
-        }
-
-        public StringPrimaryContext() {
-        }
-
-        public void copyFrom(StringPrimaryContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class StringPathExprContext extends StringPrimaryContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public StringPathExprContext(StringPrimaryContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class StringLiteralContext extends StringPrimaryContext {
-        public StringLiteralExprContext stringLiteralExpr() {
-            return getRuleContext(StringLiteralExprContext.class, 0);
-        }
-
-        public StringLiteralContext(StringPrimaryContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final StringPrimaryContext stringPrimary() throws RecognitionException {
-        StringPrimaryContext _localctx = new StringPrimaryContext(_ctx, getState());
-        enterRule(_localctx, 66, RULE_stringPrimary);
-        try {
-            setState(404);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case WORD:
-                    _localctx = new StringPathExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(402);
-                    pathExpr();
-                }
-                break;
-                case STRINGLITERAL:
-                    _localctx = new StringLiteralContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(403);
-                    stringLiteralExpr();
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class EntityExprContext extends EnhancedParserRuleContext {
-        public EntityExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_entityExpr;
-        }
-
-        public EntityExprContext() {
-        }
-
-        public void copyFrom(EntityExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class EntityValueExprContext extends EntityExprContext {
-        public InsertEntityExprContext insertEntityExpr() {
-            return getRuleContext(InsertEntityExprContext.class, 0);
-        }
-
-        public EntityValueExprContext(EntityExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class EntityPathExprContext extends EntityExprContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public EntityPathExprContext(EntityExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final EntityExprContext entityExpr() throws RecognitionException {
-        EntityExprContext _localctx = new EntityExprContext(_ctx, getState());
-        enterRule(_localctx, 68, RULE_entityExpr);
-        try {
-            setState(408);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case WORD:
-                    _localctx = new EntityPathExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(406);
-                    pathExpr();
-                }
-                break;
-                case LBRACKET:
-                    _localctx = new EntityValueExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(407);
-                    insertEntityExpr();
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ListExprContext extends EnhancedParserRuleContext {
-        public ListExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_listExpr;
-        }
-
-        public ListExprContext() {
-        }
-
-        public void copyFrom(ListExprContext ctx) {
-            super.copyFrom(ctx);
-        }
-    }
-
-    public static class ListValueExprContext extends ListExprContext {
-        public InsertListExprContext insertListExpr() {
-            return getRuleContext(InsertListExprContext.class, 0);
-        }
-
-        public ListValueExprContext(ListExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public static class ListPathExprContext extends ListExprContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public ListPathExprContext(ListExprContext ctx) {
-            copyFrom(ctx);
-        }
-    }
-
-    public final ListExprContext listExpr() throws RecognitionException {
-        ListExprContext _localctx = new ListExprContext(_ctx, getState());
-        enterRule(_localctx, 70, RULE_listExpr);
-        try {
-            setState(412);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case WORD:
-                    _localctx = new ListPathExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(410);
-                    pathExpr();
-                }
-                break;
-                case LFRACKET:
-                    _localctx = new ListValueExprContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(411);
-                    insertListExpr();
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class StringLiteralExprContext extends EnhancedParserRuleContext {
-        public TerminalNode STRINGLITERAL() {
-            return getToken(OQLParser.STRINGLITERAL, 0);
-        }
-
-        public StringLiteralExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_stringLiteralExpr;
-        }
-    }
-
-    public final StringLiteralExprContext stringLiteralExpr() throws RecognitionException {
-        StringLiteralExprContext _localctx = new StringLiteralExprContext(_ctx, getState());
-        enterRule(_localctx, 72, RULE_stringLiteralExpr);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(414);
-                match(STRINGLITERAL);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SchemaNameContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public SchemaNameContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_schemaName;
-        }
-    }
-
-    public final SchemaNameContext schemaName() throws RecognitionException {
-        SchemaNameContext _localctx = new SchemaNameContext(_ctx, getState());
-        enterRule(_localctx, 74, RULE_schemaName);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(416);
-                match(WORD);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class PatternValueContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public PatternValueContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_patternValue;
-        }
-    }
-
-    public final PatternValueContext patternValue() throws RecognitionException {
-        PatternValueContext _localctx = new PatternValueContext(_ctx, getState());
-        enterRule(_localctx, 76, RULE_patternValue);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(418);
-                match(WORD);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class NumericLiteralContext extends EnhancedParserRuleContext {
-        public TerminalNode INTNUMERAL() {
-            return getToken(OQLParser.INTNUMERAL, 0);
-        }
-
-        public TerminalNode FLOATNUMERAL() {
-            return getToken(OQLParser.FLOATNUMERAL, 0);
-        }
-
-        public NumericLiteralContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_numericLiteral;
-        }
-    }
-
-    public final NumericLiteralContext numericLiteral() throws RecognitionException {
-        NumericLiteralContext _localctx = new NumericLiteralContext(_ctx, getState());
-        enterRule(_localctx, 78, RULE_numericLiteral);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(420);
-                _la = _input.LA(1);
-                if (!(_la == INTNUMERAL || _la == FLOATNUMERAL)) {
-                    _errHandler.recoverInline(this);
-                } else {
-                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                    _errHandler.reportMatch(this);
-                    consume();
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class LiteralContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public LiteralContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_literal;
-        }
-    }
-
-    public final LiteralContext literal() throws RecognitionException {
-        LiteralContext _localctx = new LiteralContext(_ctx, getState());
-        enterRule(_localctx, 80, RULE_literal);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(422);
-                match(WORD);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class FieldContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public TerminalNode INTNUMERAL() {
-            return getToken(OQLParser.INTNUMERAL, 0);
-        }
-
-        public FieldContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_field;
-        }
-    }
-
-    public final FieldContext field() throws RecognitionException {
-        FieldContext _localctx = new FieldContext(_ctx, getState());
-        enterRule(_localctx, 82, RULE_field);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(424);
-                _la = _input.LA(1);
-                if (!(_la == WORD || _la == INTNUMERAL)) {
-                    _errHandler.recoverInline(this);
-                } else {
-                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                    _errHandler.reportMatch(this);
-                    consume();
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class IdContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public IdContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_id;
-        }
-    }
-
-    public final IdContext id() throws RecognitionException {
-        IdContext _localctx = new IdContext(_ctx, getState());
-        enterRule(_localctx, 84, RULE_id);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(426);
-                match(WORD);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class CreateStatContext extends EnhancedParserRuleContext {
-        public TerminalNode CREATE() {
-            return getToken(OQLParser.CREATE, 0);
-        }
-
-        public TerminalNode TABLE() {
-            return getToken(OQLParser.TABLE, 0);
-        }
-
-        public TableNameContext tableName() {
-            return getRuleContext(TableNameContext.class, 0);
-        }
-
-        public ColumnDefinitionContext columnDefinition() {
-            return getRuleContext(ColumnDefinitionContext.class, 0);
-        }
-
-        public ExtendsTableContext extendsTable() {
-            return getRuleContext(ExtendsTableContext.class, 0);
-        }
-
-        public TableConstraintContext tableConstraint() {
-            return getRuleContext(TableConstraintContext.class, 0);
-        }
-
-        public CreateStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_createStat;
-        }
-    }
-
-    public final CreateStatContext createStat() throws RecognitionException {
-        CreateStatContext _localctx = new CreateStatContext(_ctx, getState());
-        enterRule(_localctx, 86, RULE_createStat);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(428);
-                match(CREATE);
-                setState(429);
-                match(TABLE);
-                setState(430);
-                tableName();
-                setState(432);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == LBRACKET) {
-                    {
-                        setState(431);
-                        columnDefinition();
-                    }
-                }
-
-                setState(435);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == EXTENDS) {
-                    {
-                        setState(434);
-                        extendsTable();
-                    }
-                }
-
-                setState(438);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == PRIMARY) {
-                    {
-                        setState(437);
-                        tableConstraint();
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class TableNameContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public TableNameContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_tableName;
-        }
-    }
-
-    public final TableNameContext tableName() throws RecognitionException {
-        TableNameContext _localctx = new TableNameContext(_ctx, getState());
-        enterRule(_localctx, 88, RULE_tableName);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(440);
-                match(WORD);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ColumnDefinitionContext extends EnhancedParserRuleContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public List<ColumnDefinitionItemContext> columnDefinitionItem() {
-            return getRuleContexts(ColumnDefinitionItemContext.class);
-        }
-
-        public ColumnDefinitionItemContext columnDefinitionItem(int i) {
-            return getRuleContext(ColumnDefinitionItemContext.class, i);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public ColumnDefinitionContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_columnDefinition;
-        }
-    }
-
-    public final ColumnDefinitionContext columnDefinition() throws RecognitionException {
-        ColumnDefinitionContext _localctx = new ColumnDefinitionContext(_ctx, getState());
-        enterRule(_localctx, 90, RULE_columnDefinition);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(442);
-                match(LBRACKET);
-                setState(443);
-                columnDefinitionItem();
-                setState(448);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(444);
-                            match(COMMA);
-                            setState(445);
-                            columnDefinitionItem();
-                        }
-                    }
-                    setState(450);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(451);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ColumnDefinitionItemContext extends EnhancedParserRuleContext {
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public ColumnTypeContext columnType() {
-            return getRuleContext(ColumnTypeContext.class, 0);
-        }
-
-        public List<ColumnConstraintContext> columnConstraint() {
-            return getRuleContexts(ColumnConstraintContext.class);
-        }
-
-        public ColumnConstraintContext columnConstraint(int i) {
-            return getRuleContext(ColumnConstraintContext.class, i);
-        }
-
-        public ColumnDefinitionItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_columnDefinitionItem;
-        }
-    }
-
-    public final ColumnDefinitionItemContext columnDefinitionItem() throws RecognitionException {
-        ColumnDefinitionItemContext _localctx = new ColumnDefinitionItemContext(_ctx, getState());
-        enterRule(_localctx, 92, RULE_columnDefinitionItem);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(453);
-                match(WORD);
-                setState(454);
-                columnType();
-                setState(458);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == PRIMARY || _la == FINAL) {
-                    {
-                        {
-                            setState(455);
-                            columnConstraint();
-                        }
-                    }
-                    setState(460);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ColumnTypeContext extends EnhancedParserRuleContext {
-        public TerminalNode INT() {
-            return getToken(OQLParser.INT, 0);
-        }
-
-        public TerminalNode FLOAT() {
-            return getToken(OQLParser.FLOAT, 0);
-        }
-
-        public TerminalNode CHAR() {
-            return getToken(OQLParser.CHAR, 0);
-        }
-
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public TerminalNode INTNUMERAL() {
-            return getToken(OQLParser.INTNUMERAL, 0);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public TerminalNode LISTOF() {
-            return getToken(OQLParser.LISTOF, 0);
-        }
-
-        public ColumnTypeContext columnType() {
-            return getRuleContext(ColumnTypeContext.class, 0);
-        }
-
-        public TerminalNode COMMA() {
-            return getToken(OQLParser.COMMA, 0);
-        }
-
-        public TerminalNode REF() {
-            return getToken(OQLParser.REF, 0);
-        }
-
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public TerminalNode OBJECT() {
-            return getToken(OQLParser.OBJECT, 0);
-        }
-
-        public ColumnDefinitionContext columnDefinition() {
-            return getRuleContext(ColumnDefinitionContext.class, 0);
-        }
-
-        public ColumnTypeContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_columnType;
-        }
-    }
-
-    public final ColumnTypeContext columnType() throws RecognitionException {
-        ColumnTypeContext _localctx = new ColumnTypeContext(_ctx, getState());
-        enterRule(_localctx, 94, RULE_columnType);
-        try {
-            setState(480);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case INT:
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(461);
-                    match(INT);
-                }
-                break;
-                case FLOAT:
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(462);
-                    match(FLOAT);
-                }
-                break;
-                case CHAR:
-                    enterOuterAlt(_localctx, 3);
-                {
-                    setState(463);
-                    match(CHAR);
-                    setState(464);
-                    match(LBRACKET);
-                    setState(465);
-                    match(INTNUMERAL);
-                    setState(466);
-                    match(RBRACKET);
-                }
-                break;
-                case LISTOF:
-                    enterOuterAlt(_localctx, 4);
-                {
-                    setState(467);
-                    match(LISTOF);
-                    setState(468);
-                    match(LBRACKET);
-                    setState(469);
-                    columnType();
-                    setState(470);
-                    match(COMMA);
-                    setState(471);
-                    match(INTNUMERAL);
-                    setState(472);
-                    match(RBRACKET);
-                }
-                break;
-                case REF:
-                    enterOuterAlt(_localctx, 5);
-                {
-                    setState(474);
-                    match(REF);
-                    setState(475);
-                    match(LBRACKET);
-                    setState(476);
-                    match(WORD);
-                    setState(477);
-                    match(RBRACKET);
-                }
-                break;
-                case OBJECT:
-                    enterOuterAlt(_localctx, 6);
-                {
-                    setState(478);
-                    match(OBJECT);
-                    setState(479);
-                    columnDefinition();
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ColumnConstraintContext extends EnhancedParserRuleContext {
-        public TerminalNode PRIMARY() {
-            return getToken(OQLParser.PRIMARY, 0);
-        }
-
-        public TerminalNode KEY() {
-            return getToken(OQLParser.KEY, 0);
-        }
-
-        public TerminalNode AUTO_INCREMENT() {
-            return getToken(OQLParser.AUTO_INCREMENT, 0);
-        }
-
-        public TerminalNode ASSIGN() {
-            return getToken(OQLParser.ASSIGN, 0);
-        }
-
-        public TerminalNode UUID() {
-            return getToken(OQLParser.UUID, 0);
-        }
-
-        public TerminalNode FINAL() {
-            return getToken(OQLParser.FINAL, 0);
-        }
-
-        public ColumnConstraintContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_columnConstraint;
-        }
-    }
-
-    public final ColumnConstraintContext columnConstraint() throws RecognitionException {
-        ColumnConstraintContext _localctx = new ColumnConstraintContext(_ctx, getState());
-        enterRule(_localctx, 96, RULE_columnConstraint);
-        int _la;
-        try {
-            setState(488);
-            _errHandler.sync(this);
-            switch (_input.LA(1)) {
-                case PRIMARY:
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(482);
-                    match(PRIMARY);
-                    setState(483);
-                    match(KEY);
-                    setState(485);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                    if (((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0)) {
-                        {
-                            setState(484);
-                            _la = _input.LA(1);
-                            if (!(((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0))) {
-                                _errHandler.recoverInline(this);
-                            } else {
-                                if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                                _errHandler.reportMatch(this);
-                                consume();
-                            }
-                        }
-                    }
-
-                }
-                break;
-                case FINAL:
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(487);
-                    match(FINAL);
-                }
-                break;
-                default:
-                    throw new NoViableAltException(this);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ExtendsTableContext extends EnhancedParserRuleContext {
-        public TerminalNode EXTENDS() {
-            return getToken(OQLParser.EXTENDS, 0);
-        }
-
-        public List<TerminalNode> WORD() {
-            return getTokens(OQLParser.WORD);
-        }
-
-        public TerminalNode WORD(int i) {
-            return getToken(OQLParser.WORD, i);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public ExtendsTableContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_extendsTable;
-        }
-    }
-
-    public final ExtendsTableContext extendsTable() throws RecognitionException {
-        ExtendsTableContext _localctx = new ExtendsTableContext(_ctx, getState());
-        enterRule(_localctx, 98, RULE_extendsTable);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(490);
-                match(EXTENDS);
-                setState(491);
-                match(WORD);
-                setState(496);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(492);
-                            match(COMMA);
-                            setState(493);
-                            match(WORD);
-                        }
-                    }
-                    setState(498);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class TableConstraintContext extends EnhancedParserRuleContext {
-        public TerminalNode PRIMARY() {
-            return getToken(OQLParser.PRIMARY, 0);
-        }
-
-        public TerminalNode KEY() {
-            return getToken(OQLParser.KEY, 0);
-        }
-
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public List<PathExprContext> pathExpr() {
-            return getRuleContexts(PathExprContext.class);
-        }
-
-        public PathExprContext pathExpr(int i) {
-            return getRuleContext(PathExprContext.class, i);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public TerminalNode AUTO_INCREMENT() {
-            return getToken(OQLParser.AUTO_INCREMENT, 0);
-        }
-
-        public TerminalNode ASSIGN() {
-            return getToken(OQLParser.ASSIGN, 0);
-        }
-
-        public TerminalNode UUID() {
-            return getToken(OQLParser.UUID, 0);
-        }
-
-        public TableConstraintContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_tableConstraint;
-        }
-    }
-
-    public final TableConstraintContext tableConstraint() throws RecognitionException {
-        TableConstraintContext _localctx = new TableConstraintContext(_ctx, getState());
-        enterRule(_localctx, 100, RULE_tableConstraint);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(499);
-                match(PRIMARY);
-                setState(500);
-                match(KEY);
-                setState(501);
-                match(LBRACKET);
-                setState(502);
-                pathExpr();
-                setState(507);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(503);
-                            match(COMMA);
-                            setState(504);
-                            pathExpr();
-                        }
-                    }
-                    setState(509);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(510);
-                match(RBRACKET);
-                setState(512);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0)) {
-                    {
-                        setState(511);
-                        _la = _input.LA(1);
-                        if (!(((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0))) {
-                            _errHandler.recoverInline(this);
-                        } else {
-                            if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                            _errHandler.reportMatch(this);
-                            consume();
-                        }
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class UpdateStatContext extends EnhancedParserRuleContext {
-        public UpdateClauseContext updateClause() {
-            return getRuleContext(UpdateClauseContext.class, 0);
-        }
-
-        public WhereClauseContext whereClause() {
-            return getRuleContext(WhereClauseContext.class, 0);
-        }
-
-        public UpdateStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_updateStat;
-        }
-    }
-
-    public final UpdateStatContext updateStat() throws RecognitionException {
-        UpdateStatContext _localctx = new UpdateStatContext(_ctx, getState());
-        enterRule(_localctx, 102, RULE_updateStat);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(514);
-                updateClause();
-                setState(516);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == WHERE) {
-                    {
-                        setState(515);
-                        whereClause();
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class UpdateClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode UPDATE() {
-            return getToken(OQLParser.UPDATE, 0);
-        }
-
-        public SchemaNameContext schemaName() {
-            return getRuleContext(SchemaNameContext.class, 0);
-        }
-
-        public IdContext id() {
-            return getRuleContext(IdContext.class, 0);
-        }
-
-        public TerminalNode SET() {
-            return getToken(OQLParser.SET, 0);
-        }
-
-        public List<UpdateItemContext> updateItem() {
-            return getRuleContexts(UpdateItemContext.class);
-        }
-
-        public UpdateItemContext updateItem(int i) {
-            return getRuleContext(UpdateItemContext.class, i);
-        }
-
-        public TerminalNode AS() {
-            return getToken(OQLParser.AS, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public WhereClauseContext whereClause() {
-            return getRuleContext(WhereClauseContext.class, 0);
-        }
-
-        public UpdateClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_updateClause;
-        }
-    }
-
-    public final UpdateClauseContext updateClause() throws RecognitionException {
-        UpdateClauseContext _localctx = new UpdateClauseContext(_ctx, getState());
-        enterRule(_localctx, 104, RULE_updateClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(518);
-                match(UPDATE);
-                setState(519);
-                schemaName();
-                setState(521);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == AS) {
-                    {
-                        setState(520);
-                        match(AS);
-                    }
-                }
-
-                setState(523);
-                id();
-                setState(524);
-                match(SET);
-                setState(525);
-                updateItem();
-                setState(530);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(526);
-                            match(COMMA);
-                            setState(527);
-                            updateItem();
-                        }
-                    }
-                    setState(532);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(534);
-                _errHandler.sync(this);
-                switch (getInterpreter().adaptivePredict(_input, 51, _ctx)) {
-                    case 1: {
-                        setState(533);
-                        whereClause();
-                    }
-                    break;
-                }
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class UpdateItemContext extends EnhancedParserRuleContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public TerminalNode EQ() {
-            return getToken(OQLParser.EQ, 0);
-        }
-
-        public NewValueContext newValue() {
-            return getRuleContext(NewValueContext.class, 0);
-        }
-
-        public UpdateItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_updateItem;
-        }
-    }
-
-    public final UpdateItemContext updateItem() throws RecognitionException {
-        UpdateItemContext _localctx = new UpdateItemContext(_ctx, getState());
-        enterRule(_localctx, 106, RULE_updateItem);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(536);
-                pathExpr();
-                setState(537);
-                match(EQ);
-                setState(538);
-                newValue();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class NewValueContext extends EnhancedParserRuleContext {
-        public NewValueContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_newValue;
-        }
-
-        public NewValueContext() {
-        }
-
-        public void copyFrom(NewValueContext ctx) {
-            super.copyFrom(ctx);
-        }
-
-        public Object getValue() {
-            throw new UnsupportedOperationException("the method is not implemented");
-        }
-    }
-
-    public static class NewSimpleListExprContext extends NewValueContext {
-        public InsertListExprContext insertListExpr() {
-            return getRuleContext(InsertListExprContext.class, 0);
-        }
-
-        public NewSimpleListExprContext(NewValueContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object getValue() {
-            boolean isTuple = false;
-            List<InsertListItemContext> insertListItemContexts = insertListExpr().insertListItem();
-            for (InsertListItemContext insertEntityItemContext : insertListItemContexts) {
-                if (insertEntityItemContext.COLON() != null) {
-                    isTuple = true;
-                } else {
-                    if (isTuple) throw new ParseException("the oql is error");
-                }
-            }
-            if (isTuple) {
-                Tuple tuple = new Tuple();
-                for (InsertListItemContext insertEntityItemContext : insertListItemContexts) {
-                    String name = insertEntityItemContext.INTNUMERAL().getText();
-                    Object value = insertEntityItemContext.newValue().getValue();
-                    tuple.add(name, value);
-                }
-                return tuple;
-            }
-
-            List<Object> valueList = new ArrayList<>();
-            for (InsertListItemContext insertEntityItemContext : insertListItemContexts) {
-                Object value = insertEntityItemContext.newValue().getValue();
-                valueList.add(value);
-            }
-            return valueList;
-        }
-    }
-
-    public static class NewSimpleEntityExprContext extends NewValueContext {
-        public InsertEntityExprContext insertEntityExpr() {
-            return getRuleContext(InsertEntityExprContext.class, 0);
-        }
-
-        public InsertListExprContext insertListExpr() {
-            return getRuleContext(InsertListExprContext.class, 0);
-        }
-
-        public NewSimpleEntityExprContext(NewValueContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object getValue() {
-            boolean isTuple = false;
-            List<InsertEntityItemContext> insertEntityItemContexts = insertEntityExpr().insertEntityItem();
-            for (InsertEntityItemContext insertEntityItemContext : insertEntityItemContexts) {
-                if (insertEntityItemContext.COLON() != null) {
-                    isTuple = true;
-                } else {
-                    if (isTuple) throw new ParseException("the oql is error");
-                }
-            }
-            if (isTuple) {
-                Tuple tuple = new Tuple();
-                for (InsertEntityItemContext insertEntityItemContext : insertEntityItemContexts) {
-                    String name = insertEntityItemContext.pathExpr().getText();
-                    Object value = insertEntityItemContext.newValue().getValue();
-                    tuple.add(name, value);
-                }
-                return tuple;
-            }
-
-            List<Object> valueList = new ArrayList<>();
-            for (InsertEntityItemContext insertEntityItemContext : insertEntityItemContexts) {
-                Object value = insertEntityItemContext.newValue().getValue();
-                valueList.add(value);
-            }
-            return valueList;
-        }
-    }
-
-    public static class NewSimpleArithmeticExprContext extends NewValueContext {
-        public SimpleArithmeticExprContext simpleArithmeticExpr() {
-            return getRuleContext(SimpleArithmeticExprContext.class, 0);
-        }
-
-        public NewSimpleArithmeticExprContext(NewValueContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object getValue() {
-            return OgnlUtil.eval(getText());
-        }
-    }
-
-    public static class NewNullContext extends NewValueContext {
-        public TerminalNode NULL() {
-            return getToken(OQLParser.NULL, 0);
-        }
-
-        public NewNullContext(NewValueContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object getValue() {
-            return null;
-        }
-    }
-
-    public static class NewStringPrimaryContext extends NewValueContext {
-        public StringPrimaryContext stringPrimary() {
-            return getRuleContext(StringPrimaryContext.class, 0);
-        }
-
-        public NewStringPrimaryContext(NewValueContext ctx) {
-            copyFrom(ctx);
-        }
-
-        @Override
-        public Object getValue() {
-            return getText().replaceAll("'", "");
-        }
-    }
-
-    public final NewValueContext newValue() throws RecognitionException {
-        NewValueContext _localctx = new NewValueContext(_ctx, getState());
-        enterRule(_localctx, 108, RULE_newValue);
-        try {
-            setState(545);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 52, _ctx)) {
-                case 1:
-                    _localctx = new NewSimpleArithmeticExprContext(_localctx);
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(540);
-                    simpleArithmeticExpr();
-                }
-                break;
-                case 2:
-                    _localctx = new NewStringPrimaryContext(_localctx);
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(541);
-                    stringPrimary();
-                }
-                break;
-                case 3:
-                    _localctx = new NewSimpleEntityExprContext(_localctx);
-                    enterOuterAlt(_localctx, 3);
-                {
-                    setState(542);
-                    insertEntityExpr();
-                }
-                break;
-                case 4:
-                    _localctx = new NewSimpleListExprContext(_localctx);
-                    enterOuterAlt(_localctx, 4);
-                {
-                    setState(543);
-                    insertListExpr();
-                }
-                break;
-                case 5:
-                    _localctx = new NewNullContext(_localctx);
-                    enterOuterAlt(_localctx, 5);
-                {
-                    setState(544);
-                    match(NULL);
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InsertListExprContext extends EnhancedParserRuleContext {
-        public TerminalNode LFRACKET() {
-            return getToken(OQLParser.LFRACKET, 0);
-        }
-
-        public List<InsertListItemContext> insertListItem() {
-            return getRuleContexts(InsertListItemContext.class);
-        }
-
-        public InsertListItemContext insertListItem(int i) {
-            return getRuleContext(InsertListItemContext.class, i);
-        }
-
-        public TerminalNode RFRACKET() {
-            return getToken(OQLParser.RFRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public InsertListExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_insertListExpr;
-        }
-    }
-
-    public final InsertListExprContext insertListExpr() throws RecognitionException {
-        InsertListExprContext _localctx = new InsertListExprContext(_ctx, getState());
-        enterRule(_localctx, 110, RULE_insertListExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(547);
-                match(LFRACKET);
-                setState(548);
-                insertListItem();
-                setState(553);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(549);
-                            match(COMMA);
-                            setState(550);
-                            insertListItem();
-                        }
-                    }
-                    setState(555);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(556);
-                match(RFRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InsertListItemContext extends EnhancedParserRuleContext {
-        public TerminalNode INTNUMERAL() {
-            return getToken(OQLParser.INTNUMERAL, 0);
-        }
-
-        public TerminalNode COLON() {
-            return getToken(OQLParser.COLON, 0);
-        }
-
-        public NewValueContext newValue() {
-            return getRuleContext(NewValueContext.class, 0);
-        }
-
-        public InsertListItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_insertListItem;
-        }
-    }
-
-    public final InsertListItemContext insertListItem() throws RecognitionException {
-        InsertListItemContext _localctx = new InsertListItemContext(_ctx, getState());
-        enterRule(_localctx, 112, RULE_insertListItem);
-        try {
-            setState(562);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 54, _ctx)) {
-                case 1:
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(558);
-                    match(INTNUMERAL);
-                    setState(559);
-                    match(COLON);
-                    setState(560);
-                    newValue();
-                }
-                break;
-                case 2:
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(561);
-                    newValue();
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InsertEntityExprContext extends EnhancedParserRuleContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public List<InsertEntityItemContext> insertEntityItem() {
-            return getRuleContexts(InsertEntityItemContext.class);
-        }
-
-        public InsertEntityItemContext insertEntityItem(int i) {
-            return getRuleContext(InsertEntityItemContext.class, i);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public InsertEntityExprContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_insertEntityExpr;
-        }
-    }
-
-    public final InsertEntityExprContext insertEntityExpr() throws RecognitionException {
-        InsertEntityExprContext _localctx = new InsertEntityExprContext(_ctx, getState());
-        enterRule(_localctx, 114, RULE_insertEntityExpr);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(564);
-                match(LBRACKET);
-                setState(565);
-                insertEntityItem();
-                setState(570);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(566);
-                            match(COMMA);
-                            setState(567);
-                            insertEntityItem();
-                        }
-                    }
-                    setState(572);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(573);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InsertEntityItemContext extends EnhancedParserRuleContext {
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public TerminalNode COLON() {
-            return getToken(OQLParser.COLON, 0);
-        }
-
-        public NewValueContext newValue() {
-            return getRuleContext(NewValueContext.class, 0);
-        }
-
-        public InsertEntityItemContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_insertEntityItem;
-        }
-    }
-
-    public final InsertEntityItemContext insertEntityItem() throws RecognitionException {
-        InsertEntityItemContext _localctx = new InsertEntityItemContext(_ctx, getState());
-        enterRule(_localctx, 116, RULE_insertEntityItem);
-        try {
-            setState(580);
-            _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 56, _ctx)) {
-                case 1:
-                    enterOuterAlt(_localctx, 1);
-                {
-                    setState(575);
-                    pathExpr();
-                    setState(576);
-                    match(COLON);
-                    setState(577);
-                    newValue();
-                }
-                break;
-                case 2:
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(579);
-                    newValue();
-                }
-                break;
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class DeleteStatContext extends EnhancedParserRuleContext {
-        public DeleteClauseContext deleteClause() {
-            return getRuleContext(DeleteClauseContext.class, 0);
-        }
-
-        public WhereClauseContext whereClause() {
-            return getRuleContext(WhereClauseContext.class, 0);
-        }
-
-        public DeleteStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_deleteStat;
-        }
-    }
-
-    public final DeleteStatContext deleteStat() throws RecognitionException {
-        DeleteStatContext _localctx = new DeleteStatContext(_ctx, getState());
-        enterRule(_localctx, 118, RULE_deleteStat);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(582);
-                deleteClause();
-                setState(584);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == WHERE) {
-                    {
-                        setState(583);
-                        whereClause();
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class DeleteClauseContext extends EnhancedParserRuleContext {
-        public TerminalNode DELETE() {
-            return getToken(OQLParser.DELETE, 0);
-        }
-
-        public TerminalNode FROM() {
-            return getToken(OQLParser.FROM, 0);
-        }
-
-        public SchemaNameContext schemaName() {
-            return getRuleContext(SchemaNameContext.class, 0);
-        }
-
-        public IdContext id() {
-            return getRuleContext(IdContext.class, 0);
-        }
-
-        public TerminalNode AS() {
-            return getToken(OQLParser.AS, 0);
-        }
-
-        public DeleteClauseContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_deleteClause;
-        }
-    }
-
-    public final DeleteClauseContext deleteClause() throws RecognitionException {
-        DeleteClauseContext _localctx = new DeleteClauseContext(_ctx, getState());
-        enterRule(_localctx, 120, RULE_deleteClause);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(586);
-                match(DELETE);
-                setState(587);
-                match(FROM);
-                setState(588);
-                schemaName();
-                setState(590);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == AS) {
-                    {
-                        setState(589);
-                        match(AS);
-                    }
-                }
-
-                setState(592);
-                id();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InsertStatContext extends EnhancedParserRuleContext {
-        public TerminalNode INSERT() {
-            return getToken(OQLParser.INSERT, 0);
-        }
-
-        public TerminalNode INTO() {
-            return getToken(OQLParser.INTO, 0);
-        }
-
-        public TableNameContext tableName() {
-            return getRuleContext(TableNameContext.class, 0);
-        }
-
-        public TerminalNode VALUES() {
-            return getToken(OQLParser.VALUES, 0);
-        }
-
-        public InsertValueContext insertValue() {
-            return getRuleContext(InsertValueContext.class, 0);
-        }
-
-        public ColumnListContext columnList() {
-            return getRuleContext(ColumnListContext.class, 0);
-        }
-
-        public InsertStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_insertStat;
-        }
-    }
-
-    public final InsertStatContext insertStat() throws RecognitionException {
-        InsertStatContext _localctx = new InsertStatContext(_ctx, getState());
-        enterRule(_localctx, 122, RULE_insertStat);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(594);
-                match(INSERT);
-                setState(595);
-                match(INTO);
-                setState(596);
-                tableName();
-                setState(598);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == LBRACKET) {
-                    {
-                        setState(597);
-                        columnList();
-                    }
-                }
-
-                setState(600);
-                match(VALUES);
-                setState(601);
-                insertValue();
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ColumnListContext extends EnhancedParserRuleContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public List<PathExprContext> pathExpr() {
-            return getRuleContexts(PathExprContext.class);
-        }
-
-        public PathExprContext pathExpr(int i) {
-            return getRuleContext(PathExprContext.class, i);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public ColumnListContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_columnList;
-        }
-    }
-
-    public final ColumnListContext columnList() throws RecognitionException {
-        ColumnListContext _localctx = new ColumnListContext(_ctx, getState());
-        enterRule(_localctx, 124, RULE_columnList);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(603);
-                match(LBRACKET);
-                setState(604);
-                pathExpr();
-                setState(609);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(605);
-                            match(COMMA);
-                            setState(606);
-                            pathExpr();
-                        }
-                    }
-                    setState(611);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(612);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class InsertValueContext extends EnhancedParserRuleContext {
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public List<NewValueContext> newValue() {
-            return getRuleContexts(NewValueContext.class);
-        }
-
-        public NewValueContext newValue(int i) {
-            return getRuleContext(NewValueContext.class, i);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public List<TerminalNode> COMMA() {
-            return getTokens(OQLParser.COMMA);
-        }
-
-        public TerminalNode COMMA(int i) {
-            return getToken(OQLParser.COMMA, i);
-        }
-
-        public InsertValueContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_insertValue;
-        }
-    }
-
-    public final InsertValueContext insertValue() throws RecognitionException {
-        InsertValueContext _localctx = new InsertValueContext(_ctx, getState());
-        enterRule(_localctx, 126, RULE_insertValue);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(614);
-                match(LBRACKET);
-                setState(615);
-                newValue();
-                setState(620);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                while (_la == COMMA) {
-                    {
-                        {
-                            setState(616);
-                            match(COMMA);
-                            setState(617);
-                            newValue();
-                        }
-                    }
-                    setState(622);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                }
-                setState(623);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class DropStatContext extends EnhancedParserRuleContext {
-        public TerminalNode DROP() {
-            return getToken(OQLParser.DROP, 0);
-        }
-
-        public TerminalNode TABLE() {
-            return getToken(OQLParser.TABLE, 0);
-        }
-
-        public TerminalNode WORD() {
-            return getToken(OQLParser.WORD, 0);
-        }
-
-        public TerminalNode CASCADE() {
-            return getToken(OQLParser.CASCADE, 0);
-        }
-
-        public DropStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_dropStat;
-        }
-    }
-
-    public final DropStatContext dropStat() throws RecognitionException {
-        DropStatContext _localctx = new DropStatContext(_ctx, getState());
-        enterRule(_localctx, 128, RULE_dropStat);
-        int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(625);
-                match(DROP);
-                setState(626);
-                match(TABLE);
-                setState(627);
-                match(WORD);
-                setState(629);
-                _errHandler.sync(this);
-                _la = _input.LA(1);
-                if (_la == CASCADE) {
-                    {
-                        setState(628);
-                        match(CASCADE);
-                    }
-                }
-
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class ShowStatContext extends EnhancedParserRuleContext {
-        public TerminalNode SHOW() {
-            return getToken(OQLParser.SHOW, 0);
-        }
-
-        public TerminalNode TABLES() {
-            return getToken(OQLParser.TABLES, 0);
-        }
-
-        public ShowStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_showStat;
-        }
-    }
-
-    public final ShowStatContext showStat() throws RecognitionException {
-        ShowStatContext _localctx = new ShowStatContext(_ctx, getState());
-        enterRule(_localctx, 130, RULE_showStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(631);
-                match(SHOW);
-                setState(632);
-                match(TABLES);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class CreateIndexStatContext extends EnhancedParserRuleContext {
-        public TerminalNode CREATE() {
-            return getToken(OQLParser.CREATE, 0);
-        }
-
-        public TerminalNode INDEX() {
-            return getToken(OQLParser.INDEX, 0);
-        }
-
-        public List<TerminalNode> WORD() {
-            return getTokens(OQLParser.WORD);
-        }
-
-        public TerminalNode WORD(int i) {
-            return getToken(OQLParser.WORD, i);
-        }
-
-        public TerminalNode ON() {
-            return getToken(OQLParser.ON, 0);
-        }
-
-        public TerminalNode LBRACKET() {
-            return getToken(OQLParser.LBRACKET, 0);
-        }
-
-        public PathExprContext pathExpr() {
-            return getRuleContext(PathExprContext.class, 0);
-        }
-
-        public TerminalNode RBRACKET() {
-            return getToken(OQLParser.RBRACKET, 0);
-        }
-
-        public CreateIndexStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_createIndexStat;
-        }
-    }
-
-    public final CreateIndexStatContext createIndexStat() throws RecognitionException {
-        CreateIndexStatContext _localctx = new CreateIndexStatContext(_ctx, getState());
-        enterRule(_localctx, 132, RULE_createIndexStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(634);
-                match(CREATE);
-                setState(635);
-                match(INDEX);
-                setState(636);
-                match(WORD);
-                setState(637);
-                match(ON);
-                setState(638);
-                match(WORD);
-                setState(639);
-                match(LBRACKET);
-                setState(640);
-                pathExpr();
-                setState(641);
-                match(RBRACKET);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class DropIndexStatContext extends EnhancedParserRuleContext {
-        public TerminalNode DROP() {
-            return getToken(OQLParser.DROP, 0);
-        }
-
-        public TerminalNode INDEX() {
-            return getToken(OQLParser.INDEX, 0);
-        }
-
-        public List<TerminalNode> WORD() {
-            return getTokens(OQLParser.WORD);
-        }
-
-        public TerminalNode WORD(int i) {
-            return getToken(OQLParser.WORD, i);
-        }
-
-        public TerminalNode ON() {
-            return getToken(OQLParser.ON, 0);
-        }
-
-        public DropIndexStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_dropIndexStat;
-        }
-    }
-
-    public final DropIndexStatContext dropIndexStat() throws RecognitionException {
-        DropIndexStatContext _localctx = new DropIndexStatContext(_ctx, getState());
-        enterRule(_localctx, 134, RULE_dropIndexStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(643);
-                match(DROP);
-                setState(644);
-                match(INDEX);
-                setState(645);
-                match(WORD);
-                setState(646);
-                match(ON);
-                setState(647);
-                match(WORD);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class SyncStatContext extends EnhancedParserRuleContext {
-        public TerminalNode SYNC() {
-            return getToken(OQLParser.SYNC, 0);
-        }
-
-        public SyncStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_syncStat;
-        }
-    }
-
-    public final SyncStatContext syncStat() throws RecognitionException {
-        SyncStatContext _localctx = new SyncStatContext(_ctx, getState());
-        enterRule(_localctx, 136, RULE_syncStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(649);
-                match(SYNC);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class BeginTranStatContext extends EnhancedParserRuleContext {
-        public TerminalNode BEGIN() {
-            return getToken(OQLParser.BEGIN, 0);
-        }
-
-        public TerminalNode TRANSACTION() {
-            return getToken(OQLParser.TRANSACTION, 0);
-        }
-
-        public BeginTranStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_beginTranStat;
-        }
-    }
-
-    public final BeginTranStatContext beginTranStat() throws RecognitionException {
-        BeginTranStatContext _localctx = new BeginTranStatContext(_ctx, getState());
-        enterRule(_localctx, 138, RULE_beginTranStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(651);
-                match(BEGIN);
-                setState(652);
-                match(TRANSACTION);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class CommitStatContext extends EnhancedParserRuleContext {
-        public TerminalNode COMMIT() {
-            return getToken(OQLParser.COMMIT, 0);
-        }
-
-        public CommitStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_commitStat;
-        }
-    }
-
-    public final CommitStatContext commitStat() throws RecognitionException {
-        CommitStatContext _localctx = new CommitStatContext(_ctx, getState());
-        enterRule(_localctx, 140, RULE_commitStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(654);
-                match(COMMIT);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public static class RollBackStatContext extends EnhancedParserRuleContext {
-        public TerminalNode ROLL() {
-            return getToken(OQLParser.ROLL, 0);
-        }
-
-        public TerminalNode BACK() {
-            return getToken(OQLParser.BACK, 0);
-        }
-
-        public RollBackStatContext(ParserRuleContext parent, int invokingState) {
-            super(parent, invokingState);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_rollBackStat;
-        }
-    }
-
-    public final RollBackStatContext rollBackStat() throws RecognitionException {
-        RollBackStatContext _localctx = new RollBackStatContext(_ctx, getState());
-        enterRule(_localctx, 142, RULE_rollBackStat);
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(656);
-                match(ROLL);
-                setState(657);
-                match(BACK);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
     public static final String _serializedATN =
             "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3h\u0296\4\2\t\2\4" +
                     "\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t" +
@@ -5722,11 +318,5412 @@ public class OQLParser extends Parser {
                     "\u0258\u0263\u026e\u0277";
     public static final ATN _ATN =
             new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+    protected static final DFA[] _decisionToDFA;
+    protected static final PredictionContextCache _sharedContextCache =
+            new PredictionContextCache();
+    private static final String[] _LITERAL_NAMES = {
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, "'*'", "'/'", "'+'", "'-'", "'='", "'>'", "'<'", "'>='",
+            "'<='", null, "'.'", "'('", "')'", "'['", "']'", "','", "';'", "':'",
+            "''.''"
+    };
+    private static final String[] _SYMBOLIC_NAMES = {
+            null, "SELECT", "CREATE", "UPDATE", "DELETE", "INSERT", "FROM", "AS",
+            "LEFT", "RIGHT", "OUTER", "JOIN", "INNER", "DISTINCT", "OBJECT", "NEW",
+            "AVG", "SUM", "MAX", "MIN", "COUNT", "WHERE", "GROUP", "BY", "ORDER",
+            "HAVING", "DESC", "ASC", "NOT", "SET", "BETWEEN", "IS", "NULL", "ESCAPE",
+            "AND", "OR", "LIKE", "IN", "INTO", "VALUES", "PRIMARY", "KEY", "LISTOF",
+            "EXTENDS", "EMPTY", "MEMBER", "OF", "ALL", "ANY", "SOME", "INT", "FLOAT",
+            "CHAR", "SETOF", "REF", "TABLE", "EXISTS", "AUTO_INCREMENT", "UNIQUE",
+            "LIMIT", "DROP", "CASCADE", "ON", "SHOW", "TABLES", "FINAL", "INDEX",
+            "SYNC", "BEGIN", "TRANSACTION", "COMMIT", "ROLL", "BACK", "ASSIGN", "UUID",
+            "MUL", "DIV", "PLUS", "MINUS", "EQ", "GR", "LS", "GE", "LE", "NE", "DOT",
+            "LBRACKET", "RBRACKET", "LFRACKET", "RFRACKET", "COMMA", "SEMI", "COLON",
+            "TRIMCHARACTER", "STRINGLITERAL", "WORD", "NAMEDPARAMETER", "WS", "COMMENT",
+            "LINECOMMENT", "ESCAPECHARACTER", "INTNUMERAL", "FLOATNUMERAL"
+    };
+    public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+    static {
+        RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION);
+    }
+
+    static {
+        tokenNames = new String[_SYMBOLIC_NAMES.length];
+        for (int i = 0; i < tokenNames.length; i++) {
+            tokenNames[i] = VOCABULARY.getLiteralName(i);
+            if (tokenNames[i] == null) {
+                tokenNames[i] = VOCABULARY.getSymbolicName(i);
+            }
+
+            if (tokenNames[i] == null) {
+                tokenNames[i] = "<INVALID>";
+            }
+        }
+    }
 
     static {
         _decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
         for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
             _decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
+        }
+    }
+
+    public OQLParser(TokenStream input) {
+        super(input);
+        _interp = new ParserATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
+    }
+
+    @Override
+    @Deprecated
+    public String[] getTokenNames() {
+        return tokenNames;
+    }
+
+    @Override
+
+    public Vocabulary getVocabulary() {
+        return VOCABULARY;
+    }
+
+    @Override
+    public String getGrammarFileName() {
+        return "OQL.g4";
+    }
+
+    @Override
+    public String[] getRuleNames() {
+        return ruleNames;
+    }
+
+    @Override
+    public String getSerializedATN() {
+        return _serializedATN;
+    }
+
+    @Override
+    public ATN getATN() {
+        return _ATN;
+    }
+
+    public final OqlStatContext oqlStat() throws RecognitionException {
+        OqlStatContext _localctx = new OqlStatContext(_ctx, getState());
+        enterRule(_localctx, 0, RULE_oqlStat);
+        try {
+            setState(157);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 0, _ctx)) {
+                case 1:
+                    _localctx = new SelectStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(144);
+                    selectStat();
+                }
+                break;
+                case 2:
+                    _localctx = new CreateStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(145);
+                    createStat();
+                }
+                break;
+                case 3:
+                    _localctx = new InsertStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 3);
+                {
+                    setState(146);
+                    insertStat();
+                }
+                break;
+                case 4:
+                    _localctx = new UpdateStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 4);
+                {
+                    setState(147);
+                    updateStat();
+                }
+                break;
+                case 5:
+                    _localctx = new DeleteStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 5);
+                {
+                    setState(148);
+                    deleteStat();
+                }
+                break;
+                case 6:
+                    _localctx = new DropStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 6);
+                {
+                    setState(149);
+                    dropStat();
+                }
+                break;
+                case 7:
+                    _localctx = new ShowStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 7);
+                {
+                    setState(150);
+                    showStat();
+                }
+                break;
+                case 8:
+                    _localctx = new CreateIndexStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 8);
+                {
+                    setState(151);
+                    createIndexStat();
+                }
+                break;
+                case 9:
+                    _localctx = new DropIndexStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 9);
+                {
+                    setState(152);
+                    dropIndexStat();
+                }
+                break;
+                case 10:
+                    _localctx = new SyncStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 10);
+                {
+                    setState(153);
+                    syncStat();
+                }
+                break;
+                case 11:
+                    _localctx = new BeginTranStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 11);
+                {
+                    setState(154);
+                    beginTranStat();
+                }
+                break;
+                case 12:
+                    _localctx = new CommitStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 12);
+                {
+                    setState(155);
+                    commitStat();
+                }
+                break;
+                case 13:
+                    _localctx = new RollBackStatementContext(_localctx);
+                    enterOuterAlt(_localctx, 13);
+                {
+                    setState(156);
+                    rollBackStat();
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SelectStatContext selectStat() throws RecognitionException {
+        SelectStatContext _localctx = new SelectStatContext(_ctx, getState());
+        enterRule(_localctx, 2, RULE_selectStat);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(159);
+                match(SELECT);
+                setState(161);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == DISTINCT) {
+                    {
+                        setState(160);
+                        match(DISTINCT);
+                    }
+                }
+
+                setState(163);
+                selectClause();
+                setState(164);
+                fromClause();
+                setState(166);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == WHERE) {
+                    {
+                        setState(165);
+                        whereClause();
+                    }
+                }
+
+                setState(169);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == GROUP) {
+                    {
+                        setState(168);
+                        groupByClause();
+                    }
+                }
+
+                setState(172);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == ORDER) {
+                    {
+                        setState(171);
+                        orderByClause();
+                    }
+                }
+
+                setState(175);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == LIMIT) {
+                    {
+                        setState(174);
+                        limitClause();
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SelectClauseContext selectClause() throws RecognitionException {
+        SelectClauseContext _localctx = new SelectClauseContext(_ctx, getState());
+        enterRule(_localctx, 4, RULE_selectClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(177);
+                selectExpr();
+                setState(182);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(178);
+                            match(COMMA);
+                            setState(179);
+                            selectExpr();
+                        }
+                    }
+                    setState(184);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SelectExprContext selectExpr() throws RecognitionException {
+        SelectExprContext _localctx = new SelectExprContext(_ctx, getState());
+        enterRule(_localctx, 6, RULE_selectExpr);
+        try {
+            setState(187);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case WORD:
+                    _localctx = new SelectPathExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(185);
+                    pathExpr();
+                }
+                break;
+                case AVG:
+                case SUM:
+                case MAX:
+                case MIN:
+                case COUNT:
+                    _localctx = new SelectAggregateExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(186);
+                    aggregateExpr();
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final FromClauseContext fromClause() throws RecognitionException {
+        FromClauseContext _localctx = new FromClauseContext(_ctx, getState());
+        enterRule(_localctx, 8, RULE_fromClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(189);
+                match(FROM);
+                setState(190);
+                fromItem();
+                setState(195);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(191);
+                            match(COMMA);
+                            setState(192);
+                            fromItem();
+                        }
+                    }
+                    setState(197);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final FromItemContext fromItem() throws RecognitionException {
+        FromItemContext _localctx = new FromItemContext(_ctx, getState());
+        enterRule(_localctx, 10, RULE_fromItem);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(198);
+                schemaName();
+                setState(200);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == AS) {
+                    {
+                        setState(199);
+                        match(AS);
+                    }
+                }
+
+                setState(202);
+                id();
+                setState(206);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == JOIN) {
+                    {
+                        {
+                            setState(203);
+                            join();
+                        }
+                    }
+                    setState(208);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final JoinContext join() throws RecognitionException {
+        JoinContext _localctx = new JoinContext(_ctx, getState());
+        enterRule(_localctx, 12, RULE_join);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(209);
+                match(JOIN);
+                setState(210);
+                schemaName();
+                setState(212);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == AS) {
+                    {
+                        setState(211);
+                        match(AS);
+                    }
+                }
+
+                setState(214);
+                id();
+                setState(215);
+                match(ON);
+                setState(216);
+                conditionalExpr();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final PathExprContext pathExpr() throws RecognitionException {
+        PathExprContext _localctx = new PathExprContext(_ctx, getState());
+        enterRule(_localctx, 14, RULE_pathExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(218);
+                id();
+                setState(223);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == DOT) {
+                    {
+                        {
+                            setState(219);
+                            match(DOT);
+                            setState(220);
+                            field();
+                        }
+                    }
+                    setState(225);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final LimitClauseContext limitClause() throws RecognitionException {
+        LimitClauseContext _localctx = new LimitClauseContext(_ctx, getState());
+        enterRule(_localctx, 16, RULE_limitClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(226);
+                match(LIMIT);
+                setState(227);
+                match(INTNUMERAL);
+                setState(230);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == COMMA) {
+                    {
+                        setState(228);
+                        match(COMMA);
+                        setState(229);
+                        match(INTNUMERAL);
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final AggregateExprContext aggregateExpr() throws RecognitionException {
+        AggregateExprContext _localctx = new AggregateExprContext(_ctx, getState());
+        enterRule(_localctx, 18, RULE_aggregateExpr);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(232);
+                aggregateExprFunctionName();
+                setState(233);
+                match(LBRACKET);
+                setState(234);
+                pathExpr();
+                setState(235);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final AggregateExprFunctionNameContext aggregateExprFunctionName() throws RecognitionException {
+        AggregateExprFunctionNameContext _localctx = new AggregateExprFunctionNameContext(_ctx, getState());
+        enterRule(_localctx, 20, RULE_aggregateExprFunctionName);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(237);
+                _la = _input.LA(1);
+                if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AVG) | (1L << SUM) | (1L << MAX) | (1L << MIN) | (1L << COUNT))) != 0))) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final WhereClauseContext whereClause() throws RecognitionException {
+        WhereClauseContext _localctx = new WhereClauseContext(_ctx, getState());
+        enterRule(_localctx, 22, RULE_whereClause);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(239);
+                match(WHERE);
+                setState(240);
+                conditionalExpr();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final GroupByClauseContext groupByClause() throws RecognitionException {
+        GroupByClauseContext _localctx = new GroupByClauseContext(_ctx, getState());
+        enterRule(_localctx, 24, RULE_groupByClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(242);
+                match(GROUP);
+                setState(243);
+                match(BY);
+                setState(244);
+                pathExpr();
+                setState(246);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == HAVING) {
+                    {
+                        setState(245);
+                        havingClause();
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final HavingClauseContext havingClause() throws RecognitionException {
+        HavingClauseContext _localctx = new HavingClauseContext(_ctx, getState());
+        enterRule(_localctx, 26, RULE_havingClause);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(248);
+                match(HAVING);
+                setState(249);
+                conditionalExpr();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final OrderByClauseContext orderByClause() throws RecognitionException {
+        OrderByClauseContext _localctx = new OrderByClauseContext(_ctx, getState());
+        enterRule(_localctx, 28, RULE_orderByClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(251);
+                match(ORDER);
+                setState(252);
+                match(BY);
+                setState(253);
+                orderByItem();
+                setState(258);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(254);
+                            match(COMMA);
+                            setState(255);
+                            orderByItem();
+                        }
+                    }
+                    setState(260);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final OrderByItemContext orderByItem() throws RecognitionException {
+        OrderByItemContext _localctx = new OrderByItemContext(_ctx, getState());
+        enterRule(_localctx, 30, RULE_orderByItem);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(261);
+                pathExpr();
+                setState(266);
+                _errHandler.sync(this);
+                switch (_input.LA(1)) {
+                    case EOF:
+                    case ASC:
+                    case LIMIT:
+                    case COMMA: {
+                        setState(263);
+                        _errHandler.sync(this);
+                        _la = _input.LA(1);
+                        if (_la == ASC) {
+                            {
+                                setState(262);
+                                match(ASC);
+                            }
+                        }
+
+                    }
+                    break;
+                    case DESC: {
+                        setState(265);
+                        match(DESC);
+                    }
+                    break;
+                    default:
+                        throw new NoViableAltException(this);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ConditionalExprContext conditionalExpr() throws RecognitionException {
+        ConditionalExprContext _localctx = new ConditionalExprContext(_ctx, getState());
+        enterRule(_localctx, 32, RULE_conditionalExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                {
+                    setState(268);
+                    conditionalTerm();
+                }
+                setState(273);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == OR) {
+                    {
+                        {
+                            setState(269);
+                            match(OR);
+                            setState(270);
+                            conditionalTerm();
+                        }
+                    }
+                    setState(275);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ConditionalTermContext conditionalTerm() throws RecognitionException {
+        ConditionalTermContext _localctx = new ConditionalTermContext(_ctx, getState());
+        enterRule(_localctx, 34, RULE_conditionalTerm);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                {
+                    setState(276);
+                    conditionalFactor();
+                }
+                setState(281);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == AND) {
+                    {
+                        {
+                            setState(277);
+                            match(AND);
+                            setState(278);
+                            conditionalFactor();
+                        }
+                    }
+                    setState(283);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ConditionalFactorContext conditionalFactor() throws RecognitionException {
+        ConditionalFactorContext _localctx = new ConditionalFactorContext(_ctx, getState());
+        enterRule(_localctx, 36, RULE_conditionalFactor);
+        try {
+            setState(289);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 20, _ctx)) {
+                case 1:
+                    _localctx = new ConditionalFactorSimpleCondExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(284);
+                    simpleCondExpr();
+                }
+                break;
+                case 2:
+                    _localctx = new ConditionalFactorExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(285);
+                    match(LBRACKET);
+                    setState(286);
+                    conditionalExpr();
+                    setState(287);
+                    match(RBRACKET);
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SimpleCondExprContext simpleCondExpr() throws RecognitionException {
+        SimpleCondExprContext _localctx = new SimpleCondExprContext(_ctx, getState());
+        enterRule(_localctx, 38, RULE_simpleCondExpr);
+        try {
+            setState(295);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 21, _ctx)) {
+                case 1:
+                    _localctx = new SimpleComparisonExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(291);
+                    comparisonExpr();
+                }
+                break;
+                case 2:
+                    _localctx = new SimpleBetweenExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(292);
+                    betweenExpr();
+                }
+                break;
+                case 3:
+                    _localctx = new SimpleLikeExprContext(_localctx);
+                    enterOuterAlt(_localctx, 3);
+                {
+                    setState(293);
+                    likeExpr();
+                }
+                break;
+                case 4:
+                    _localctx = new SimpleInExprContext(_localctx);
+                    enterOuterAlt(_localctx, 4);
+                {
+                    setState(294);
+                    inExpr();
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final BetweenExprContext betweenExpr() throws RecognitionException {
+        BetweenExprContext _localctx = new BetweenExprContext(_ctx, getState());
+        enterRule(_localctx, 40, RULE_betweenExpr);
+        int _la;
+        try {
+            setState(315);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 24, _ctx)) {
+                case 1:
+                    _localctx = new BetweenArithmeticExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(297);
+                    arithmeticExpr();
+                    setState(299);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                    if (_la == NOT) {
+                        {
+                            setState(298);
+                            match(NOT);
+                        }
+                    }
+
+                    setState(301);
+                    match(BETWEEN);
+                    setState(302);
+                    arithmeticExpr();
+                    setState(303);
+                    match(AND);
+                    setState(304);
+                    arithmeticExpr();
+                }
+                break;
+                case 2:
+                    _localctx = new BetweenStringExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(306);
+                    stringExpr();
+                    setState(308);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                    if (_la == NOT) {
+                        {
+                            setState(307);
+                            match(NOT);
+                        }
+                    }
+
+                    setState(310);
+                    match(BETWEEN);
+                    setState(311);
+                    stringExpr();
+                    setState(312);
+                    match(AND);
+                    setState(313);
+                    stringExpr();
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InExprContext inExpr() throws RecognitionException {
+        InExprContext _localctx = new InExprContext(_ctx, getState());
+        enterRule(_localctx, 42, RULE_inExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(317);
+                pathExpr();
+                setState(319);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == NOT) {
+                    {
+                        setState(318);
+                        match(NOT);
+                    }
+                }
+
+                setState(321);
+                match(IN);
+                setState(322);
+                inExprRightPart();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InExprRightPartContext inExprRightPart() throws RecognitionException {
+        InExprRightPartContext _localctx = new InExprRightPartContext(_ctx, getState());
+        enterRule(_localctx, 44, RULE_inExprRightPart);
+        int _la;
+        try {
+            _localctx = new InExprItemContext(_localctx);
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(324);
+                match(LBRACKET);
+                setState(325);
+                inItem();
+                setState(330);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(326);
+                            match(COMMA);
+                            setState(327);
+                            inItem();
+                        }
+                    }
+                    setState(332);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(333);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InItemContext inItem() throws RecognitionException {
+        InItemContext _localctx = new InItemContext(_ctx, getState());
+        enterRule(_localctx, 46, RULE_inItem);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(335);
+                literal();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final LikeExprContext likeExpr() throws RecognitionException {
+        LikeExprContext _localctx = new LikeExprContext(_ctx, getState());
+        enterRule(_localctx, 48, RULE_likeExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(337);
+                stringExpr();
+                setState(339);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == NOT) {
+                    {
+                        setState(338);
+                        match(NOT);
+                    }
+                }
+
+                setState(341);
+                match(LIKE);
+                setState(342);
+                patternValue();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ComparisonExprContext comparisonExpr() throws RecognitionException {
+        ComparisonExprContext _localctx = new ComparisonExprContext(_ctx, getState());
+        enterRule(_localctx, 50, RULE_comparisonExpr);
+        try {
+            setState(364);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 28, _ctx)) {
+                case 1:
+                    _localctx = new ComparisonStringExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(344);
+                    stringExpr();
+                    setState(345);
+                    comparisonOperator();
+                    setState(346);
+                    stringExpr();
+                }
+                break;
+                case 2:
+                    _localctx = new ComparisonArithmeticExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(348);
+                    arithmeticExpr();
+                    setState(349);
+                    comparisonOperator();
+                    setState(350);
+                    arithmeticExpr();
+                }
+                break;
+                case 3:
+                    _localctx = new ComparisonAggregateExprContext(_localctx);
+                    enterOuterAlt(_localctx, 3);
+                {
+                    setState(352);
+                    aggregateExpr();
+                    setState(353);
+                    comparisonOperator();
+                    setState(354);
+                    arithmeticExpr();
+                }
+                break;
+                case 4:
+                    _localctx = new ComparisonEntityExprContext(_localctx);
+                    enterOuterAlt(_localctx, 4);
+                {
+                    setState(356);
+                    entityExpr();
+                    setState(357);
+                    comparisonOperator();
+                    setState(358);
+                    entityExpr();
+                }
+                break;
+                case 5:
+                    _localctx = new ComparisonListExprContext(_localctx);
+                    enterOuterAlt(_localctx, 5);
+                {
+                    setState(360);
+                    listExpr();
+                    setState(361);
+                    comparisonOperator();
+                    setState(362);
+                    listExpr();
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ComparisonOperatorContext comparisonOperator() throws RecognitionException {
+        ComparisonOperatorContext _localctx = new ComparisonOperatorContext(_ctx, getState());
+        enterRule(_localctx, 52, RULE_comparisonOperator);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(366);
+                _la = _input.LA(1);
+                if (!(((((_la - 79)) & ~0x3f) == 0 && ((1L << (_la - 79)) & ((1L << (EQ - 79)) | (1L << (GR - 79)) | (1L << (LS - 79)) | (1L << (GE - 79)) | (1L << (LE - 79)) | (1L << (NE - 79)))) != 0))) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ArithmeticExprContext arithmeticExpr() throws RecognitionException {
+        ArithmeticExprContext _localctx = new ArithmeticExprContext(_ctx, getState());
+        enterRule(_localctx, 54, RULE_arithmeticExpr);
+        try {
+            setState(370);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case WORD:
+                    _localctx = new ArithmeticPathExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(368);
+                    pathExpr();
+                }
+                break;
+                case PLUS:
+                case MINUS:
+                case LBRACKET:
+                case INTNUMERAL:
+                case FLOATNUMERAL:
+                    _localctx = new ArithmeticSimpleArithmeticExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(369);
+                    simpleArithmeticExpr();
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SimpleArithmeticExprContext simpleArithmeticExpr() throws RecognitionException {
+        SimpleArithmeticExprContext _localctx = new SimpleArithmeticExprContext(_ctx, getState());
+        enterRule(_localctx, 56, RULE_simpleArithmeticExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                {
+                    setState(372);
+                    arithmeticTerm();
+                }
+                setState(377);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == PLUS || _la == MINUS) {
+                    {
+                        {
+                            setState(373);
+                            _la = _input.LA(1);
+                            if (!(_la == PLUS || _la == MINUS)) {
+                                _errHandler.recoverInline(this);
+                            } else {
+                                if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                                _errHandler.reportMatch(this);
+                                consume();
+                            }
+                            setState(374);
+                            arithmeticTerm();
+                        }
+                    }
+                    setState(379);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ArithmeticTermContext arithmeticTerm() throws RecognitionException {
+        ArithmeticTermContext _localctx = new ArithmeticTermContext(_ctx, getState());
+        enterRule(_localctx, 58, RULE_arithmeticTerm);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                {
+                    setState(380);
+                    arithmeticFactor();
+                }
+                setState(385);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == MUL || _la == DIV) {
+                    {
+                        {
+                            setState(381);
+                            _la = _input.LA(1);
+                            if (!(_la == MUL || _la == DIV)) {
+                                _errHandler.recoverInline(this);
+                            } else {
+                                if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                                _errHandler.reportMatch(this);
+                                consume();
+                            }
+                            setState(382);
+                            arithmeticFactor();
+                        }
+                    }
+                    setState(387);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ArithmeticFactorContext arithmeticFactor() throws RecognitionException {
+        ArithmeticFactorContext _localctx = new ArithmeticFactorContext(_ctx, getState());
+        enterRule(_localctx, 60, RULE_arithmeticFactor);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(389);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == PLUS || _la == MINUS) {
+                    {
+                        setState(388);
+                        _la = _input.LA(1);
+                        if (!(_la == PLUS || _la == MINUS)) {
+                            _errHandler.recoverInline(this);
+                        } else {
+                            if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                            _errHandler.reportMatch(this);
+                            consume();
+                        }
+                    }
+                }
+
+                setState(391);
+                arithmeticPrimary();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ArithmeticPrimaryContext arithmeticPrimary() throws RecognitionException {
+        ArithmeticPrimaryContext _localctx = new ArithmeticPrimaryContext(_ctx, getState());
+        enterRule(_localctx, 62, RULE_arithmeticPrimary);
+        try {
+            setState(398);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case INTNUMERAL:
+                case FLOATNUMERAL:
+                    _localctx = new AriPriNumericLiteralContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(393);
+                    numericLiteral();
+                }
+                break;
+                case LBRACKET:
+                    _localctx = new AriPriSimpleArithmeticExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(394);
+                    match(LBRACKET);
+                    setState(395);
+                    simpleArithmeticExpr();
+                    setState(396);
+                    match(RBRACKET);
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final StringExprContext stringExpr() throws RecognitionException {
+        StringExprContext _localctx = new StringExprContext(_ctx, getState());
+        enterRule(_localctx, 64, RULE_stringExpr);
+        try {
+            _localctx = new StringPriContext(_localctx);
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(400);
+                stringPrimary();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final StringPrimaryContext stringPrimary() throws RecognitionException {
+        StringPrimaryContext _localctx = new StringPrimaryContext(_ctx, getState());
+        enterRule(_localctx, 66, RULE_stringPrimary);
+        try {
+            setState(404);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case WORD:
+                    _localctx = new StringPathExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(402);
+                    pathExpr();
+                }
+                break;
+                case STRINGLITERAL:
+                    _localctx = new StringLiteralContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(403);
+                    stringLiteralExpr();
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final EntityExprContext entityExpr() throws RecognitionException {
+        EntityExprContext _localctx = new EntityExprContext(_ctx, getState());
+        enterRule(_localctx, 68, RULE_entityExpr);
+        try {
+            setState(408);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case WORD:
+                    _localctx = new EntityPathExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(406);
+                    pathExpr();
+                }
+                break;
+                case LBRACKET:
+                    _localctx = new EntityValueExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(407);
+                    insertEntityExpr();
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ListExprContext listExpr() throws RecognitionException {
+        ListExprContext _localctx = new ListExprContext(_ctx, getState());
+        enterRule(_localctx, 70, RULE_listExpr);
+        try {
+            setState(412);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case WORD:
+                    _localctx = new ListPathExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(410);
+                    pathExpr();
+                }
+                break;
+                case LFRACKET:
+                    _localctx = new ListValueExprContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(411);
+                    insertListExpr();
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final StringLiteralExprContext stringLiteralExpr() throws RecognitionException {
+        StringLiteralExprContext _localctx = new StringLiteralExprContext(_ctx, getState());
+        enterRule(_localctx, 72, RULE_stringLiteralExpr);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(414);
+                match(STRINGLITERAL);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SchemaNameContext schemaName() throws RecognitionException {
+        SchemaNameContext _localctx = new SchemaNameContext(_ctx, getState());
+        enterRule(_localctx, 74, RULE_schemaName);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(416);
+                match(WORD);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final PatternValueContext patternValue() throws RecognitionException {
+        PatternValueContext _localctx = new PatternValueContext(_ctx, getState());
+        enterRule(_localctx, 76, RULE_patternValue);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(418);
+                match(WORD);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final NumericLiteralContext numericLiteral() throws RecognitionException {
+        NumericLiteralContext _localctx = new NumericLiteralContext(_ctx, getState());
+        enterRule(_localctx, 78, RULE_numericLiteral);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(420);
+                _la = _input.LA(1);
+                if (!(_la == INTNUMERAL || _la == FLOATNUMERAL)) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final LiteralContext literal() throws RecognitionException {
+        LiteralContext _localctx = new LiteralContext(_ctx, getState());
+        enterRule(_localctx, 80, RULE_literal);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(422);
+                match(WORD);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final FieldContext field() throws RecognitionException {
+        FieldContext _localctx = new FieldContext(_ctx, getState());
+        enterRule(_localctx, 82, RULE_field);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(424);
+                _la = _input.LA(1);
+                if (!(_la == WORD || _la == INTNUMERAL)) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final IdContext id() throws RecognitionException {
+        IdContext _localctx = new IdContext(_ctx, getState());
+        enterRule(_localctx, 84, RULE_id);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(426);
+                match(WORD);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final CreateStatContext createStat() throws RecognitionException {
+        CreateStatContext _localctx = new CreateStatContext(_ctx, getState());
+        enterRule(_localctx, 86, RULE_createStat);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(428);
+                match(CREATE);
+                setState(429);
+                match(TABLE);
+                setState(430);
+                tableName();
+                setState(432);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == LBRACKET) {
+                    {
+                        setState(431);
+                        columnDefinition();
+                    }
+                }
+
+                setState(435);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == EXTENDS) {
+                    {
+                        setState(434);
+                        extendsTable();
+                    }
+                }
+
+                setState(438);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == PRIMARY) {
+                    {
+                        setState(437);
+                        tableConstraint();
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final TableNameContext tableName() throws RecognitionException {
+        TableNameContext _localctx = new TableNameContext(_ctx, getState());
+        enterRule(_localctx, 88, RULE_tableName);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(440);
+                match(WORD);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ColumnDefinitionContext columnDefinition() throws RecognitionException {
+        ColumnDefinitionContext _localctx = new ColumnDefinitionContext(_ctx, getState());
+        enterRule(_localctx, 90, RULE_columnDefinition);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(442);
+                match(LBRACKET);
+                setState(443);
+                columnDefinitionItem();
+                setState(448);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(444);
+                            match(COMMA);
+                            setState(445);
+                            columnDefinitionItem();
+                        }
+                    }
+                    setState(450);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(451);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ColumnDefinitionItemContext columnDefinitionItem() throws RecognitionException {
+        ColumnDefinitionItemContext _localctx = new ColumnDefinitionItemContext(_ctx, getState());
+        enterRule(_localctx, 92, RULE_columnDefinitionItem);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(453);
+                match(WORD);
+                setState(454);
+                columnType();
+                setState(458);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == PRIMARY || _la == FINAL) {
+                    {
+                        {
+                            setState(455);
+                            columnConstraint();
+                        }
+                    }
+                    setState(460);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ColumnTypeContext columnType() throws RecognitionException {
+        ColumnTypeContext _localctx = new ColumnTypeContext(_ctx, getState());
+        enterRule(_localctx, 94, RULE_columnType);
+        try {
+            setState(480);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case INT:
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(461);
+                    match(INT);
+                }
+                break;
+                case FLOAT:
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(462);
+                    match(FLOAT);
+                }
+                break;
+                case CHAR:
+                    enterOuterAlt(_localctx, 3);
+                {
+                    setState(463);
+                    match(CHAR);
+                    setState(464);
+                    match(LBRACKET);
+                    setState(465);
+                    match(INTNUMERAL);
+                    setState(466);
+                    match(RBRACKET);
+                }
+                break;
+                case LISTOF:
+                    enterOuterAlt(_localctx, 4);
+                {
+                    setState(467);
+                    match(LISTOF);
+                    setState(468);
+                    match(LBRACKET);
+                    setState(469);
+                    columnType();
+                    setState(470);
+                    match(COMMA);
+                    setState(471);
+                    match(INTNUMERAL);
+                    setState(472);
+                    match(RBRACKET);
+                }
+                break;
+                case REF:
+                    enterOuterAlt(_localctx, 5);
+                {
+                    setState(474);
+                    match(REF);
+                    setState(475);
+                    match(LBRACKET);
+                    setState(476);
+                    match(WORD);
+                    setState(477);
+                    match(RBRACKET);
+                }
+                break;
+                case OBJECT:
+                    enterOuterAlt(_localctx, 6);
+                {
+                    setState(478);
+                    match(OBJECT);
+                    setState(479);
+                    columnDefinition();
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ColumnConstraintContext columnConstraint() throws RecognitionException {
+        ColumnConstraintContext _localctx = new ColumnConstraintContext(_ctx, getState());
+        enterRule(_localctx, 96, RULE_columnConstraint);
+        int _la;
+        try {
+            setState(488);
+            _errHandler.sync(this);
+            switch (_input.LA(1)) {
+                case PRIMARY:
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(482);
+                    match(PRIMARY);
+                    setState(483);
+                    match(KEY);
+                    setState(485);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                    if (((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0)) {
+                        {
+                            setState(484);
+                            _la = _input.LA(1);
+                            if (!(((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0))) {
+                                _errHandler.recoverInline(this);
+                            } else {
+                                if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                                _errHandler.reportMatch(this);
+                                consume();
+                            }
+                        }
+                    }
+
+                }
+                break;
+                case FINAL:
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(487);
+                    match(FINAL);
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ExtendsTableContext extendsTable() throws RecognitionException {
+        ExtendsTableContext _localctx = new ExtendsTableContext(_ctx, getState());
+        enterRule(_localctx, 98, RULE_extendsTable);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(490);
+                match(EXTENDS);
+                setState(491);
+                match(WORD);
+                setState(496);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(492);
+                            match(COMMA);
+                            setState(493);
+                            match(WORD);
+                        }
+                    }
+                    setState(498);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final TableConstraintContext tableConstraint() throws RecognitionException {
+        TableConstraintContext _localctx = new TableConstraintContext(_ctx, getState());
+        enterRule(_localctx, 100, RULE_tableConstraint);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(499);
+                match(PRIMARY);
+                setState(500);
+                match(KEY);
+                setState(501);
+                match(LBRACKET);
+                setState(502);
+                pathExpr();
+                setState(507);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(503);
+                            match(COMMA);
+                            setState(504);
+                            pathExpr();
+                        }
+                    }
+                    setState(509);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(510);
+                match(RBRACKET);
+                setState(512);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0)) {
+                    {
+                        setState(511);
+                        _la = _input.LA(1);
+                        if (!(((((_la - 57)) & ~0x3f) == 0 && ((1L << (_la - 57)) & ((1L << (AUTO_INCREMENT - 57)) | (1L << (ASSIGN - 57)) | (1L << (UUID - 57)))) != 0))) {
+                            _errHandler.recoverInline(this);
+                        } else {
+                            if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                            _errHandler.reportMatch(this);
+                            consume();
+                        }
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final UpdateStatContext updateStat() throws RecognitionException {
+        UpdateStatContext _localctx = new UpdateStatContext(_ctx, getState());
+        enterRule(_localctx, 102, RULE_updateStat);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(514);
+                updateClause();
+                setState(516);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == WHERE) {
+                    {
+                        setState(515);
+                        whereClause();
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final UpdateClauseContext updateClause() throws RecognitionException {
+        UpdateClauseContext _localctx = new UpdateClauseContext(_ctx, getState());
+        enterRule(_localctx, 104, RULE_updateClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(518);
+                match(UPDATE);
+                setState(519);
+                schemaName();
+                setState(521);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == AS) {
+                    {
+                        setState(520);
+                        match(AS);
+                    }
+                }
+
+                setState(523);
+                id();
+                setState(524);
+                match(SET);
+                setState(525);
+                updateItem();
+                setState(530);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(526);
+                            match(COMMA);
+                            setState(527);
+                            updateItem();
+                        }
+                    }
+                    setState(532);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(534);
+                _errHandler.sync(this);
+                switch (getInterpreter().adaptivePredict(_input, 51, _ctx)) {
+                    case 1: {
+                        setState(533);
+                        whereClause();
+                    }
+                    break;
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final UpdateItemContext updateItem() throws RecognitionException {
+        UpdateItemContext _localctx = new UpdateItemContext(_ctx, getState());
+        enterRule(_localctx, 106, RULE_updateItem);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(536);
+                pathExpr();
+                setState(537);
+                match(EQ);
+                setState(538);
+                newValue();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final NewValueContext newValue() throws RecognitionException {
+        NewValueContext _localctx = new NewValueContext(_ctx, getState());
+        enterRule(_localctx, 108, RULE_newValue);
+        try {
+            setState(545);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 52, _ctx)) {
+                case 1:
+                    _localctx = new NewSimpleArithmeticExprContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(540);
+                    simpleArithmeticExpr();
+                }
+                break;
+                case 2:
+                    _localctx = new NewStringPrimaryContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(541);
+                    stringPrimary();
+                }
+                break;
+                case 3:
+                    _localctx = new NewSimpleEntityExprContext(_localctx);
+                    enterOuterAlt(_localctx, 3);
+                {
+                    setState(542);
+                    insertEntityExpr();
+                }
+                break;
+                case 4:
+                    _localctx = new NewSimpleListExprContext(_localctx);
+                    enterOuterAlt(_localctx, 4);
+                {
+                    setState(543);
+                    insertListExpr();
+                }
+                break;
+                case 5:
+                    _localctx = new NewNullContext(_localctx);
+                    enterOuterAlt(_localctx, 5);
+                {
+                    setState(544);
+                    match(NULL);
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InsertListExprContext insertListExpr() throws RecognitionException {
+        InsertListExprContext _localctx = new InsertListExprContext(_ctx, getState());
+        enterRule(_localctx, 110, RULE_insertListExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(547);
+                match(LFRACKET);
+                setState(548);
+                insertListItem();
+                setState(553);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(549);
+                            match(COMMA);
+                            setState(550);
+                            insertListItem();
+                        }
+                    }
+                    setState(555);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(556);
+                match(RFRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InsertListItemContext insertListItem() throws RecognitionException {
+        InsertListItemContext _localctx = new InsertListItemContext(_ctx, getState());
+        enterRule(_localctx, 112, RULE_insertListItem);
+        try {
+            setState(562);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 54, _ctx)) {
+                case 1:
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(558);
+                    match(INTNUMERAL);
+                    setState(559);
+                    match(COLON);
+                    setState(560);
+                    newValue();
+                }
+                break;
+                case 2:
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(561);
+                    newValue();
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InsertEntityExprContext insertEntityExpr() throws RecognitionException {
+        InsertEntityExprContext _localctx = new InsertEntityExprContext(_ctx, getState());
+        enterRule(_localctx, 114, RULE_insertEntityExpr);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(564);
+                match(LBRACKET);
+                setState(565);
+                insertEntityItem();
+                setState(570);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(566);
+                            match(COMMA);
+                            setState(567);
+                            insertEntityItem();
+                        }
+                    }
+                    setState(572);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(573);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InsertEntityItemContext insertEntityItem() throws RecognitionException {
+        InsertEntityItemContext _localctx = new InsertEntityItemContext(_ctx, getState());
+        enterRule(_localctx, 116, RULE_insertEntityItem);
+        try {
+            setState(580);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 56, _ctx)) {
+                case 1:
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(575);
+                    pathExpr();
+                    setState(576);
+                    match(COLON);
+                    setState(577);
+                    newValue();
+                }
+                break;
+                case 2:
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(579);
+                    newValue();
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final DeleteStatContext deleteStat() throws RecognitionException {
+        DeleteStatContext _localctx = new DeleteStatContext(_ctx, getState());
+        enterRule(_localctx, 118, RULE_deleteStat);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(582);
+                deleteClause();
+                setState(584);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == WHERE) {
+                    {
+                        setState(583);
+                        whereClause();
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final DeleteClauseContext deleteClause() throws RecognitionException {
+        DeleteClauseContext _localctx = new DeleteClauseContext(_ctx, getState());
+        enterRule(_localctx, 120, RULE_deleteClause);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(586);
+                match(DELETE);
+                setState(587);
+                match(FROM);
+                setState(588);
+                schemaName();
+                setState(590);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == AS) {
+                    {
+                        setState(589);
+                        match(AS);
+                    }
+                }
+
+                setState(592);
+                id();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InsertStatContext insertStat() throws RecognitionException {
+        InsertStatContext _localctx = new InsertStatContext(_ctx, getState());
+        enterRule(_localctx, 122, RULE_insertStat);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(594);
+                match(INSERT);
+                setState(595);
+                match(INTO);
+                setState(596);
+                tableName();
+                setState(598);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == LBRACKET) {
+                    {
+                        setState(597);
+                        columnList();
+                    }
+                }
+
+                setState(600);
+                match(VALUES);
+                setState(601);
+                insertValue();
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ColumnListContext columnList() throws RecognitionException {
+        ColumnListContext _localctx = new ColumnListContext(_ctx, getState());
+        enterRule(_localctx, 124, RULE_columnList);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(603);
+                match(LBRACKET);
+                setState(604);
+                pathExpr();
+                setState(609);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(605);
+                            match(COMMA);
+                            setState(606);
+                            pathExpr();
+                        }
+                    }
+                    setState(611);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(612);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final InsertValueContext insertValue() throws RecognitionException {
+        InsertValueContext _localctx = new InsertValueContext(_ctx, getState());
+        enterRule(_localctx, 126, RULE_insertValue);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(614);
+                match(LBRACKET);
+                setState(615);
+                newValue();
+                setState(620);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                while (_la == COMMA) {
+                    {
+                        {
+                            setState(616);
+                            match(COMMA);
+                            setState(617);
+                            newValue();
+                        }
+                    }
+                    setState(622);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                }
+                setState(623);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final DropStatContext dropStat() throws RecognitionException {
+        DropStatContext _localctx = new DropStatContext(_ctx, getState());
+        enterRule(_localctx, 128, RULE_dropStat);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(625);
+                match(DROP);
+                setState(626);
+                match(TABLE);
+                setState(627);
+                match(WORD);
+                setState(629);
+                _errHandler.sync(this);
+                _la = _input.LA(1);
+                if (_la == CASCADE) {
+                    {
+                        setState(628);
+                        match(CASCADE);
+                    }
+                }
+
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ShowStatContext showStat() throws RecognitionException {
+        ShowStatContext _localctx = new ShowStatContext(_ctx, getState());
+        enterRule(_localctx, 130, RULE_showStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(631);
+                match(SHOW);
+                setState(632);
+                match(TABLES);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final CreateIndexStatContext createIndexStat() throws RecognitionException {
+        CreateIndexStatContext _localctx = new CreateIndexStatContext(_ctx, getState());
+        enterRule(_localctx, 132, RULE_createIndexStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(634);
+                match(CREATE);
+                setState(635);
+                match(INDEX);
+                setState(636);
+                match(WORD);
+                setState(637);
+                match(ON);
+                setState(638);
+                match(WORD);
+                setState(639);
+                match(LBRACKET);
+                setState(640);
+                pathExpr();
+                setState(641);
+                match(RBRACKET);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final DropIndexStatContext dropIndexStat() throws RecognitionException {
+        DropIndexStatContext _localctx = new DropIndexStatContext(_ctx, getState());
+        enterRule(_localctx, 134, RULE_dropIndexStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(643);
+                match(DROP);
+                setState(644);
+                match(INDEX);
+                setState(645);
+                match(WORD);
+                setState(646);
+                match(ON);
+                setState(647);
+                match(WORD);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final SyncStatContext syncStat() throws RecognitionException {
+        SyncStatContext _localctx = new SyncStatContext(_ctx, getState());
+        enterRule(_localctx, 136, RULE_syncStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(649);
+                match(SYNC);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final BeginTranStatContext beginTranStat() throws RecognitionException {
+        BeginTranStatContext _localctx = new BeginTranStatContext(_ctx, getState());
+        enterRule(_localctx, 138, RULE_beginTranStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(651);
+                match(BEGIN);
+                setState(652);
+                match(TRANSACTION);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final CommitStatContext commitStat() throws RecognitionException {
+        CommitStatContext _localctx = new CommitStatContext(_ctx, getState());
+        enterRule(_localctx, 140, RULE_commitStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(654);
+                match(COMMIT);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final RollBackStatContext rollBackStat() throws RecognitionException {
+        RollBackStatContext _localctx = new RollBackStatContext(_ctx, getState());
+        enterRule(_localctx, 142, RULE_rollBackStat);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(656);
+                match(ROLL);
+                setState(657);
+                match(BACK);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public static class OqlStatContext extends EnhancedParserRuleContext {
+        public OqlStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public OqlStatContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_oqlStat;
+        }
+
+        public void copyFrom(OqlStatContext ctx) {
+            super.copyFrom(ctx);
+        }
+
+        public Object doExecute() {
+            throw new UnsupportedOperationException("the method is not implement");
+        }
+    }
+
+    public static class RollBackStatementContext extends OqlStatContext {
+        public RollBackStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public RollBackStatContext rollBackStat() {
+            return getRuleContext(RollBackStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            Transaction.rollback();
+            return "roll back successfully";
+        }
+    }
+
+    public static class BeginTranStatementContext extends OqlStatContext {
+        public BeginTranStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public BeginTranStatContext beginTranStat() {
+            return getRuleContext(BeginTranStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            Transaction.start();
+            return "the transaction has started";
+        }
+    }
+
+    public static class CreateStatementContext extends OqlStatContext {
+        public CreateStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public CreateStatContext createStat() {
+            return getRuleContext(CreateStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            CreateStatContext stat = this.createStat();
+            return CreateExplain.getCreateExplain(stat).doCreate();
+        }
+
+    }
+
+    public static class DeleteStatementContext extends OqlStatContext {
+        public DeleteStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public DeleteStatContext deleteStat() {
+            return getRuleContext(DeleteStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            DeleteStatContext deleteStatContext = this.deleteStat();
+            return DeleteExplain.getDeleteExplain(deleteStatContext).doDelete();
+        }
+    }
+
+    public static class InsertStatementContext extends OqlStatContext {
+        public InsertStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public InsertStatContext insertStat() {
+            return getRuleContext(InsertStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            InsertStatContext insertStatContext = this.insertStat();
+            return InsertExplain.getInsertExplain(insertStatContext).doInsert();
+        }
+    }
+
+    public static class CreateIndexStatementContext extends OqlStatContext {
+        public CreateIndexStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public CreateIndexStatContext createIndexStat() {
+            return getRuleContext(CreateIndexStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            CreateIndexStatContext indexStat = this.createIndexStat();
+            return CreateIndexExplain.getCreateIndexExplain(indexStat).doCreate();
+        }
+    }
+
+    public static class DropIndexStatementContext extends OqlStatContext {
+        public DropIndexStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public DropIndexStatContext dropIndexStat() {
+            return getRuleContext(DropIndexStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            DropIndexStatContext dropIndexStatContext = this.dropIndexStat();
+            return DropIndexExplain.getDropIndexExplain(dropIndexStatContext).doDrop();
+        }
+    }
+
+    public static class SyncStatementContext extends OqlStatContext {
+        public SyncStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public SyncStatContext syncStat() {
+            return getRuleContext(SyncStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            return SyncExplain.sync();
+        }
+    }
+
+    public static class UpdateStatementContext extends OqlStatContext {
+        public UpdateStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public UpdateStatContext updateStat() {
+            return getRuleContext(UpdateStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            UpdateStatContext updateStatContext = this.updateStat();
+            return UpdateExplain.getUpdateExplain(updateStatContext).doUpdate();
+        }
+    }
+
+    public static class CommitStatementContext extends OqlStatContext {
+        public CommitStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public CommitStatContext commitStat() {
+            return getRuleContext(CommitStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            Transaction.commit();
+            return "commit successfully";
+        }
+    }
+
+    public static class SelectStatementContext extends OqlStatContext {
+        public SelectStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public SelectStatContext selectStat() {
+            return getRuleContext(SelectStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            SelectStatContext selectStatContext = this.selectStat();
+            return SelectExplain.getSelectExplain(selectStatContext).doSelect();
+        }
+
+    }
+
+    public static class DropStatementContext extends OqlStatContext {
+        public DropStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public DropStatContext dropStat() {
+            return getRuleContext(DropStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            DropStatContext dropStatContext = this.dropStat();
+            return DropExplain.getDropStatContext(dropStatContext).doDrop();
+        }
+    }
+
+    public static class ShowStatementContext extends OqlStatContext {
+        public ShowStatementContext(OqlStatContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public ShowStatContext showStat() {
+            return getRuleContext(ShowStatContext.class, 0);
+        }
+
+        @Override
+        public Object doExecute() {
+            return ShowExplain.doShow();
+        }
+    }
+
+    public static class SelectStatContext extends EnhancedParserRuleContext {
+        public SelectStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode SELECT() {
+            return getToken(OQLParser.SELECT, 0);
+        }
+
+        public SelectClauseContext selectClause() {
+            return getRuleContext(SelectClauseContext.class, 0);
+        }
+
+        public FromClauseContext fromClause() {
+            return getRuleContext(FromClauseContext.class, 0);
+        }
+
+        public TerminalNode DISTINCT() {
+            return getToken(OQLParser.DISTINCT, 0);
+        }
+
+        public WhereClauseContext whereClause() {
+            return getRuleContext(WhereClauseContext.class, 0);
+        }
+
+        public GroupByClauseContext groupByClause() {
+            return getRuleContext(GroupByClauseContext.class, 0);
+        }
+
+        public OrderByClauseContext orderByClause() {
+            return getRuleContext(OrderByClauseContext.class, 0);
+        }
+
+        public LimitClauseContext limitClause() {
+            return getRuleContext(LimitClauseContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_selectStat;
+        }
+    }
+
+    public static class SelectClauseContext extends EnhancedParserRuleContext {
+        public SelectClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public List<SelectExprContext> selectExpr() {
+            return getRuleContexts(SelectExprContext.class);
+        }
+
+        public SelectExprContext selectExpr(int i) {
+            return getRuleContext(SelectExprContext.class, i);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_selectClause;
+        }
+    }
+
+    public static class SelectExprContext extends EnhancedParserRuleContext {
+        public SelectExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public SelectExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_selectExpr;
+        }
+
+        public void copyFrom(SelectExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class SelectPathExprContext extends SelectExprContext {
+        public SelectPathExprContext(SelectExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+    }
+
+    public static class SelectAggregateExprContext extends SelectExprContext {
+        public SelectAggregateExprContext(SelectExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public AggregateExprContext aggregateExpr() {
+            return getRuleContext(AggregateExprContext.class, 0);
+        }
+    }
+
+    public static class FromClauseContext extends EnhancedParserRuleContext {
+        public FromClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode FROM() {
+            return getToken(OQLParser.FROM, 0);
+        }
+
+        public List<FromItemContext> fromItem() {
+            return getRuleContexts(FromItemContext.class);
+        }
+
+        public FromItemContext fromItem(int i) {
+            return getRuleContext(FromItemContext.class, i);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_fromClause;
+        }
+    }
+
+    public static class FromItemContext extends EnhancedParserRuleContext {
+        public FromItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public SchemaNameContext schemaName() {
+            return getRuleContext(SchemaNameContext.class, 0);
+        }
+
+        public IdContext id() {
+            return getRuleContext(IdContext.class, 0);
+        }
+
+        public TerminalNode AS() {
+            return getToken(OQLParser.AS, 0);
+        }
+
+        public List<JoinContext> join() {
+            return getRuleContexts(JoinContext.class);
+        }
+
+        public JoinContext join(int i) {
+            return getRuleContext(JoinContext.class, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_fromItem;
+        }
+    }
+
+    public static class JoinContext extends EnhancedParserRuleContext {
+        public JoinContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode JOIN() {
+            return getToken(OQLParser.JOIN, 0);
+        }
+
+        public SchemaNameContext schemaName() {
+            return getRuleContext(SchemaNameContext.class, 0);
+        }
+
+        public IdContext id() {
+            return getRuleContext(IdContext.class, 0);
+        }
+
+        public TerminalNode ON() {
+            return getToken(OQLParser.ON, 0);
+        }
+
+        public ConditionalExprContext conditionalExpr() {
+            return getRuleContext(ConditionalExprContext.class, 0);
+        }
+
+        public TerminalNode AS() {
+            return getToken(OQLParser.AS, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_join;
+        }
+    }
+
+    public static class PathExprContext extends EnhancedParserRuleContext {
+        public PathExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public IdContext id() {
+            return getRuleContext(IdContext.class, 0);
+        }
+
+        public List<TerminalNode> DOT() {
+            return getTokens(OQLParser.DOT);
+        }
+
+        public TerminalNode DOT(int i) {
+            return getToken(OQLParser.DOT, i);
+        }
+
+        public List<FieldContext> field() {
+            return getRuleContexts(FieldContext.class);
+        }
+
+        public FieldContext field(int i) {
+            return getRuleContext(FieldContext.class, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_pathExpr;
+        }
+    }
+
+    public static class LimitClauseContext extends EnhancedParserRuleContext {
+        public LimitClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode LIMIT() {
+            return getToken(OQLParser.LIMIT, 0);
+        }
+
+        public List<TerminalNode> INTNUMERAL() {
+            return getTokens(OQLParser.INTNUMERAL);
+        }
+
+        public TerminalNode INTNUMERAL(int i) {
+            return getToken(OQLParser.INTNUMERAL, i);
+        }
+
+        public TerminalNode COMMA() {
+            return getToken(OQLParser.COMMA, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_limitClause;
+        }
+    }
+
+    public static class AggregateExprContext extends EnhancedParserRuleContext {
+        public AggregateExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public AggregateExprFunctionNameContext aggregateExprFunctionName() {
+            return getRuleContext(AggregateExprFunctionNameContext.class, 0);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_aggregateExpr;
+        }
+    }
+
+    public static class AggregateExprFunctionNameContext extends EnhancedParserRuleContext {
+        public AggregateExprFunctionNameContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode AVG() {
+            return getToken(OQLParser.AVG, 0);
+        }
+
+        public TerminalNode MAX() {
+            return getToken(OQLParser.MAX, 0);
+        }
+
+        public TerminalNode MIN() {
+            return getToken(OQLParser.MIN, 0);
+        }
+
+        public TerminalNode SUM() {
+            return getToken(OQLParser.SUM, 0);
+        }
+
+        public TerminalNode COUNT() {
+            return getToken(OQLParser.COUNT, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_aggregateExprFunctionName;
+        }
+    }
+
+    public static class WhereClauseContext extends EnhancedParserRuleContext {
+        public WhereClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WHERE() {
+            return getToken(OQLParser.WHERE, 0);
+        }
+
+        public ConditionalExprContext conditionalExpr() {
+            return getRuleContext(ConditionalExprContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_whereClause;
+        }
+    }
+
+    public static class GroupByClauseContext extends EnhancedParserRuleContext {
+        public GroupByClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode GROUP() {
+            return getToken(OQLParser.GROUP, 0);
+        }
+
+        public TerminalNode BY() {
+            return getToken(OQLParser.BY, 0);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public HavingClauseContext havingClause() {
+            return getRuleContext(HavingClauseContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_groupByClause;
+        }
+    }
+
+    public static class HavingClauseContext extends EnhancedParserRuleContext {
+        public HavingClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode HAVING() {
+            return getToken(OQLParser.HAVING, 0);
+        }
+
+        public ConditionalExprContext conditionalExpr() {
+            return getRuleContext(ConditionalExprContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_havingClause;
+        }
+    }
+
+    public static class OrderByClauseContext extends EnhancedParserRuleContext {
+        public OrderByClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode ORDER() {
+            return getToken(OQLParser.ORDER, 0);
+        }
+
+        public TerminalNode BY() {
+            return getToken(OQLParser.BY, 0);
+        }
+
+        public List<OrderByItemContext> orderByItem() {
+            return getRuleContexts(OrderByItemContext.class);
+        }
+
+        public OrderByItemContext orderByItem(int i) {
+            return getRuleContext(OrderByItemContext.class, i);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_orderByClause;
+        }
+    }
+
+    public static class OrderByItemContext extends EnhancedParserRuleContext {
+        public OrderByItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public TerminalNode DESC() {
+            return getToken(OQLParser.DESC, 0);
+        }
+
+        public TerminalNode ASC() {
+            return getToken(OQLParser.ASC, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_orderByItem;
+        }
+    }
+
+    public static class ConditionalExprContext extends EnhancedParserRuleContext {
+        public ConditionalExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public List<ConditionalTermContext> conditionalTerm() {
+            return getRuleContexts(ConditionalTermContext.class);
+        }
+
+        public ConditionalTermContext conditionalTerm(int i) {
+            return getRuleContext(ConditionalTermContext.class, i);
+        }
+
+        public List<TerminalNode> OR() {
+            return getTokens(OQLParser.OR);
+        }
+
+        public TerminalNode OR(int i) {
+            return getToken(OQLParser.OR, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_conditionalExpr;
+        }
+    }
+
+    public static class ConditionalTermContext extends EnhancedParserRuleContext {
+        public ConditionalTermContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public List<ConditionalFactorContext> conditionalFactor() {
+            return getRuleContexts(ConditionalFactorContext.class);
+        }
+
+        public ConditionalFactorContext conditionalFactor(int i) {
+            return getRuleContext(ConditionalFactorContext.class, i);
+        }
+
+        public List<TerminalNode> AND() {
+            return getTokens(OQLParser.AND);
+        }
+
+        public TerminalNode AND(int i) {
+            return getToken(OQLParser.AND, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_conditionalTerm;
+        }
+    }
+
+    public static class ConditionalFactorContext extends EnhancedParserRuleContext {
+        public ConditionalFactorContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public ConditionalFactorContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_conditionalFactor;
+        }
+
+        public void copyFrom(ConditionalFactorContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class ConditionalFactorSimpleCondExprContext extends ConditionalFactorContext {
+        public ConditionalFactorSimpleCondExprContext(ConditionalFactorContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public SimpleCondExprContext simpleCondExpr() {
+            return getRuleContext(SimpleCondExprContext.class, 0);
+        }
+    }
+
+    public static class ConditionalFactorExprContext extends ConditionalFactorContext {
+        public ConditionalFactorExprContext(ConditionalFactorContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public ConditionalExprContext conditionalExpr() {
+            return getRuleContext(ConditionalExprContext.class, 0);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+    }
+
+    public static class SimpleCondExprContext extends EnhancedParserRuleContext {
+        public SimpleCondExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public SimpleCondExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_simpleCondExpr;
+        }
+
+        public void copyFrom(SimpleCondExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class SimpleLikeExprContext extends SimpleCondExprContext {
+        public SimpleLikeExprContext(SimpleCondExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public LikeExprContext likeExpr() {
+            return getRuleContext(LikeExprContext.class, 0);
+        }
+    }
+
+    public static class SimpleInExprContext extends SimpleCondExprContext {
+        public SimpleInExprContext(SimpleCondExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public InExprContext inExpr() {
+            return getRuleContext(InExprContext.class, 0);
+        }
+    }
+
+    public static class SimpleComparisonExprContext extends SimpleCondExprContext {
+        public SimpleComparisonExprContext(SimpleCondExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public ComparisonExprContext comparisonExpr() {
+            return getRuleContext(ComparisonExprContext.class, 0);
+        }
+    }
+
+    public static class SimpleBetweenExprContext extends SimpleCondExprContext {
+        public SimpleBetweenExprContext(SimpleCondExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public BetweenExprContext betweenExpr() {
+            return getRuleContext(BetweenExprContext.class, 0);
+        }
+    }
+
+    public static class BetweenExprContext extends EnhancedParserRuleContext {
+        public BetweenExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public BetweenExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_betweenExpr;
+        }
+
+        public void copyFrom(BetweenExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class BetweenStringExprContext extends BetweenExprContext {
+        public BetweenStringExprContext(BetweenExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<StringExprContext> stringExpr() {
+            return getRuleContexts(StringExprContext.class);
+        }
+
+        public StringExprContext stringExpr(int i) {
+            return getRuleContext(StringExprContext.class, i);
+        }
+
+        public TerminalNode BETWEEN() {
+            return getToken(OQLParser.BETWEEN, 0);
+        }
+
+        public TerminalNode AND() {
+            return getToken(OQLParser.AND, 0);
+        }
+
+        public TerminalNode NOT() {
+            return getToken(OQLParser.NOT, 0);
+        }
+    }
+
+    public static class BetweenArithmeticExprContext extends BetweenExprContext {
+        public BetweenArithmeticExprContext(BetweenExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<ArithmeticExprContext> arithmeticExpr() {
+            return getRuleContexts(ArithmeticExprContext.class);
+        }
+
+        public ArithmeticExprContext arithmeticExpr(int i) {
+            return getRuleContext(ArithmeticExprContext.class, i);
+        }
+
+        public TerminalNode BETWEEN() {
+            return getToken(OQLParser.BETWEEN, 0);
+        }
+
+        public TerminalNode AND() {
+            return getToken(OQLParser.AND, 0);
+        }
+
+        public TerminalNode NOT() {
+            return getToken(OQLParser.NOT, 0);
+        }
+    }
+
+    public static class InExprContext extends EnhancedParserRuleContext {
+        public InExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public TerminalNode IN() {
+            return getToken(OQLParser.IN, 0);
+        }
+
+        public InExprRightPartContext inExprRightPart() {
+            return getRuleContext(InExprRightPartContext.class, 0);
+        }
+
+        public TerminalNode NOT() {
+            return getToken(OQLParser.NOT, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_inExpr;
+        }
+    }
+
+    public static class InExprRightPartContext extends EnhancedParserRuleContext {
+        public InExprRightPartContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public InExprRightPartContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_inExprRightPart;
+        }
+
+        public void copyFrom(InExprRightPartContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class InExprItemContext extends InExprRightPartContext {
+        public InExprItemContext(InExprRightPartContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public List<InItemContext> inItem() {
+            return getRuleContexts(InItemContext.class);
+        }
+
+        public InItemContext inItem(int i) {
+            return getRuleContext(InItemContext.class, i);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+    }
+
+    public static class InItemContext extends EnhancedParserRuleContext {
+        public InItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public LiteralContext literal() {
+            return getRuleContext(LiteralContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_inItem;
+        }
+    }
+
+    public static class LikeExprContext extends EnhancedParserRuleContext {
+        public LikeExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public StringExprContext stringExpr() {
+            return getRuleContext(StringExprContext.class, 0);
+        }
+
+        public TerminalNode LIKE() {
+            return getToken(OQLParser.LIKE, 0);
+        }
+
+        public PatternValueContext patternValue() {
+            return getRuleContext(PatternValueContext.class, 0);
+        }
+
+        public TerminalNode NOT() {
+            return getToken(OQLParser.NOT, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_likeExpr;
+        }
+    }
+
+    public static class ComparisonExprContext extends EnhancedParserRuleContext {
+        public ComparisonExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public ComparisonExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_comparisonExpr;
+        }
+
+        public void copyFrom(ComparisonExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class ComparisonListExprContext extends ComparisonExprContext {
+        public ComparisonListExprContext(ComparisonExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<ListExprContext> listExpr() {
+            return getRuleContexts(ListExprContext.class);
+        }
+
+        public ListExprContext listExpr(int i) {
+            return getRuleContext(ListExprContext.class, i);
+        }
+
+        public ComparisonOperatorContext comparisonOperator() {
+            return getRuleContext(ComparisonOperatorContext.class, 0);
+        }
+    }
+
+    public static class ComparisonAggregateExprContext extends ComparisonExprContext {
+        public ComparisonAggregateExprContext(ComparisonExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public AggregateExprContext aggregateExpr() {
+            return getRuleContext(AggregateExprContext.class, 0);
+        }
+
+        public ComparisonOperatorContext comparisonOperator() {
+            return getRuleContext(ComparisonOperatorContext.class, 0);
+        }
+
+        public ArithmeticExprContext arithmeticExpr() {
+            return getRuleContext(ArithmeticExprContext.class, 0);
+        }
+    }
+
+    public static class ComparisonEntityExprContext extends ComparisonExprContext {
+        public ComparisonEntityExprContext(ComparisonExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<EntityExprContext> entityExpr() {
+            return getRuleContexts(EntityExprContext.class);
+        }
+
+        public EntityExprContext entityExpr(int i) {
+            return getRuleContext(EntityExprContext.class, i);
+        }
+
+        public ComparisonOperatorContext comparisonOperator() {
+            return getRuleContext(ComparisonOperatorContext.class, 0);
+        }
+    }
+
+    public static class ComparisonArithmeticExprContext extends ComparisonExprContext {
+        public ComparisonArithmeticExprContext(ComparisonExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<ArithmeticExprContext> arithmeticExpr() {
+            return getRuleContexts(ArithmeticExprContext.class);
+        }
+
+        public ArithmeticExprContext arithmeticExpr(int i) {
+            return getRuleContext(ArithmeticExprContext.class, i);
+        }
+
+        public ComparisonOperatorContext comparisonOperator() {
+            return getRuleContext(ComparisonOperatorContext.class, 0);
+        }
+    }
+
+    public static class ComparisonStringExprContext extends ComparisonExprContext {
+        public ComparisonStringExprContext(ComparisonExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<StringExprContext> stringExpr() {
+            return getRuleContexts(StringExprContext.class);
+        }
+
+        public StringExprContext stringExpr(int i) {
+            return getRuleContext(StringExprContext.class, i);
+        }
+
+        public ComparisonOperatorContext comparisonOperator() {
+            return getRuleContext(ComparisonOperatorContext.class, 0);
+        }
+    }
+
+    public static class ComparisonOperatorContext extends EnhancedParserRuleContext {
+        public ComparisonOperatorContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode EQ() {
+            return getToken(OQLParser.EQ, 0);
+        }
+
+        public TerminalNode GR() {
+            return getToken(OQLParser.GR, 0);
+        }
+
+        public TerminalNode GE() {
+            return getToken(OQLParser.GE, 0);
+        }
+
+        public TerminalNode LS() {
+            return getToken(OQLParser.LS, 0);
+        }
+
+        public TerminalNode LE() {
+            return getToken(OQLParser.LE, 0);
+        }
+
+        public TerminalNode NE() {
+            return getToken(OQLParser.NE, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_comparisonOperator;
+        }
+    }
+
+    public static class ArithmeticExprContext extends EnhancedParserRuleContext {
+        public ArithmeticExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public ArithmeticExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_arithmeticExpr;
+        }
+
+        public void copyFrom(ArithmeticExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class ArithmeticPathExprContext extends ArithmeticExprContext {
+        public ArithmeticPathExprContext(ArithmeticExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+    }
+
+    public static class ArithmeticSimpleArithmeticExprContext extends ArithmeticExprContext {
+        public ArithmeticSimpleArithmeticExprContext(ArithmeticExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public SimpleArithmeticExprContext simpleArithmeticExpr() {
+            return getRuleContext(SimpleArithmeticExprContext.class, 0);
+        }
+    }
+
+    public static class SimpleArithmeticExprContext extends EnhancedParserRuleContext {
+        public SimpleArithmeticExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public List<ArithmeticTermContext> arithmeticTerm() {
+            return getRuleContexts(ArithmeticTermContext.class);
+        }
+
+        public ArithmeticTermContext arithmeticTerm(int i) {
+            return getRuleContext(ArithmeticTermContext.class, i);
+        }
+
+        public List<TerminalNode> PLUS() {
+            return getTokens(OQLParser.PLUS);
+        }
+
+        public TerminalNode PLUS(int i) {
+            return getToken(OQLParser.PLUS, i);
+        }
+
+        public List<TerminalNode> MINUS() {
+            return getTokens(OQLParser.MINUS);
+        }
+
+        public TerminalNode MINUS(int i) {
+            return getToken(OQLParser.MINUS, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_simpleArithmeticExpr;
+        }
+    }
+
+    public static class ArithmeticTermContext extends EnhancedParserRuleContext {
+        public ArithmeticTermContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public List<ArithmeticFactorContext> arithmeticFactor() {
+            return getRuleContexts(ArithmeticFactorContext.class);
+        }
+
+        public ArithmeticFactorContext arithmeticFactor(int i) {
+            return getRuleContext(ArithmeticFactorContext.class, i);
+        }
+
+        public List<TerminalNode> MUL() {
+            return getTokens(OQLParser.MUL);
+        }
+
+        public TerminalNode MUL(int i) {
+            return getToken(OQLParser.MUL, i);
+        }
+
+        public List<TerminalNode> DIV() {
+            return getTokens(OQLParser.DIV);
+        }
+
+        public TerminalNode DIV(int i) {
+            return getToken(OQLParser.DIV, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_arithmeticTerm;
+        }
+    }
+
+    public static class ArithmeticFactorContext extends EnhancedParserRuleContext {
+        public ArithmeticFactorContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public ArithmeticPrimaryContext arithmeticPrimary() {
+            return getRuleContext(ArithmeticPrimaryContext.class, 0);
+        }
+
+        public TerminalNode PLUS() {
+            return getToken(OQLParser.PLUS, 0);
+        }
+
+        public TerminalNode MINUS() {
+            return getToken(OQLParser.MINUS, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_arithmeticFactor;
+        }
+    }
+
+    public static class ArithmeticPrimaryContext extends EnhancedParserRuleContext {
+        public ArithmeticPrimaryContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public ArithmeticPrimaryContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_arithmeticPrimary;
+        }
+
+        public void copyFrom(ArithmeticPrimaryContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class AriPriSimpleArithmeticExprContext extends ArithmeticPrimaryContext {
+        public AriPriSimpleArithmeticExprContext(ArithmeticPrimaryContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public SimpleArithmeticExprContext simpleArithmeticExpr() {
+            return getRuleContext(SimpleArithmeticExprContext.class, 0);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+    }
+
+    public static class AriPriNumericLiteralContext extends ArithmeticPrimaryContext {
+        public AriPriNumericLiteralContext(ArithmeticPrimaryContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public NumericLiteralContext numericLiteral() {
+            return getRuleContext(NumericLiteralContext.class, 0);
+        }
+    }
+
+    public static class StringExprContext extends EnhancedParserRuleContext {
+        public StringExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public StringExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_stringExpr;
+        }
+
+        public void copyFrom(StringExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class StringPriContext extends StringExprContext {
+        public StringPriContext(StringExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public StringPrimaryContext stringPrimary() {
+            return getRuleContext(StringPrimaryContext.class, 0);
+        }
+    }
+
+    public static class StringPrimaryContext extends EnhancedParserRuleContext {
+        public StringPrimaryContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public StringPrimaryContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_stringPrimary;
+        }
+
+        public void copyFrom(StringPrimaryContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class StringPathExprContext extends StringPrimaryContext {
+        public StringPathExprContext(StringPrimaryContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+    }
+
+    public static class StringLiteralContext extends StringPrimaryContext {
+        public StringLiteralContext(StringPrimaryContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public StringLiteralExprContext stringLiteralExpr() {
+            return getRuleContext(StringLiteralExprContext.class, 0);
+        }
+    }
+
+    public static class EntityExprContext extends EnhancedParserRuleContext {
+        public EntityExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public EntityExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_entityExpr;
+        }
+
+        public void copyFrom(EntityExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class EntityValueExprContext extends EntityExprContext {
+        public EntityValueExprContext(EntityExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public InsertEntityExprContext insertEntityExpr() {
+            return getRuleContext(InsertEntityExprContext.class, 0);
+        }
+    }
+
+    public static class EntityPathExprContext extends EntityExprContext {
+        public EntityPathExprContext(EntityExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+    }
+
+    public static class ListExprContext extends EnhancedParserRuleContext {
+        public ListExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public ListExprContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_listExpr;
+        }
+
+        public void copyFrom(ListExprContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class ListValueExprContext extends ListExprContext {
+        public ListValueExprContext(ListExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public InsertListExprContext insertListExpr() {
+            return getRuleContext(InsertListExprContext.class, 0);
+        }
+    }
+
+    public static class ListPathExprContext extends ListExprContext {
+        public ListPathExprContext(ListExprContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+    }
+
+    public static class StringLiteralExprContext extends EnhancedParserRuleContext {
+        public StringLiteralExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode STRINGLITERAL() {
+            return getToken(OQLParser.STRINGLITERAL, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_stringLiteralExpr;
+        }
+    }
+
+    public static class SchemaNameContext extends EnhancedParserRuleContext {
+        public SchemaNameContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_schemaName;
+        }
+    }
+
+    public static class PatternValueContext extends EnhancedParserRuleContext {
+        public PatternValueContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_patternValue;
+        }
+    }
+
+    public static class NumericLiteralContext extends EnhancedParserRuleContext {
+        public NumericLiteralContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode INTNUMERAL() {
+            return getToken(OQLParser.INTNUMERAL, 0);
+        }
+
+        public TerminalNode FLOATNUMERAL() {
+            return getToken(OQLParser.FLOATNUMERAL, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_numericLiteral;
+        }
+    }
+
+    public static class LiteralContext extends EnhancedParserRuleContext {
+        public LiteralContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_literal;
+        }
+    }
+
+    public static class FieldContext extends EnhancedParserRuleContext {
+        public FieldContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        public TerminalNode INTNUMERAL() {
+            return getToken(OQLParser.INTNUMERAL, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_field;
+        }
+    }
+
+    public static class IdContext extends EnhancedParserRuleContext {
+        public IdContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_id;
+        }
+    }
+
+    public static class CreateStatContext extends EnhancedParserRuleContext {
+        public CreateStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode CREATE() {
+            return getToken(OQLParser.CREATE, 0);
+        }
+
+        public TerminalNode TABLE() {
+            return getToken(OQLParser.TABLE, 0);
+        }
+
+        public TableNameContext tableName() {
+            return getRuleContext(TableNameContext.class, 0);
+        }
+
+        public ColumnDefinitionContext columnDefinition() {
+            return getRuleContext(ColumnDefinitionContext.class, 0);
+        }
+
+        public ExtendsTableContext extendsTable() {
+            return getRuleContext(ExtendsTableContext.class, 0);
+        }
+
+        public TableConstraintContext tableConstraint() {
+            return getRuleContext(TableConstraintContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_createStat;
+        }
+    }
+
+    public static class TableNameContext extends EnhancedParserRuleContext {
+        public TableNameContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_tableName;
+        }
+    }
+
+    public static class ColumnDefinitionContext extends EnhancedParserRuleContext {
+        public ColumnDefinitionContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public List<ColumnDefinitionItemContext> columnDefinitionItem() {
+            return getRuleContexts(ColumnDefinitionItemContext.class);
+        }
+
+        public ColumnDefinitionItemContext columnDefinitionItem(int i) {
+            return getRuleContext(ColumnDefinitionItemContext.class, i);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_columnDefinition;
+        }
+    }
+
+    public static class ColumnDefinitionItemContext extends EnhancedParserRuleContext {
+        public ColumnDefinitionItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        public ColumnTypeContext columnType() {
+            return getRuleContext(ColumnTypeContext.class, 0);
+        }
+
+        public List<ColumnConstraintContext> columnConstraint() {
+            return getRuleContexts(ColumnConstraintContext.class);
+        }
+
+        public ColumnConstraintContext columnConstraint(int i) {
+            return getRuleContext(ColumnConstraintContext.class, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_columnDefinitionItem;
+        }
+    }
+
+    public static class ColumnTypeContext extends EnhancedParserRuleContext {
+        public ColumnTypeContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode INT() {
+            return getToken(OQLParser.INT, 0);
+        }
+
+        public TerminalNode FLOAT() {
+            return getToken(OQLParser.FLOAT, 0);
+        }
+
+        public TerminalNode CHAR() {
+            return getToken(OQLParser.CHAR, 0);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public TerminalNode INTNUMERAL() {
+            return getToken(OQLParser.INTNUMERAL, 0);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public TerminalNode LISTOF() {
+            return getToken(OQLParser.LISTOF, 0);
+        }
+
+        public ColumnTypeContext columnType() {
+            return getRuleContext(ColumnTypeContext.class, 0);
+        }
+
+        public TerminalNode COMMA() {
+            return getToken(OQLParser.COMMA, 0);
+        }
+
+        public TerminalNode REF() {
+            return getToken(OQLParser.REF, 0);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        public TerminalNode OBJECT() {
+            return getToken(OQLParser.OBJECT, 0);
+        }
+
+        public ColumnDefinitionContext columnDefinition() {
+            return getRuleContext(ColumnDefinitionContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_columnType;
+        }
+    }
+
+    public static class ColumnConstraintContext extends EnhancedParserRuleContext {
+        public ColumnConstraintContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode PRIMARY() {
+            return getToken(OQLParser.PRIMARY, 0);
+        }
+
+        public TerminalNode KEY() {
+            return getToken(OQLParser.KEY, 0);
+        }
+
+        public TerminalNode AUTO_INCREMENT() {
+            return getToken(OQLParser.AUTO_INCREMENT, 0);
+        }
+
+        public TerminalNode ASSIGN() {
+            return getToken(OQLParser.ASSIGN, 0);
+        }
+
+        public TerminalNode UUID() {
+            return getToken(OQLParser.UUID, 0);
+        }
+
+        public TerminalNode FINAL() {
+            return getToken(OQLParser.FINAL, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_columnConstraint;
+        }
+    }
+
+    public static class ExtendsTableContext extends EnhancedParserRuleContext {
+        public ExtendsTableContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode EXTENDS() {
+            return getToken(OQLParser.EXTENDS, 0);
+        }
+
+        public List<TerminalNode> WORD() {
+            return getTokens(OQLParser.WORD);
+        }
+
+        public TerminalNode WORD(int i) {
+            return getToken(OQLParser.WORD, i);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_extendsTable;
+        }
+    }
+
+    public static class TableConstraintContext extends EnhancedParserRuleContext {
+        public TableConstraintContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode PRIMARY() {
+            return getToken(OQLParser.PRIMARY, 0);
+        }
+
+        public TerminalNode KEY() {
+            return getToken(OQLParser.KEY, 0);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public List<PathExprContext> pathExpr() {
+            return getRuleContexts(PathExprContext.class);
+        }
+
+        public PathExprContext pathExpr(int i) {
+            return getRuleContext(PathExprContext.class, i);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        public TerminalNode AUTO_INCREMENT() {
+            return getToken(OQLParser.AUTO_INCREMENT, 0);
+        }
+
+        public TerminalNode ASSIGN() {
+            return getToken(OQLParser.ASSIGN, 0);
+        }
+
+        public TerminalNode UUID() {
+            return getToken(OQLParser.UUID, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_tableConstraint;
+        }
+    }
+
+    public static class UpdateStatContext extends EnhancedParserRuleContext {
+        public UpdateStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public UpdateClauseContext updateClause() {
+            return getRuleContext(UpdateClauseContext.class, 0);
+        }
+
+        public WhereClauseContext whereClause() {
+            return getRuleContext(WhereClauseContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_updateStat;
+        }
+    }
+
+    public static class UpdateClauseContext extends EnhancedParserRuleContext {
+        public UpdateClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode UPDATE() {
+            return getToken(OQLParser.UPDATE, 0);
+        }
+
+        public SchemaNameContext schemaName() {
+            return getRuleContext(SchemaNameContext.class, 0);
+        }
+
+        public IdContext id() {
+            return getRuleContext(IdContext.class, 0);
+        }
+
+        public TerminalNode SET() {
+            return getToken(OQLParser.SET, 0);
+        }
+
+        public List<UpdateItemContext> updateItem() {
+            return getRuleContexts(UpdateItemContext.class);
+        }
+
+        public UpdateItemContext updateItem(int i) {
+            return getRuleContext(UpdateItemContext.class, i);
+        }
+
+        public TerminalNode AS() {
+            return getToken(OQLParser.AS, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        public WhereClauseContext whereClause() {
+            return getRuleContext(WhereClauseContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_updateClause;
+        }
+    }
+
+    public static class UpdateItemContext extends EnhancedParserRuleContext {
+        public UpdateItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public TerminalNode EQ() {
+            return getToken(OQLParser.EQ, 0);
+        }
+
+        public NewValueContext newValue() {
+            return getRuleContext(NewValueContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_updateItem;
+        }
+    }
+
+    public static class NewValueContext extends EnhancedParserRuleContext {
+        public NewValueContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public NewValueContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_newValue;
+        }
+
+        public void copyFrom(NewValueContext ctx) {
+            super.copyFrom(ctx);
+        }
+
+        public Object getValue() {
+            throw new UnsupportedOperationException("the method is not implemented");
+        }
+    }
+
+    public static class NewSimpleListExprContext extends NewValueContext {
+        public NewSimpleListExprContext(NewValueContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public InsertListExprContext insertListExpr() {
+            return getRuleContext(InsertListExprContext.class, 0);
+        }
+
+        @Override
+        public Object getValue() {
+            boolean isTuple = false;
+            List<InsertListItemContext> insertListItemContexts = insertListExpr().insertListItem();
+            for (InsertListItemContext insertEntityItemContext : insertListItemContexts) {
+                if (insertEntityItemContext.COLON() != null) {
+                    isTuple = true;
+                } else {
+                    if (isTuple) throw new ParseException("the oql is error");
+                }
+            }
+            if (isTuple) {
+                Tuple tuple = new Tuple();
+                for (InsertListItemContext insertEntityItemContext : insertListItemContexts) {
+                    String name = insertEntityItemContext.INTNUMERAL().getText();
+                    Object value = insertEntityItemContext.newValue().getValue();
+                    tuple.add(name, value);
+                }
+                return tuple;
+            }
+
+            List<Object> valueList = new ArrayList<>();
+            for (InsertListItemContext insertEntityItemContext : insertListItemContexts) {
+                Object value = insertEntityItemContext.newValue().getValue();
+                valueList.add(value);
+            }
+            return valueList;
+        }
+    }
+
+    public static class NewSimpleEntityExprContext extends NewValueContext {
+        public NewSimpleEntityExprContext(NewValueContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public InsertEntityExprContext insertEntityExpr() {
+            return getRuleContext(InsertEntityExprContext.class, 0);
+        }
+
+        public InsertListExprContext insertListExpr() {
+            return getRuleContext(InsertListExprContext.class, 0);
+        }
+
+        @Override
+        public Object getValue() {
+            boolean isTuple = false;
+            List<InsertEntityItemContext> insertEntityItemContexts = insertEntityExpr().insertEntityItem();
+            for (InsertEntityItemContext insertEntityItemContext : insertEntityItemContexts) {
+                if (insertEntityItemContext.COLON() != null) {
+                    isTuple = true;
+                } else {
+                    if (isTuple) throw new ParseException("the oql is error");
+                }
+            }
+            if (isTuple) {
+                Tuple tuple = new Tuple();
+                for (InsertEntityItemContext insertEntityItemContext : insertEntityItemContexts) {
+                    String name = insertEntityItemContext.pathExpr().getText();
+                    Object value = insertEntityItemContext.newValue().getValue();
+                    tuple.add(name, value);
+                }
+                return tuple;
+            }
+
+            List<Object> valueList = new ArrayList<>();
+            for (InsertEntityItemContext insertEntityItemContext : insertEntityItemContexts) {
+                Object value = insertEntityItemContext.newValue().getValue();
+                valueList.add(value);
+            }
+            return valueList;
+        }
+    }
+
+    public static class NewSimpleArithmeticExprContext extends NewValueContext {
+        public NewSimpleArithmeticExprContext(NewValueContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public SimpleArithmeticExprContext simpleArithmeticExpr() {
+            return getRuleContext(SimpleArithmeticExprContext.class, 0);
+        }
+
+        @Override
+        public Object getValue() {
+            return OgnlUtil.eval(getText());
+        }
+    }
+
+    public static class NewNullContext extends NewValueContext {
+        public NewNullContext(NewValueContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public TerminalNode NULL() {
+            return getToken(OQLParser.NULL, 0);
+        }
+
+        @Override
+        public Object getValue() {
+            return null;
+        }
+    }
+
+    public static class NewStringPrimaryContext extends NewValueContext {
+        public NewStringPrimaryContext(NewValueContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public StringPrimaryContext stringPrimary() {
+            return getRuleContext(StringPrimaryContext.class, 0);
+        }
+
+        @Override
+        public Object getValue() {
+            return getText().replaceAll("'", "");
+        }
+    }
+
+    public static class InsertListExprContext extends EnhancedParserRuleContext {
+        public InsertListExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode LFRACKET() {
+            return getToken(OQLParser.LFRACKET, 0);
+        }
+
+        public List<InsertListItemContext> insertListItem() {
+            return getRuleContexts(InsertListItemContext.class);
+        }
+
+        public InsertListItemContext insertListItem(int i) {
+            return getRuleContext(InsertListItemContext.class, i);
+        }
+
+        public TerminalNode RFRACKET() {
+            return getToken(OQLParser.RFRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_insertListExpr;
+        }
+    }
+
+    public static class InsertListItemContext extends EnhancedParserRuleContext {
+        public InsertListItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode INTNUMERAL() {
+            return getToken(OQLParser.INTNUMERAL, 0);
+        }
+
+        public TerminalNode COLON() {
+            return getToken(OQLParser.COLON, 0);
+        }
+
+        public NewValueContext newValue() {
+            return getRuleContext(NewValueContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_insertListItem;
+        }
+    }
+
+    public static class InsertEntityExprContext extends EnhancedParserRuleContext {
+        public InsertEntityExprContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public List<InsertEntityItemContext> insertEntityItem() {
+            return getRuleContexts(InsertEntityItemContext.class);
+        }
+
+        public InsertEntityItemContext insertEntityItem(int i) {
+            return getRuleContext(InsertEntityItemContext.class, i);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_insertEntityExpr;
+        }
+    }
+
+    public static class InsertEntityItemContext extends EnhancedParserRuleContext {
+        public InsertEntityItemContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public TerminalNode COLON() {
+            return getToken(OQLParser.COLON, 0);
+        }
+
+        public NewValueContext newValue() {
+            return getRuleContext(NewValueContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_insertEntityItem;
+        }
+    }
+
+    public static class DeleteStatContext extends EnhancedParserRuleContext {
+        public DeleteStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public DeleteClauseContext deleteClause() {
+            return getRuleContext(DeleteClauseContext.class, 0);
+        }
+
+        public WhereClauseContext whereClause() {
+            return getRuleContext(WhereClauseContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_deleteStat;
+        }
+    }
+
+    public static class DeleteClauseContext extends EnhancedParserRuleContext {
+        public DeleteClauseContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode DELETE() {
+            return getToken(OQLParser.DELETE, 0);
+        }
+
+        public TerminalNode FROM() {
+            return getToken(OQLParser.FROM, 0);
+        }
+
+        public SchemaNameContext schemaName() {
+            return getRuleContext(SchemaNameContext.class, 0);
+        }
+
+        public IdContext id() {
+            return getRuleContext(IdContext.class, 0);
+        }
+
+        public TerminalNode AS() {
+            return getToken(OQLParser.AS, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_deleteClause;
+        }
+    }
+
+    public static class InsertStatContext extends EnhancedParserRuleContext {
+        public InsertStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode INSERT() {
+            return getToken(OQLParser.INSERT, 0);
+        }
+
+        public TerminalNode INTO() {
+            return getToken(OQLParser.INTO, 0);
+        }
+
+        public TableNameContext tableName() {
+            return getRuleContext(TableNameContext.class, 0);
+        }
+
+        public TerminalNode VALUES() {
+            return getToken(OQLParser.VALUES, 0);
+        }
+
+        public InsertValueContext insertValue() {
+            return getRuleContext(InsertValueContext.class, 0);
+        }
+
+        public ColumnListContext columnList() {
+            return getRuleContext(ColumnListContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_insertStat;
+        }
+    }
+
+    public static class ColumnListContext extends EnhancedParserRuleContext {
+        public ColumnListContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public List<PathExprContext> pathExpr() {
+            return getRuleContexts(PathExprContext.class);
+        }
+
+        public PathExprContext pathExpr(int i) {
+            return getRuleContext(PathExprContext.class, i);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_columnList;
+        }
+    }
+
+    public static class InsertValueContext extends EnhancedParserRuleContext {
+        public InsertValueContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public List<NewValueContext> newValue() {
+            return getRuleContexts(NewValueContext.class);
+        }
+
+        public NewValueContext newValue(int i) {
+            return getRuleContext(NewValueContext.class, i);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        public List<TerminalNode> COMMA() {
+            return getTokens(OQLParser.COMMA);
+        }
+
+        public TerminalNode COMMA(int i) {
+            return getToken(OQLParser.COMMA, i);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_insertValue;
+        }
+    }
+
+    public static class DropStatContext extends EnhancedParserRuleContext {
+        public DropStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode DROP() {
+            return getToken(OQLParser.DROP, 0);
+        }
+
+        public TerminalNode TABLE() {
+            return getToken(OQLParser.TABLE, 0);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(OQLParser.WORD, 0);
+        }
+
+        public TerminalNode CASCADE() {
+            return getToken(OQLParser.CASCADE, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_dropStat;
+        }
+    }
+
+    public static class ShowStatContext extends EnhancedParserRuleContext {
+        public ShowStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode SHOW() {
+            return getToken(OQLParser.SHOW, 0);
+        }
+
+        public TerminalNode TABLES() {
+            return getToken(OQLParser.TABLES, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_showStat;
+        }
+    }
+
+    public static class CreateIndexStatContext extends EnhancedParserRuleContext {
+        public CreateIndexStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode CREATE() {
+            return getToken(OQLParser.CREATE, 0);
+        }
+
+        public TerminalNode INDEX() {
+            return getToken(OQLParser.INDEX, 0);
+        }
+
+        public List<TerminalNode> WORD() {
+            return getTokens(OQLParser.WORD);
+        }
+
+        public TerminalNode WORD(int i) {
+            return getToken(OQLParser.WORD, i);
+        }
+
+        public TerminalNode ON() {
+            return getToken(OQLParser.ON, 0);
+        }
+
+        public TerminalNode LBRACKET() {
+            return getToken(OQLParser.LBRACKET, 0);
+        }
+
+        public PathExprContext pathExpr() {
+            return getRuleContext(PathExprContext.class, 0);
+        }
+
+        public TerminalNode RBRACKET() {
+            return getToken(OQLParser.RBRACKET, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_createIndexStat;
+        }
+    }
+
+    public static class DropIndexStatContext extends EnhancedParserRuleContext {
+        public DropIndexStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode DROP() {
+            return getToken(OQLParser.DROP, 0);
+        }
+
+        public TerminalNode INDEX() {
+            return getToken(OQLParser.INDEX, 0);
+        }
+
+        public List<TerminalNode> WORD() {
+            return getTokens(OQLParser.WORD);
+        }
+
+        public TerminalNode WORD(int i) {
+            return getToken(OQLParser.WORD, i);
+        }
+
+        public TerminalNode ON() {
+            return getToken(OQLParser.ON, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_dropIndexStat;
+        }
+    }
+
+    public static class SyncStatContext extends EnhancedParserRuleContext {
+        public SyncStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode SYNC() {
+            return getToken(OQLParser.SYNC, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_syncStat;
+        }
+    }
+
+    public static class BeginTranStatContext extends EnhancedParserRuleContext {
+        public BeginTranStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode BEGIN() {
+            return getToken(OQLParser.BEGIN, 0);
+        }
+
+        public TerminalNode TRANSACTION() {
+            return getToken(OQLParser.TRANSACTION, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_beginTranStat;
+        }
+    }
+
+    public static class CommitStatContext extends EnhancedParserRuleContext {
+        public CommitStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode COMMIT() {
+            return getToken(OQLParser.COMMIT, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_commitStat;
+        }
+    }
+
+    public static class RollBackStatContext extends EnhancedParserRuleContext {
+        public RollBackStatContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode ROLL() {
+            return getToken(OQLParser.ROLL, 0);
+        }
+
+        public TerminalNode BACK() {
+            return getToken(OQLParser.BACK, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_rollBackStat;
         }
     }
 }

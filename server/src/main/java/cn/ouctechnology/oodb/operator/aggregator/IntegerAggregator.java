@@ -88,7 +88,7 @@ public class IntegerAggregator implements Aggregator {
 
 
     public DbIterator iterator() {
-        return new AggregatorIterator(resMap,afield, groupField, what);
+        return new AggregatorIterator(resMap, afield, groupField, what);
     }
 
     @Override

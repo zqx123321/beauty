@@ -1,9 +1,6 @@
 package cn.ouctechnology.oodb.beauty.test;
 
 import cn.ouctechnology.oodb.beauty.annotation.Length;
-import cn.ouctechnology.oodb.beauty.annotation.Size;
-
-import java.util.List;
 
 /**
  * @program: oodb

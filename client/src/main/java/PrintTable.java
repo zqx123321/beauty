@@ -5,7 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-18 09:51
- * @description: TODO
+ * @description: 嵌套表格打印系统
+ * @todo 此类性能有待提高
  **/
 @SuppressWarnings("all")
 public class PrintTable {
@@ -50,6 +51,23 @@ public class PrintTable {
 
     }
 
+    private static int stringLen(String s) {
+        if (s == null) {
+            return 0;
+        }
+        int len = 0;
+        String ch = "[\u0391-\uFFE5]";
+        String ch2 = "[\u00B7]";
+        for (int i = 0; i < s.length(); i++) {
+            String tmp = s.substring(i, i + 1);
+            if (tmp.matches(ch) || tmp.matches(ch2)) {
+                len += 2;
+            } else
+                len += 1;
+        }
+        return len;
+    }
+
     private void buildLensMap(Map<String, Object> aData, String parent, AtomicInteger count) {
         for (Map.Entry<String, Object> data : aData.entrySet()) {
             String son = buildSon(parent, data.getKey());
@@ -77,7 +95,6 @@ public class PrintTable {
             return key;
         return parent + "." + key;
     }
-
 
     private void buildLength(Map<String, Object> aData) {
         for (Map.Entry<String, Object> data : aData.entrySet()) {
@@ -139,18 +156,6 @@ public class PrintTable {
         Object obj = list.get(0);
         if (obj instanceof Map) getDeep((Map<String, Object>) obj, deep + 1);
         else if (obj instanceof List) getDeep((List) obj, deep + 1);
-    }
-
-    class Item {
-        int start;
-        String parent;
-        Object data;
-
-        public Item(int start, String parent, Object data) {
-            this.start = start;
-            this.parent = parent;
-            this.data = data;
-        }
     }
 
     private void fillHeader(Map<String, Object> data) {
@@ -343,23 +348,6 @@ public class PrintTable {
         }
     }
 
-    private static int stringLen(String s) {
-        if (s == null) {
-            return 0;
-        }
-        int len = 0;
-        String ch = "[\u0391-\uFFE5]";
-        String ch2 = "[\u00B7]";
-        for (int i = 0; i < s.length(); i++) {
-            String tmp = s.substring(i, i + 1);
-            if (tmp.matches(ch) || tmp.matches(ch2)) {
-                len += 2;
-            } else
-                len += 1;
-        }
-        return len;
-    }
-
     private String buildSplitLine(int length) {
         return "|" +
                 buildStrWithFixCharAndLength('-', length + 2) +
@@ -389,6 +377,18 @@ public class PrintTable {
             sb.append(splitLine).append('\n');
         }
         return sb.toString();
+    }
+
+    class Item {
+        int start;
+        String parent;
+        Object data;
+
+        public Item(int start, String parent, Object data) {
+            this.start = start;
+            this.parent = parent;
+            this.data = data;
+        }
     }
 
 }

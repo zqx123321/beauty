@@ -9,7 +9,7 @@ import java.util.List;
  * @program: parser
  * @author: ZQX
  * @create: 2018-10-15 22:43
- * @description: TODO
+ * @description: 抽象语法树帮助类，用于获取子节点
  **/
 @SuppressWarnings("unchecked")
 public class ParseTreeUtil {

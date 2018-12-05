@@ -3,7 +3,7 @@ package cn.ouctechnology.oodb.logical;
 import cn.ouctechnology.oodb.util.where.WhereNode;
 
 
-public class LogicalFilterNode  {
+public class LogicalFilterNode {
 
     private WhereNode whereTree;
 

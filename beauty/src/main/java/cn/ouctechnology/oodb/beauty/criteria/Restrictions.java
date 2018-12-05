@@ -6,20 +6,14 @@ import java.util.Map;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 09:49
- * @description: TODO
+ * @description: 条件操作工厂
  **/
 public class Restrictions {
-//    /**
-//     * Apply an "equal" constraint to the identifier property
-//     *
-//     * @param value The value to use in comparison
-//     *
-//     * @return Criterion
-//     *
-//     */
-//    public static Criterion idEq(Object value) {
-//        return new IdentifierEqExpression( value );
-//    }
+
+
+    protected Restrictions() {
+        // cannot be instantiated, but needs to be protected so Expression can extend it
+    }
 
     /**
      * Apply an "equal" constraint to the named property
@@ -33,7 +27,6 @@ public class Restrictions {
         return new SimpleExpression(propertyName, value, "=");
     }
 
-
     /**
      * Apply a "not equal" constraint to the named property
      *
@@ -45,7 +38,6 @@ public class Restrictions {
     public static SimpleExpression ne(String propertyName, Object value) {
         return new SimpleExpression(propertyName, value, "!=");
     }
-
 
     /**
      * Apply a "greater than" constraint to the named property
@@ -95,91 +87,6 @@ public class Restrictions {
         return new SimpleExpression(propertyName, value, ">=");
     }
 
-
-//    /**
-//     * Apply an "equal" constraint to two properties
-//     *
-//     * @param propertyName One property name
-//     * @param otherPropertyName The other property name
-//     *
-//     * @return The Criterion
-//     *
-//     * @see PropertyExpression
-//     */
-//    public static PropertyExpression eqProperty(String propertyName, String otherPropertyName) {
-//        return new PropertyExpression( propertyName, otherPropertyName, "=" );
-//    }
-//
-//    /**
-//     * Apply a "not equal" constraint to two properties
-//     *
-//     * @param propertyName One property name
-//     * @param otherPropertyName The other property name
-//     *
-//     * @return The Criterion
-//     *
-//     * @see PropertyExpression
-//     */
-//    public static PropertyExpression neProperty(String propertyName, String otherPropertyName) {
-//        return new PropertyExpression( propertyName, otherPropertyName, "<>" );
-//    }
-//
-//    /**
-//     * Apply a "less than" constraint to two properties
-//     *
-//     * @param propertyName One property name
-//     * @param otherPropertyName The other property name
-//     *
-//     * @return The Criterion
-//     *
-//     * @see PropertyExpression
-//     */
-//    public static PropertyExpression ltProperty(String propertyName, String otherPropertyName) {
-//        return new PropertyExpression( propertyName, otherPropertyName, "<" );
-//    }
-//
-//    /**
-//     * Apply a "less than or equal" constraint to two properties
-//     *
-//     * @param propertyName One property name
-//     * @param otherPropertyName The other property name
-//     *
-//     * @return The Criterion
-//     *
-//     * @see PropertyExpression
-//     */
-//    public static PropertyExpression leProperty(String propertyName, String otherPropertyName) {
-//        return new PropertyExpression( propertyName, otherPropertyName, "<=" );
-//    }
-//
-//    /**
-//     * Apply a "greater than" constraint to two properties
-//     *
-//     * @param propertyName One property name
-//     * @param otherPropertyName The other property name
-//     *
-//     * @return The Criterion
-//     *
-//     * @see PropertyExpression
-//     */
-//    public static PropertyExpression gtProperty(String propertyName, String otherPropertyName) {
-//        return new PropertyExpression( propertyName, otherPropertyName, ">" );
-//    }
-//
-//    /**
-//     * Apply a "greater than or equal" constraint to two properties
-//     *
-//     * @param propertyName One property name
-//     * @param otherPropertyName The other property name
-//     *
-//     * @return The Criterion
-//     *
-//     * @see PropertyExpression
-//     */
-//    public static PropertyExpression geProperty(String propertyName, String otherPropertyName) {
-//        return new PropertyExpression( propertyName, otherPropertyName, ">=" );
-//    }
-
     /**
      * Return the conjuction of two expressions
      *
@@ -221,7 +128,6 @@ public class Restrictions {
     public static Disjunction or(Criterion... predicates) {
         return disjunction(predicates);
     }
-
 
     /**
      * Group expressions together in a single conjunction (A and B and C...).
@@ -285,90 +191,72 @@ public class Restrictions {
     /**
      * Apply an "equal" constraint to two properties
      *
-     * @param propertyName One property name
+     * @param propertyName      One property name
      * @param otherPropertyName The other property name
-     *
      * @return The Criterion
-     *
      * @see PropertyExpression
      */
     public static PropertyExpression eqProperty(String propertyName, String otherPropertyName) {
-        return new PropertyExpression( propertyName, otherPropertyName, "=" );
+        return new PropertyExpression(propertyName, otherPropertyName, "=");
     }
 
     /**
      * Apply a "not equal" constraint to two properties
      *
-     * @param propertyName One property name
+     * @param propertyName      One property name
      * @param otherPropertyName The other property name
-     *
      * @return The Criterion
-     *
      * @see PropertyExpression
      */
     public static PropertyExpression neProperty(String propertyName, String otherPropertyName) {
-        return new PropertyExpression( propertyName, otherPropertyName, "<>" );
+        return new PropertyExpression(propertyName, otherPropertyName, "<>");
     }
 
     /**
      * Apply a "less than" constraint to two properties
      *
-     * @param propertyName One property name
+     * @param propertyName      One property name
      * @param otherPropertyName The other property name
-     *
      * @return The Criterion
-     *
      * @see PropertyExpression
      */
     public static PropertyExpression ltProperty(String propertyName, String otherPropertyName) {
-        return new PropertyExpression( propertyName, otherPropertyName, "<" );
+        return new PropertyExpression(propertyName, otherPropertyName, "<");
     }
 
     /**
      * Apply a "less than or equal" constraint to two properties
      *
-     * @param propertyName One property name
+     * @param propertyName      One property name
      * @param otherPropertyName The other property name
-     *
      * @return The Criterion
-     *
      * @see PropertyExpression
      */
     public static PropertyExpression leProperty(String propertyName, String otherPropertyName) {
-        return new PropertyExpression( propertyName, otherPropertyName, "<=" );
+        return new PropertyExpression(propertyName, otherPropertyName, "<=");
     }
 
     /**
      * Apply a "greater than" constraint to two properties
      *
-     * @param propertyName One property name
+     * @param propertyName      One property name
      * @param otherPropertyName The other property name
-     *
      * @return The Criterion
-     *
      * @see PropertyExpression
      */
     public static PropertyExpression gtProperty(String propertyName, String otherPropertyName) {
-        return new PropertyExpression( propertyName, otherPropertyName, ">" );
+        return new PropertyExpression(propertyName, otherPropertyName, ">");
     }
 
     /**
      * Apply a "greater than or equal" constraint to two properties
      *
-     * @param propertyName One property name
+     * @param propertyName      One property name
      * @param otherPropertyName The other property name
-     *
      * @return The Criterion
-     *
      * @see PropertyExpression
      */
     public static PropertyExpression geProperty(String propertyName, String otherPropertyName) {
-        return new PropertyExpression( propertyName, otherPropertyName, ">=" );
-    }
-
-
-
-    protected Restrictions() {
-        // cannot be instantiated, but needs to be protected so Expression can extend it
+        return new PropertyExpression(propertyName, otherPropertyName, ">=");
     }
 }

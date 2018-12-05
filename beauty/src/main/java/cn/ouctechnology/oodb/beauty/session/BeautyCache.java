@@ -31,8 +31,24 @@ public class BeautyCache implements Cache<String, Map<String, Object>>, Initiali
     public BeautyCache() {
     }
 
-    public void setCacheSize(int cacheSize) {
-        this.cacheSize = cacheSize;
+    /**
+     * 非Spring环境下创建Cache
+     *
+     * @param policy 缓存淘汰策略
+     * @param size   缓存大小
+     * @return
+     */
+    private static Cache<String, Map<String, Object>> getCache(String policy, int size) {
+        switch (policy) {
+            case "lru":
+                return new LRUCache<>(size, 0);
+            case "fifo":
+                return new LFUCache<>(size, 0);
+            case "lfu":
+                return new LFUCache<>(size, 0);
+            default:
+                throw new BeautifulException("the cache policy is not supported");
+        }
     }
 
     public void setPolicy(String policy) {
@@ -90,22 +106,13 @@ public class BeautyCache implements Cache<String, Map<String, Object>>, Initiali
         return cache.getCacheSize();
     }
 
+    public void setCacheSize(int cacheSize) {
+        this.cacheSize = cacheSize;
+    }
+
     @Override
     public boolean isEmpty() {
         return cache.isEmpty();
-    }
-
-    private static Cache<String, Map<String, Object>> getCache(String policy, int size) {
-        switch (policy) {
-            case "lru":
-                return new LRUCache<>(size, 0);
-            case "fifo":
-                return new LFUCache<>(size, 0);
-            case "lfu":
-                return new LFUCache<>(size, 0);
-            default:
-                throw new BeautifulException("the cache policy is not supported");
-        }
     }
 
     @Override

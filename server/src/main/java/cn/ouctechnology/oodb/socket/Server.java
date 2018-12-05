@@ -29,41 +29,26 @@ import java.util.TimerTask;
  * SocketPusher作为消费者，负责从Map去取数据，然后发送给客户端
  */
 public class Server {
-    private static Logger logger = LoggerFactory.getLogger(Server.class);
-    private int tcpPort;
-
     /**
      * 当前连接数
      */
     public static int socketCount = 0;
-
-    public Server(int tcpPort) {
-        this.tcpPort = tcpPort;
-    }
-
-    public void start() {
-
-        SocketAccepter socketAccepter = new SocketAccepter(tcpPort);
-        //开启多个线程
-        Thread accepterThread = new Thread(socketAccepter);
-
-        accepterThread.start();
-        logger.info("server started successfully,port:{}", tcpPort);
-    }
+    private static Logger logger = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) throws IOException {
         readConfig();
         Buffer.init();
         Catalog.initialCatalog();
-        Server server = new Server(9999);
+        Server server = new Server();
         server.start();
+        //同步任务，将数据同步进入文件，防止数据丢失
         new Timer("sync-timer ").schedule(new TimerTask() {
             @Override
             public void run() {
                 logger.info(SyncExplain.sync());
             }
-        }, 0, 3000);
-//        检测死锁定时任务，每分钟执行一次
+        }, 0, Constants.SYNC_PERIOD);
+        //检测死锁定时任务，每分钟执行一次
         DeadlockDetector deadlockDetector = new DeadlockDetector();
         new Timer("sync-timer ").schedule(new TimerTask() {
             @Override
@@ -119,9 +104,24 @@ public class Server {
                 Constants.MAX_NUM_OF_NODE = Integer.parseInt(indexNodeElement.getText());
             }
 
+            Element syncTimeElement = beauty.element("syncTime");
+            if (syncTimeElement != null) {
+                Constants.SYNC_PERIOD = Integer.parseInt(syncTimeElement.getText());
+            }
+
             IOUtils.closeQuietly(inputStream);
         } catch (FileNotFoundException | DocumentException e) {
             e.printStackTrace();
         }
+    }
+
+    public void start() {
+
+        SocketAccepter socketAccepter = new SocketAccepter(Constants.SERVER_PORT);
+        //开启多个线程
+        Thread accepterThread = new Thread(socketAccepter);
+
+        accepterThread.start();
+        logger.info("server started successfully,port:{}", Constants.SERVER_PORT);
     }
 }

@@ -4,7 +4,7 @@ package cn.ouctechnology.oodb.beauty.criteria;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 12:32
- * @description: TODO
+ * @description: 投影操作
  **/
 public class PropertyProjection implements Projection {
     private String propertyName;

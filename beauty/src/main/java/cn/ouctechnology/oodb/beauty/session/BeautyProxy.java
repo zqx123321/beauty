@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-12 20:52
- * @description: TODO
+ * @description: Beauty的InvocationHandler，描述如何代理
  **/
 public class BeautyProxy implements InvocationHandler {
     private Logger logger = LoggerFactory.getLogger(BeautyProxy.class);
@@ -35,6 +35,16 @@ public class BeautyProxy implements InvocationHandler {
     private Set<String> fieldSet;
 
 
+    public BeautyProxy(Session session) {
+        this.session = session;
+    }
+
+    /**
+     * 生产代理类
+     *
+     * @param clz
+     * @return
+     */
     public Object bind(Class<?> clz) {
         //判断是否继承BaseBeauty
         Type[] genericInterfaces = clz.getGenericInterfaces();
@@ -43,19 +53,24 @@ public class BeautyProxy implements InvocationHandler {
             if (genericInterface instanceof ParameterizedType) {
                 ParameterizedType baseBeautyType = (ParameterizedType) genericInterface;
                 genericClz = (Class) baseBeautyType.getActualTypeArguments()[0];
+                //获取泛型类的所有属性
                 fieldSet = Arrays.stream(genericClz.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet());
                 methodSet = new HashSet<>();
+                //获取BeseBeauty上的所有方法
                 methodSet.addAll(Arrays.asList(clz.getDeclaredMethods()));
             }
         }
         return Proxy.newProxyInstance(clz.getClassLoader(), new Class[]{clz}, this);
     }
 
-
-    public BeautyProxy(Session session) {
-        this.session = session;
-    }
-
+    /**
+     * 对每个方法进行代理
+     *
+     * @param proxy
+     * @param method
+     * @param args
+     * @return
+     */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         //垃圾回收的时候关闭session
@@ -63,10 +78,13 @@ public class BeautyProxy implements InvocationHandler {
             session.close();
             return null;
         }
+        //调用父类上的方法
         if (genericClz != null && !methodSet.contains(method)) {
             return invokeBase(genericClz, session, method, args);
         }
+        //初始化参数-值的对应map
         initMap(method, args);
+        //获取注解
         Select select = method.getAnnotation(Select.class);
         Insert insert = method.getAnnotation(Insert.class);
         Update update = method.getAnnotation(Update.class);
@@ -84,16 +102,19 @@ public class BeautyProxy implements InvocationHandler {
             oql = delete.value();
         }
         if (oql == null) {
+            //处理Query By Properties
             String methodName = method.getName();
             if (methodName.startsWith("findBy") || methodName.startsWith("updateBy") || methodName.startsWith("deleteBy")) {
                 return invokeProperty(genericClz, session, method, args);
             }
             return null;
         }
+
         List<String> paramList = new ArrayList<>();
+        //填充OQL参数
         oql = transferOqlParams(oql, paramList);
         oql = fillParams(oql, paramList);
-
+        //执行查询
         if (isSelect) return doSelect(method, oql);
         return doUpdate(method, oql);
     }
@@ -103,12 +124,14 @@ public class BeautyProxy implements InvocationHandler {
         Object[] values = new Object[paramList.size()];
         for (int i = 0; i < paramList.size(); i++) {
             String param = paramList.get(i);
-            Object value = columnValueMap.get(param);
-            if (value == null) {
+            Object value;
+            if (columnValueMap.containsKey(param)) {
+                value = columnValueMap.get(param);
+            } else if (columnValueMap.containsKey(null)) {
                 //利用hashMap能存储一个null值来尝试直接使用参数
                 value = columnValueMap.get(null);
-                if (value == null)
-                    throw new BeautifulException("can not found the property");
+            } else {
+                throw new BeautifulException("can not found the property");
             }
             values[i] = value;
         }
@@ -128,15 +151,20 @@ public class BeautyProxy implements InvocationHandler {
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
+            //如果有param注解，则优先使用
             Param param = parameter.getAnnotation(Param.class);
             if (param != null) {
                 String column = param.value();
                 columnList.add(column);
                 valueList.add(args[i]);
-            } else if (args[i].getClass().getClassLoader() != null) {
+            }
+            //使用对象的属性
+            else if (args[i].getClass().getClassLoader() != null) {
                 columnList.addAll(BeanUtil.getColumnList(args[i], ""));
                 valueList.addAll(BeanUtil.getValueList(args[i]));
-            } else {
+            }
+            //尝试直接使用该对象
+            else {
                 columnList.add(null);
                 valueList.add(args[i]);
             }
@@ -162,6 +190,13 @@ public class BeautyProxy implements InvocationHandler {
         return matcher.replaceAll("%s");
     }
 
+    /**
+     * 执行查询操作
+     *
+     * @param method
+     * @param oql
+     * @return
+     */
     private Object doSelect(Method method, String oql) {
         NoCached noCached = method.getAnnotation(NoCached.class);
         logger.info("select:{}", oql);
@@ -192,6 +227,13 @@ public class BeautyProxy implements InvocationHandler {
         return query.firstResult();
     }
 
+    /**
+     * 执行更新操作
+     *
+     * @param method
+     * @param oql
+     * @return
+     */
     private Object doUpdate(Method method, String oql) {
         NoFlush noFlush = method.getAnnotation(NoFlush.class);
         logger.info("update:{}", oql);
@@ -206,9 +248,17 @@ public class BeautyProxy implements InvocationHandler {
     }
 
 
+    /**
+     * 触发父类中的方法
+     *
+     * @param genericClz
+     * @param session
+     * @param method
+     * @param args
+     * @return
+     */
     private Object invokeBase(Class genericClz, Session session, Method method, Object[] args) {
         String methodName = method.getName();
-        String tableName = StringUtils.uncapitalize(genericClz.getSimpleName());
         if (methodName.equals("save")) {
             return session.save(args[0]);
         }
@@ -227,6 +277,15 @@ public class BeautyProxy implements InvocationHandler {
         return null;
     }
 
+    /**
+     * 处理Query By Property
+     *
+     * @param genericClz
+     * @param session
+     * @param method
+     * @param args
+     * @return
+     */
     private Object invokeProperty(Class genericClz, Session session, Method method, Object[] args) {
         String methodName = method.getName();
         if (methodName.startsWith("findBy")) {

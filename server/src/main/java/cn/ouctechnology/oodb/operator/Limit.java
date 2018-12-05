@@ -6,7 +6,7 @@ import cn.ouctechnology.oodb.reocrd.Tuple;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-31 16:26
- * @description: TODO
+ * @description: Limit操作
  **/
 public class Limit extends Operator {
     private DbIterator child;

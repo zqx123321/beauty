@@ -42,11 +42,11 @@ public enum Op {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public static Op getEnum(String name) {
         return enumMap.get(name);
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -4,9 +4,13 @@ package cn.ouctechnology.oodb.beauty.criteria;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 12:20
- * @description: TODO
+ * @description: 投影操作工厂
  **/
 public class Projections {
+
+    private Projections() {
+        //cannot be instantiated
+    }
 
     /**
      * A grouping property value projection
@@ -37,7 +41,6 @@ public class Projections {
         return new ProjectionList();
     }
 
-
     /**
      * A property value count projection
      *
@@ -47,7 +50,6 @@ public class Projections {
     public static AggregateProjection count(String propertyName) {
         return new AggregateProjection("count", propertyName);
     }
-
 
     /**
      * A property maximum value projection
@@ -90,23 +92,6 @@ public class Projections {
      */
     public static AggregateProjection sum(String propertyName) {
         return new AggregateProjection("sum", propertyName);
-    }
-
-//    /**
-//     * Assign an alias to a projection, by wrapping it
-//     *
-//     * @param projection The projection to be aliased
-//     * @param alias      The alias to apply
-//     * @return The aliased projection
-//     * @see AliasedProjection
-//     */
-//    public static Projection alias(Projection projection, String alias) {
-//        return new AliasedProjection(projection, alias);
-//    }
-
-
-    private Projections() {
-        //cannot be instantiated
     }
 
 }

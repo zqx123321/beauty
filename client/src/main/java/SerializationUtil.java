@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
  * @author: ZQX
  * @create: 2018-09-07 17:16
  **/
+@SuppressWarnings("all")
 public class SerializationUtil {
 
     public static byte[] serialize(Object object) {

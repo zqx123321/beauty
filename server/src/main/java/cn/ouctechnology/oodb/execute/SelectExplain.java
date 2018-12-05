@@ -21,18 +21,6 @@ public class SelectExplain {
 
     private DbIterator dbIterator;
 
-    public Object doSelect() {
-        if (dbIterator == null) return null;
-        dbIterator.open();
-        List<Tuple> tupleList = new ArrayList<>();
-        while (dbIterator.hasNext()) {
-            Tuple next = dbIterator.next();
-            tupleList.add(next);
-        }
-        dbIterator.close();
-        return tupleList;
-    }
-
     /**
      * 静态工厂方法，返回处理该条select的explain
      *
@@ -43,5 +31,17 @@ public class SelectExplain {
         logicalPlan.check();
         DbIterator dbIterator = logicalPlan.toPhysicalPlan();
         return SelectExplain.builder().dbIterator(dbIterator).build();
+    }
+
+    public Object doSelect() {
+        if (dbIterator == null) return null;
+        dbIterator.open();
+        List<Tuple> tupleList = new ArrayList<>();
+        while (dbIterator.hasNext()) {
+            Tuple next = dbIterator.next();
+            tupleList.add(next);
+        }
+        dbIterator.close();
+        return tupleList;
     }
 }

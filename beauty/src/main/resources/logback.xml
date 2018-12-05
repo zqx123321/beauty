@@ -11,6 +11,6 @@
 
     <!-- 日志输出级别 -->
     <root level="debug"><!-- ERROR、WARN、INFO、DEBUG -->
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

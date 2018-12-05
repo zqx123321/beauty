@@ -4,7 +4,7 @@ package cn.ouctechnology.oodb.beauty.criteria;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 14:34
- * @description: TODO
+ * @description: property=property型表达式
  **/
 public class PropertyExpression implements Criterion {
 

@@ -1,7 +1,5 @@
 package cn.ouctechnology.oodb.catalog.attribute;
 
-import java.util.List;
-
 import static cn.ouctechnology.oodb.constant.Constants.SIZE_FLOAT;
 import static cn.ouctechnology.oodb.constant.Constants.SIZE_INT;
 

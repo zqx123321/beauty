@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 /**
- * OrderBy is an operator that implements a relational ORDER BY.
+ * 排序
  */
 public class OrderBy extends Operator {
 

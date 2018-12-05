@@ -65,6 +65,10 @@ public abstract class BTreeNode<TKey extends Comparable<TKey>> {
         return this.keyCount;
     }
 
+    public void setKeyCount(int keyCount) {
+        this.keyCount = keyCount;
+    }
+
     @SuppressWarnings("unchecked")
     public TKey getKey(int index) {
         return (TKey) this.keys[index];
@@ -82,11 +86,6 @@ public abstract class BTreeNode<TKey extends Comparable<TKey>> {
     public void setParent(int parent) {
         dirty = true;
         this.parentNode = parent;
-    }
-
-
-    public void setKeyCount(int keyCount) {
-        this.keyCount = keyCount;
     }
 
     public abstract TreeNodeType getNodeType();

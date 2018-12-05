@@ -79,11 +79,11 @@ public abstract class Attribute {
         return null;
     }
 
-    public void setSee(boolean see) {
-        this.see = see;
-    }
-
     public boolean isSee() {
         return see;
+    }
+
+    public void setSee(boolean see) {
+        this.see = see;
     }
 }

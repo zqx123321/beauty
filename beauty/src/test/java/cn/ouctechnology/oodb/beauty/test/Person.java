@@ -15,6 +15,8 @@ public class Person {
 
     private String name;
 
+    private Dept dept;
+
 
     public Integer getId() {
         return id;
@@ -32,11 +34,20 @@ public class Person {
         this.name = name;
     }
 
+    public Dept getDept() {
+        return dept;
+    }
+
+    public void setDept(Dept dept) {
+        this.dept = dept;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", dept=" + dept +
                 '}';
     }
 }

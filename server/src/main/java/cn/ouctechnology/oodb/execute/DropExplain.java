@@ -25,6 +25,12 @@ public class DropExplain {
 
     private boolean cascade;
 
+    public static DropExplain getDropStatContext(OQLParser.DropStatContext drop) {
+        String tableName = drop.WORD().getText();
+        boolean cascade = drop.CASCADE() != null;
+        return DropExplain.builder().tableName(tableName).cascade(cascade).build();
+    }
+
     public String doDrop() {
         Table table = Catalog.getTable(tableName);
         List<String> refs = Catalog.checkRef(tableName);
@@ -49,12 +55,6 @@ public class DropExplain {
             }
         }
         return 1 + refs.size() + extendTables.size() + ROWS_AFFECTED;
-    }
-
-    public static DropExplain getDropStatContext(OQLParser.DropStatContext drop) {
-        String tableName = drop.WORD().getText();
-        boolean cascade = drop.CASCADE() != null;
-        return DropExplain.builder().tableName(tableName).cascade(cascade).build();
     }
 
 }

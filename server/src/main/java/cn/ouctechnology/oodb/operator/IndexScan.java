@@ -20,7 +20,7 @@ import static cn.ouctechnology.oodb.constant.Constants.READ;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-07 11:30
- * @description: TODO
+ * @description: 索引扫描
  **/
 public class IndexScan implements DbIterator {
     private String tableName;

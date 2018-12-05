@@ -4,10 +4,9 @@ package cn.ouctechnology.oodb.util;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-07 11:44
- * @description: TODO
+ * @description: 用于B+树二分查找
  **/
 public class SearchUtil {
-
 
     public static <T extends Comparable<T>> int lowerBound(T[] array, int length, T value) {
         if (array[length - 1].compareTo(value) < 0) return length - 1;

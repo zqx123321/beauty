@@ -9,7 +9,7 @@ import java.util.Map;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-07 21:29
- * @description: TODO
+ * @description: 索引连接
  **/
 public class IndexJoin extends Operator {
 

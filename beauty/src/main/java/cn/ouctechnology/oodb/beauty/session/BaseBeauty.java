@@ -12,7 +12,7 @@ import java.util.List;
  **/
 
 /**
- * Beauty总父类，继承此类之后悔自动拥有如下所有方法
+ * Beauty总父类，继承此类之会自动拥有如下所有方法
  *
  * @param <T>
  */

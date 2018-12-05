@@ -6,7 +6,7 @@ package cn.ouctechnology.oodb.beauty.exception;
  * @create: 2018-11-14 09:40
  * @description: TODO
  **/
-public class BeautifulException extends RuntimeException{
+public class BeautifulException extends RuntimeException {
     public BeautifulException() {
         super();
     }

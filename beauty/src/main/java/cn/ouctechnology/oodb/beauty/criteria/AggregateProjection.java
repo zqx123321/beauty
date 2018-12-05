@@ -4,7 +4,7 @@ package cn.ouctechnology.oodb.beauty.criteria;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 12:25
- * @description: TODO
+ * @description: 聚集操作
  **/
 public class AggregateProjection implements Projection {
 

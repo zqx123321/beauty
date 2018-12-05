@@ -37,118 +37,18 @@ import java.util.TimerTask;
  * 自定义简易数据库连接池
  */
 public class SessionPool implements InitializingBean, BeanDefinitionRegistryPostProcessor {
+    private volatile static SessionPool instance;
+    private final LinkedList<Session> sessionList = new LinkedList<>();// 储存空闲Connection链接的集合和(涉及多次添加、删除操作、故而用LinkedList)
     private Logger logger = LoggerFactory.getLogger(SessionPool.class);
     private int initialSize;// 最小连接数
     private int maxActive;// 最大连接数
     private int maxIdle;//最大空闲时间
     private SessionFactory sessionFactory;//创建连接的sessionFactory
-    private final LinkedList<Session> sessionList = new LinkedList<>();// 储存空闲Connection链接的集合和(涉及多次添加、删除操作、故而用LinkedList)
-    private volatile static SessionPool instance;
-
-    public void setInitialSize(int initialSize) {
-        this.initialSize = initialSize;
-    }
-
-    public void setMaxActive(int maxActive) {
-        this.maxActive = maxActive;
-    }
-
-    public void setMaxIdle(int maxIdle) {
-        this.maxIdle = maxIdle;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    private void init() {
-        for (int i = 0; i < initialSize; i++) {
-            sessionList.add(sessionFactory.getSession());
-        }
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    int current = sessionList.size();
-                    if (current > initialSize) {
-                        logger.info("clear {} idle session.....", current - initialSize);
-                        for (int i = 0; i < current - initialSize; i++) {
-                            Session session = getSession();
-                            session.close();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 0, maxIdle);
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        init();
-    }
 
     public SessionPool() {
         initialSize = 1;
         maxActive = 5;
         maxIdle = 60000;
-    }
-
-    public Session getSession(long timeoutTime) throws InterruptedException {
-        synchronized (sessionList) {
-            if (timeoutTime <= 0) {
-                while (sessionList.isEmpty()) {
-                    if (sessionList.size() < maxActive) {
-                        addSession();
-                    } else {
-                        sessionList.wait();
-                    }
-                }
-                return sessionList.removeFirst();
-            }
-            long future = System.currentTimeMillis() + timeoutTime;
-            long remaining = timeoutTime;
-            while (sessionList.isEmpty() && remaining > 0) {
-                sessionList.wait(remaining);
-                remaining = future - System.currentTimeMillis();
-            }
-            Session result = null;
-            if (!sessionList.isEmpty()) {
-                result = sessionList.removeFirst();
-            }
-            return result;
-        }
-    }
-
-    public Session getSession() throws InterruptedException {
-        synchronized (sessionList) {
-            while (sessionList.isEmpty()) {
-                if (sessionList.size() < maxActive) {
-                    addSession();
-                } else {
-                    sessionList.wait();
-                }
-            }
-            return sessionList.removeFirst();
-        }
-    }
-
-    public void addSession() {
-        if (sessionList.size() > maxActive) throw new BeautifulException("the session count has reach the max size");
-        synchronized (sessionList) {
-            Session session = sessionFactory.getSession();
-            sessionList.add(session);
-        }
-    }
-
-    public void closeSession(Session conn) {
-        if (conn != null) {
-            synchronized (sessionList) {
-                sessionList.addLast(conn);
-                sessionList.notifyAll();
-            }
-        }
     }
 
     public SessionPool(SessionFactory sessionFactory, int initialSize, int maxActive, int maxIdle) {
@@ -218,6 +118,107 @@ public class SessionPool implements InitializingBean, BeanDefinitionRegistryPost
         } catch (DocumentException e) {
             e.printStackTrace();
             throw new BeautifulException(e);
+        }
+    }
+
+    public void setInitialSize(int initialSize) {
+        this.initialSize = initialSize;
+    }
+
+    public void setMaxActive(int maxActive) {
+        this.maxActive = maxActive;
+    }
+
+    public void setMaxIdle(int maxIdle) {
+        this.maxIdle = maxIdle;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    private void init() {
+        for (int i = 0; i < initialSize; i++) {
+            sessionList.add(sessionFactory.getSession());
+        }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    int current = sessionList.size();
+                    if (current > initialSize) {
+                        logger.info("clear {} idle session.....", current - initialSize);
+                        for (int i = 0; i < current - initialSize; i++) {
+                            Session session = getSession();
+                            session.close();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, maxIdle);
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        if (sessionFactory.getClass() == SessionFactory.class)
+            init();
+    }
+
+    public Session getSession(long timeoutTime) throws InterruptedException {
+        synchronized (sessionList) {
+            if (timeoutTime <= 0) {
+                while (sessionList.isEmpty()) {
+                    if (sessionList.size() < maxActive) {
+                        addSession();
+                    } else {
+                        sessionList.wait();
+                    }
+                }
+                return sessionList.removeFirst();
+            }
+            long future = System.currentTimeMillis() + timeoutTime;
+            long remaining = timeoutTime;
+            while (sessionList.isEmpty() && remaining > 0) {
+                sessionList.wait(remaining);
+                remaining = future - System.currentTimeMillis();
+            }
+            Session result = null;
+            if (!sessionList.isEmpty()) {
+                result = sessionList.removeFirst();
+            }
+            return result;
+        }
+    }
+
+    public Session getSession() throws InterruptedException {
+        synchronized (sessionList) {
+            while (sessionList.isEmpty()) {
+                if (sessionList.size() < maxActive) {
+                    addSession();
+                } else {
+                    sessionList.wait();
+                }
+            }
+            return sessionList.removeFirst();
+        }
+    }
+
+    public void addSession() {
+        if (sessionList.size() > maxActive) throw new BeautifulException("the session count has reach the max size");
+        synchronized (sessionList) {
+            Session session = sessionFactory.getSession();
+            sessionList.add(session);
+        }
+    }
+
+    public void closeSession(Session conn) {
+        if (conn != null) {
+            synchronized (sessionList) {
+                sessionList.addLast(conn);
+                sessionList.notifyAll();
+            }
         }
     }
 

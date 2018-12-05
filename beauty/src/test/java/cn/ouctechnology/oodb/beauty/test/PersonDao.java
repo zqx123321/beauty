@@ -18,15 +18,22 @@ public interface PersonDao extends BaseBeauty<Person> {
     List<Person> list();
 
     @NoCached
-    @Select("select a from person a where a.id=#{id}")
+    @Select("select a from person a where a.id=#{aaaaa}")
     Person get(int id);
 
     @Update("update person a set a.name=#{name} where a.id=#{id}")
     int update(Person person);
 
+    @Update("update person a set a.name=#{name} where a.id=#{id}")
+    int update(Person person, int id);
+
+    @NoFlush
+    @Insert("insert into person values(#{id}, #{name},(#{dept.id},#{dept.name})")
+    int insert(Person person);
+
     @NoFlush
     @Insert("insert into person values(#{id}, #{name})")
-    int insert(Person person);
+    int insert(@Param("name") String name, @Param("id") Integer id);
 
     List<Person> findByNameOrIdGreater(@Param("name") String name, @Param("id") Integer id);
 

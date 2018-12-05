@@ -56,24 +56,24 @@ public class Table implements Cloneable {
         return tableName;
     }
 
-    public void setExtendTables(List<String> extendTables) {
-        this.extendTables = extendTables;
-    }
-
-    public void setRefs(List<String> refs) {
-        this.refs = refs;
+    public synchronized void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public List<String> getRefs() {
         return refs;
     }
 
+    public void setRefs(List<String> refs) {
+        this.refs = refs;
+    }
+
     public List<String> getExtendTables() {
         return extendTables;
     }
 
-    public synchronized void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setExtendTables(List<String> extendTables) {
+        this.extendTables = extendTables;
     }
 
     public PrimaryKey getPrimaryKey() {

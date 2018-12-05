@@ -18,7 +18,7 @@ import static cn.ouctechnology.oodb.constant.Constants.*;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-09 09:41
- * @description: TODO
+ * @description: 用于已经存在数据的情况下，建立索引
  **/
 public class RebuildIndex implements DbIterator {
 

@@ -1,11 +1,11 @@
 package cn.ouctechnology.oodb.operator;
 
 import cn.ouctechnology.oodb.BaseTest;
+import cn.ouctechnology.oodb.reocrd.Field;
+import cn.ouctechnology.oodb.reocrd.Tuple;
 import cn.ouctechnology.oodb.util.where.InnerNode;
 import cn.ouctechnology.oodb.util.where.LeafNode;
 import cn.ouctechnology.oodb.util.where.Op;
-import cn.ouctechnology.oodb.reocrd.Field;
-import cn.ouctechnology.oodb.reocrd.Tuple;
 import org.junit.Test;
 
 /**
@@ -35,7 +35,7 @@ public class FilterTest extends BaseTest {
         innerNode.setLeft(innerNode1);
         innerNode.setRight(innerNode2);
 
-        DbIterator test = new SeqScan("test","a");
+        DbIterator test = new SeqScan("test", "a");
 
         Filter filter = new Filter(test, innerNode);
         filter.open();

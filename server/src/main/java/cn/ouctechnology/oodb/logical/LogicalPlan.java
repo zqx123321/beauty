@@ -56,34 +56,6 @@ public class LogicalPlan {
         this.distinct = distinct;
     }
 
-    public LogicalTableNode getTableNode() {
-        return tableNode;
-    }
-
-    public LogicalAggregateNode getAggregateNode() {
-        return aggregateNode;
-    }
-
-    public LogicalFilterNode getFilterNode() {
-        return filterNode;
-    }
-
-    public LogicalProjectNode getProjectNode() {
-        return projectNode;
-    }
-
-    public LogicalLimitNode getLogicalLimitNode() {
-        return logicalLimitNode;
-    }
-
-    public List<LogicalOrderNode> getLogicalOrderNode() {
-        return logicalOrderNode;
-    }
-
-    public boolean isDistinct() {
-        return distinct;
-    }
-
     public static LogicalPlan getLogicalPlan(OQLParser.SelectStatContext selectStatContext) {
         OQLParser.WhereClauseContext whereClauseContext = selectStatContext.whereClause();
         WhereNode whereTree = WhereClauseUtil.getWhereTree(whereClauseContext);
@@ -194,6 +166,34 @@ public class LogicalPlan {
             String name = attribute.getName();
             projectNode.addField(tableAlias + "." + name);
         }
+    }
+
+    public LogicalTableNode getTableNode() {
+        return tableNode;
+    }
+
+    public LogicalAggregateNode getAggregateNode() {
+        return aggregateNode;
+    }
+
+    public LogicalFilterNode getFilterNode() {
+        return filterNode;
+    }
+
+    public LogicalProjectNode getProjectNode() {
+        return projectNode;
+    }
+
+    public LogicalLimitNode getLogicalLimitNode() {
+        return logicalLimitNode;
+    }
+
+    public List<LogicalOrderNode> getLogicalOrderNode() {
+        return logicalOrderNode;
+    }
+
+    public boolean isDistinct() {
+        return distinct;
     }
 
     public void check() {

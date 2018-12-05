@@ -6,7 +6,9 @@ import cn.ouctechnology.oodb.util.where.WhereNode;
 
 import java.util.Map;
 
-
+/**
+ * 二元连接操作
+ */
 public class Join extends Operator {
 
 

@@ -4,7 +4,7 @@ package cn.ouctechnology.oodb.reocrd;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-29 21:14
- * @description: TODO
+ * @description: 字段类型
  **/
 public class Field {
     private String name;

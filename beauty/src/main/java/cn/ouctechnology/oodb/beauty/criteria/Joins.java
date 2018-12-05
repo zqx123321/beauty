@@ -4,7 +4,7 @@ package cn.ouctechnology.oodb.beauty.criteria;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 14:49
- * @description: TODO
+ * @description: 连接操作工厂
  **/
 public class Joins {
 

@@ -2,17 +2,12 @@ package cn.ouctechnology.oodb.reocrd;
 
 import cn.ouctechnology.oodb.buffer.Buffer;
 import cn.ouctechnology.oodb.catalog.Catalog;
-import cn.ouctechnology.oodb.catalog.Index;
-import cn.ouctechnology.oodb.catalog.Table;
-import cn.ouctechnology.oodb.catalog.attribute.CharAttribute;
-import cn.ouctechnology.oodb.catalog.attribute.IntAttribute;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

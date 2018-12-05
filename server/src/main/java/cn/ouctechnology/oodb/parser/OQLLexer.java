@@ -10,13 +10,6 @@ import org.antlr.v4.runtime.dfa.DFA;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class OQLLexer extends Lexer {
-    static {
-        RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION);
-    }
-
-    protected static final DFA[] _decisionToDFA;
-    protected static final PredictionContextCache _sharedContextCache =
-            new PredictionContextCache();
     public static final int
             SELECT = 1, CREATE = 2, UPDATE = 3, DELETE = 4, INSERT = 5, FROM = 6, AS = 7, LEFT = 8,
             RIGHT = 9, OUTER = 10, JOIN = 11, INNER = 12, DISTINCT = 13, OBJECT = 14, NEW = 15,
@@ -32,14 +25,6 @@ public class OQLLexer extends Lexer {
             LFRACKET = 88, RFRACKET = 89, COMMA = 90, SEMI = 91, COLON = 92, TRIMCHARACTER = 93,
             STRINGLITERAL = 94, WORD = 95, NAMEDPARAMETER = 96, WS = 97, COMMENT = 98, LINECOMMENT = 99,
             ESCAPECHARACTER = 100, INTNUMERAL = 101, FLOATNUMERAL = 102;
-    public static String[] channelNames = {
-            "DEFAULT_TOKEN_CHANNEL", "HIDDEN"
-    };
-
-    public static String[] modeNames = {
-            "DEFAULT_MODE"
-    };
-
     public static final String[] ruleNames = {
             "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
             "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "SELECT",
@@ -57,103 +42,11 @@ public class OQLLexer extends Lexer {
             "STRINGLITERAL", "WORD", "NAMEDPARAMETER", "WS", "COMMENT", "LINECOMMENT",
             "ESCAPECHARACTER", "INTNUMERAL", "FLOATNUMERAL"
     };
-
-    private static final String[] _LITERAL_NAMES = {
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, "'*'", "'/'", "'+'", "'-'", "'='", "'>'", "'<'", "'>='",
-            "'<='", null, "'.'", "'('", "')'", "'['", "']'", "','", "';'", "':'",
-            "''.''"
-    };
-    private static final String[] _SYMBOLIC_NAMES = {
-            null, "SELECT", "CREATE", "UPDATE", "DELETE", "INSERT", "FROM", "AS",
-            "LEFT", "RIGHT", "OUTER", "JOIN", "INNER", "DISTINCT", "OBJECT", "NEW",
-            "AVG", "SUM", "MAX", "MIN", "COUNT", "WHERE", "GROUP", "BY", "ORDER",
-            "HAVING", "DESC", "ASC", "NOT", "SET", "BETWEEN", "IS", "NULL", "ESCAPE",
-            "AND", "OR", "LIKE", "IN", "INTO", "VALUES", "PRIMARY", "KEY", "LISTOF",
-            "EXTENDS", "EMPTY", "MEMBER", "OF", "ALL", "ANY", "SOME", "INT", "FLOAT",
-            "CHAR", "SETOF", "REF", "TABLE", "EXISTS", "AUTO_INCREMENT", "UNIQUE",
-            "LIMIT", "DROP", "CASCADE", "ON", "SHOW", "TABLES", "FINAL", "INDEX",
-            "SYNC", "BEGIN", "TRANSACTION", "COMMIT", "ROLL", "BACK", "ASSIGN", "UUID",
-            "MUL", "DIV", "PLUS", "MINUS", "EQ", "GR", "LS", "GE", "LE", "NE", "DOT",
-            "LBRACKET", "RBRACKET", "LFRACKET", "RFRACKET", "COMMA", "SEMI", "COLON",
-            "TRIMCHARACTER", "STRINGLITERAL", "WORD", "NAMEDPARAMETER", "WS", "COMMENT",
-            "LINECOMMENT", "ESCAPECHARACTER", "INTNUMERAL", "FLOATNUMERAL"
-    };
-    public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
-
     /**
      * @deprecated Use {@link #VOCABULARY} instead.
      */
     @Deprecated
     public static final String[] tokenNames;
-
-    static {
-        tokenNames = new String[_SYMBOLIC_NAMES.length];
-        for (int i = 0; i < tokenNames.length; i++) {
-            tokenNames[i] = VOCABULARY.getLiteralName(i);
-            if (tokenNames[i] == null) {
-                tokenNames[i] = VOCABULARY.getSymbolicName(i);
-            }
-
-            if (tokenNames[i] == null) {
-                tokenNames[i] = "<INVALID>";
-            }
-        }
-    }
-
-    @Override
-    @Deprecated
-    public String[] getTokenNames() {
-        return tokenNames;
-    }
-
-    @Override
-
-    public Vocabulary getVocabulary() {
-        return VOCABULARY;
-    }
-
-
-    public OQLLexer(CharStream input) {
-        super(input);
-        _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
-    }
-
-    @Override
-    public String getGrammarFileName() {
-        return "OQL.g4";
-    }
-
-    @Override
-    public String[] getRuleNames() {
-        return ruleNames;
-    }
-
-    @Override
-    public String getSerializedATN() {
-        return _serializedATN;
-    }
-
-    @Override
-    public String[] getChannelNames() {
-        return channelNames;
-    }
-
-    @Override
-    public String[] getModeNames() {
-        return modeNames;
-    }
-
-    @Override
-    public ATN getATN() {
-        return _ATN;
-    }
-
     public static final String _serializedATN =
             "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2h\u0362\b\1\4\2\t" +
                     "\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13" +
@@ -449,11 +342,112 @@ public class OQLLexer extends Lexer {
                     "\u0355\u035a\u0360\3\b\2\2";
     public static final ATN _ATN =
             new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+    protected static final DFA[] _decisionToDFA;
+    protected static final PredictionContextCache _sharedContextCache =
+            new PredictionContextCache();
+    private static final String[] _LITERAL_NAMES = {
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, "'*'", "'/'", "'+'", "'-'", "'='", "'>'", "'<'", "'>='",
+            "'<='", null, "'.'", "'('", "')'", "'['", "']'", "','", "';'", "':'",
+            "''.''"
+    };
+    private static final String[] _SYMBOLIC_NAMES = {
+            null, "SELECT", "CREATE", "UPDATE", "DELETE", "INSERT", "FROM", "AS",
+            "LEFT", "RIGHT", "OUTER", "JOIN", "INNER", "DISTINCT", "OBJECT", "NEW",
+            "AVG", "SUM", "MAX", "MIN", "COUNT", "WHERE", "GROUP", "BY", "ORDER",
+            "HAVING", "DESC", "ASC", "NOT", "SET", "BETWEEN", "IS", "NULL", "ESCAPE",
+            "AND", "OR", "LIKE", "IN", "INTO", "VALUES", "PRIMARY", "KEY", "LISTOF",
+            "EXTENDS", "EMPTY", "MEMBER", "OF", "ALL", "ANY", "SOME", "INT", "FLOAT",
+            "CHAR", "SETOF", "REF", "TABLE", "EXISTS", "AUTO_INCREMENT", "UNIQUE",
+            "LIMIT", "DROP", "CASCADE", "ON", "SHOW", "TABLES", "FINAL", "INDEX",
+            "SYNC", "BEGIN", "TRANSACTION", "COMMIT", "ROLL", "BACK", "ASSIGN", "UUID",
+            "MUL", "DIV", "PLUS", "MINUS", "EQ", "GR", "LS", "GE", "LE", "NE", "DOT",
+            "LBRACKET", "RBRACKET", "LFRACKET", "RFRACKET", "COMMA", "SEMI", "COLON",
+            "TRIMCHARACTER", "STRINGLITERAL", "WORD", "NAMEDPARAMETER", "WS", "COMMENT",
+            "LINECOMMENT", "ESCAPECHARACTER", "INTNUMERAL", "FLOATNUMERAL"
+    };
+    public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+    public static String[] channelNames = {
+            "DEFAULT_TOKEN_CHANNEL", "HIDDEN"
+    };
+    public static String[] modeNames = {
+            "DEFAULT_MODE"
+    };
+
+    static {
+        RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION);
+    }
+
+    static {
+        tokenNames = new String[_SYMBOLIC_NAMES.length];
+        for (int i = 0; i < tokenNames.length; i++) {
+            tokenNames[i] = VOCABULARY.getLiteralName(i);
+            if (tokenNames[i] == null) {
+                tokenNames[i] = VOCABULARY.getSymbolicName(i);
+            }
+
+            if (tokenNames[i] == null) {
+                tokenNames[i] = "<INVALID>";
+            }
+        }
+    }
 
     static {
         _decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
         for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
             _decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
         }
+    }
+
+    public OQLLexer(CharStream input) {
+        super(input);
+        _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
+    }
+
+    @Override
+    @Deprecated
+    public String[] getTokenNames() {
+        return tokenNames;
+    }
+
+    @Override
+
+    public Vocabulary getVocabulary() {
+        return VOCABULARY;
+    }
+
+    @Override
+    public String getGrammarFileName() {
+        return "OQL.g4";
+    }
+
+    @Override
+    public String[] getRuleNames() {
+        return ruleNames;
+    }
+
+    @Override
+    public String getSerializedATN() {
+        return _serializedATN;
+    }
+
+    @Override
+    public String[] getChannelNames() {
+        return channelNames;
+    }
+
+    @Override
+    public String[] getModeNames() {
+        return modeNames;
+    }
+
+    @Override
+    public ATN getATN() {
+        return _ATN;
     }
 }

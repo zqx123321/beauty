@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-13 14:22
- * @description: TODO
+ * @description: 简单连接条件
  **/
 public class SimpleJoinCondition implements JoinCondition {
 

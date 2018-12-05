@@ -6,7 +6,7 @@ import org.springframework.beans.factory.FactoryBean;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-14 12:10
- * @description: TODO
+ * @description: Beauty的FactoryBean，用于产生JDK动态代理后的Beauty
  **/
 public class BeautyProxyFactory<T> implements FactoryBean<T> {
     private Class<T> interfaceClass;

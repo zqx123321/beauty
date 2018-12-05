@@ -1,9 +1,6 @@
 package cn.ouctechnology.oodb.beauty;
 
-import cn.ouctechnology.oodb.beauty.criteria.Criteria;
-import cn.ouctechnology.oodb.beauty.criteria.Criterion;
-import cn.ouctechnology.oodb.beauty.criteria.Joins;
-import cn.ouctechnology.oodb.beauty.criteria.Restrictions;
+import cn.ouctechnology.oodb.beauty.criteria.*;
 import cn.ouctechnology.oodb.beauty.session.BeautyProxy;
 import cn.ouctechnology.oodb.beauty.session.Predicate;
 import cn.ouctechnology.oodb.beauty.session.Session;
@@ -126,7 +123,7 @@ public class SessionFactoryTest {
         List<User> query = session.query(new Predicate<User>() {
             @Override
             public boolean match(User user) {
-                return user.getId() == 1;
+                return user.getId() == 1 && user.getName().equals("tom");
             }
 
             @Override
@@ -155,21 +152,14 @@ public class SessionFactoryTest {
         Teacher teacher = new Teacher();
         teacher.setId(1);
         teacher.setName("ddd");
-        List<Float> student = new ArrayList<>();
-        student.add(1.1f);
-        student.add(1.2f);
-        student.add(1.3f);
-        student.add(1.4f);
-        student.add(1.5f);
-        teacher.setStudent(student);
-        List<Dept> dept = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Dept dept1 = new Dept();
-            dept1.setId(i);
-            dept1.setName("hhh" + i);
-            dept.add(dept1);
-        }
-        teacher.setDept(dept);
+        List<Integer> students = new ArrayList<>();
+        students.add(1);
+        students.add(2);
+        students.add(3);
+        students.add(4);
+        students.add(5);
+
+        teacher.setStudents(students);
         System.out.println(session.save(teacher));
         List<Teacher> teacherList = session.createQuery("select a from teacher a").list(Teacher.class);
         for (Teacher t : teacherList) {
@@ -183,6 +173,30 @@ public class SessionFactoryTest {
         session.drop(Person.class);
         session.create(Person.class);
         System.out.println(session.createOql("show tables"));
+
+
+    }
+
+
+    @Test
+    public void testPaper() {
+//        List<User> list = session.createCriteria(User.class)
+//                .setProjection(Projections.projectionList()
+//                        .add(Projections.property("id"))
+//                        .add(Projections.property("name"))
+//                )
+//                .list();
+
+
+        Object count = session.createCriteria(User.class)
+                .setProjection(Projections.count("id")).uniqueResult(Integer.class);
+
+//        Object max = session.createCriteria(User.class)
+//                .setProjection(Projections.max("id")).uniqueResult();
+
+
+        UserDao userDao = session.getBeautiful(UserDao.class);
+
     }
 
 

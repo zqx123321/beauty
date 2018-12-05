@@ -196,21 +196,6 @@ public class WhereClauseUtil {
         return buildWhereTree(exprContext);
     }
 
-
-    public static class IndexStruct {
-        public Index index;
-        public String column;
-        public Comparable value;
-        public Op op;
-
-        public IndexStruct(Index index, String column, Comparable value, Op op) {
-            this.index = index;
-            this.column = column;
-            this.value = value;
-            this.op = op;
-        }
-    }
-
     public static IndexStruct getIndex(String tableName, WhereNode whereTree) {
         if (!(whereTree instanceof InnerNode)) return null;
         InnerNode node = (InnerNode) whereTree;
@@ -233,5 +218,19 @@ public class WhereClauseUtil {
         Index index = Catalog.getIndexByColumnName(tableName, columnName);
         if (index == null) return null;
         return new IndexStruct(index, columnName, (Comparable) value, node.getOperator());
+    }
+
+    public static class IndexStruct {
+        public Index index;
+        public String column;
+        public Comparable value;
+        public Op op;
+
+        public IndexStruct(Index index, String column, Comparable value, Op op) {
+            this.index = index;
+            this.column = column;
+            this.value = value;
+            this.op = op;
+        }
     }
 }

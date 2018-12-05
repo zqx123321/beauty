@@ -1,7 +1,6 @@
 package cn.ouctechnology.oodb.logical;
 
 import cn.ouctechnology.oodb.operator.DbIterator;
-import cn.ouctechnology.oodb.operator.Filter;
 import cn.ouctechnology.oodb.operator.Join;
 import cn.ouctechnology.oodb.util.where.WhereNode;
 
@@ -17,8 +16,8 @@ import java.util.Map;
  * @description: TODO
  **/
 public class IteratorMap {
-    private Map<String, DbIterator> iteratorMap = new HashMap<>();
     private static final String splitCharacter = "+";
+    private Map<String, DbIterator> iteratorMap = new HashMap<>();
 
     public DbIterator singleGet(String alias) {
         return iteratorMap.get(alias);

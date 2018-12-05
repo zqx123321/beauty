@@ -4,7 +4,9 @@ import cn.ouctechnology.oodb.dbenum.Type;
 import cn.ouctechnology.oodb.operator.aggregator.Aggregator;
 import cn.ouctechnology.oodb.reocrd.Tuple;
 
-
+/**
+ * 聚集操作
+ */
 public class Aggregate extends Operator {
 
     private DbIterator child;

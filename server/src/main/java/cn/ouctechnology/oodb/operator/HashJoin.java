@@ -8,7 +8,7 @@ import java.util.*;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-11-08 10:37
- * @description: TODO
+ * @description: 哈希连接
  **/
 public class HashJoin extends Operator {
     private DbIterator child1;

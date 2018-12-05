@@ -29,12 +29,6 @@ public class InsertExplain {
 
     private List<OQLParser.NewValueContext> newValueList;
 
-    public String doInsert() {
-        Tuple tuple = buildTuple();
-        int insert = Record.insert(tableName, tuple);
-        return insert + ROWS_AFFECTED;
-    }
-
     public static InsertExplain getInsertExplain(InsertStatContext insert) {
         String tableName = insert.getChild(TableNameContext.class).getText();
         ColumnListContext columnListContext = insert.getChild(ColumnListContext.class);
@@ -46,6 +40,12 @@ public class InsertExplain {
                 .columnListContext(columnListContext)
                 .newValueList(newValueList)
                 .build();
+    }
+
+    public String doInsert() {
+        Tuple tuple = buildTuple();
+        int insert = Record.insert(tableName, tuple);
+        return insert + ROWS_AFFECTED;
     }
 
     private List<String> getColumnList() {

@@ -27,13 +27,6 @@ public class DeleteExplain {
 
     private WhereNode whereTree;
 
-    public String doDelete() {
-        if (whereTree != null) {
-            return doDeleteWithWhere();
-        }
-        return doDeleteWithoutWhere();
-    }
-
     public static DeleteExplain getDeleteExplain(OQLParser.DeleteStatContext delete) {
         OQLParser.DeleteClauseContext deleteClause = delete.getChild(OQLParser.DeleteClauseContext.class);
         String tableName = deleteClause.getChild(OQLParser.SchemaNameContext.class).getText();
@@ -49,6 +42,13 @@ public class DeleteExplain {
                 .whereTree(whereTree)
                 .build();
 
+    }
+
+    public String doDelete() {
+        if (whereTree != null) {
+            return doDeleteWithWhere();
+        }
+        return doDeleteWithoutWhere();
     }
 
     private String doDeleteWithoutWhere() {
