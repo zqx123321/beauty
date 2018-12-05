@@ -1,4 +1,4 @@
-*/target/
-*/test/
-*/out/
-*/db/
+target
+test
+out
+db
