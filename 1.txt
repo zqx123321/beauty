@@ -19,23 +19,23 @@ import static cn.ouctechnology.oodb.constant.Constants.*;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-06 13:35
- * @description: ç¼“å†²åŒºï¼Œé‡‡ç”¨LRUç½®æ¢ç®—æ³•ï¼Œæ•°æ®ç»“æ„ä¸ºåŒå‘é“¾è¡¨+HashSet
+ * @description: »º³åÇø£¬²ÉÓÃLRUÖÃ»»Ëã·¨£¬Êı¾İ½á¹¹ÎªË«ÏòÁ´±í+HashSet
  **/
 public class Buffer {
     private static Logger logger = LoggerFactory.getLogger(Buffer.class);
 
-    //å­˜å‚¨åŒºå—çš„HashMapï¼Œkeyä¸ºæ–‡ä»¶åç§°å’ŒåŒºå—åœ¨æ–‡ä»¶ä¸­åç§»é‡çš„ç»„åˆ
+    //´æ´¢Çø¿éµÄHashMap£¬keyÎªÎÄ¼şÃû³ÆºÍÇø¿éÔÚÎÄ¼şÖĞÆ«ÒÆÁ¿µÄ×éºÏ
     private static Map<BlockKey, Block> blockMap = new HashMap<>(MAX_NUM_OF_BLOCKS);
-    //ç¼“å†²åŒºä¸­å½“å‰åŒºå—çš„æ•°ç›®
+    //»º³åÇøÖĞµ±Ç°Çø¿éµÄÊıÄ¿
     private static int size = 0;
-    //å¤´åŒºå—
+    //Í·Çø¿é
     private static Block head;
-    //å°¾åŒºå—
+    //Î²Çø¿é
     private static Block tail;
 
 
     /**
-     * åˆå§‹åŒ–å¤´å°¾ç»“ç‚¹
+     * ³õÊ¼»¯Í·Î²½áµã
      */
     public static void init() {
         head = new Block();
@@ -48,7 +48,7 @@ public class Buffer {
 
 
     /**
-     * å…³é—­ç¼“å†²åŒºï¼ŒåŒæ­¥è„æ•°æ®
+     * ¹Ø±Õ»º³åÇø£¬Í¬²½ÔàÊı¾İ
      */
     public static void close() {
         Block iterator = head.next;
@@ -59,7 +59,7 @@ public class Buffer {
     }
 
     /**
-     * å°†tableNameæ¶‰åŠçš„bufferå…¨éƒ¨å†™å…¥ç£ç›˜
+     * ½«tableNameÉæ¼°µÄbufferÈ«²¿Ğ´Èë´ÅÅÌ
      *
      * @param tableName
      */
@@ -77,9 +77,9 @@ public class Buffer {
     }
 
     /**
-     * å‘ç¼“å­˜ä¸­æ·»åŠ åŒºå—
+     * Ïò»º´æÖĞÌí¼ÓÇø¿é
      *
-     * @param blockKey åŒºå—ç´¢å¼•
+     * @param blockKey Çø¿éË÷Òı
      */
     private static Block addBlocks(BlockKey blockKey) {
         size++;
@@ -96,9 +96,9 @@ public class Buffer {
     }
 
     /**
-     * å°†æŒ‡å®šåŒºå—ç§»åˆ°é“¾è¡¨çš„å°¾éƒ¨ï¼Œç”¨äºLRUç½®æ¢
+     * ½«Ö¸¶¨Çø¿éÒÆµ½Á´±íµÄÎ²²¿£¬ÓÃÓÚLRUÖÃ»»
      *
-     * @param block åŒºå—
+     * @param block Çø¿é
      */
     private static void moveToTail(Block block) {
         block.pre.next = block.next;
@@ -110,19 +110,19 @@ public class Buffer {
     }
 
     /**
-     * å°†æŒ‡å®šåŒºå—ä»ç¼“å†²åŒºä¸­åˆ é™¤
+     * ½«Ö¸¶¨Çø¿é´Ó»º³åÇøÖĞÉ¾³ı
      *
-     * @param blockKey åŒºå—ç´¢å¼•
+     * @param blockKey Çø¿éË÷Òı
      */
     private static void deleteBlock(BlockKey blockKey) {
         size--;
         Block block = blockMap.get(blockKey);
-        //åˆ·æ–°åˆ°ç£ç›˜
+        //Ë¢ĞÂµ½´ÅÅÌ
         if (block.dirty) writeToDisk(block);
         block.pre.next = block.next;
         block.next.pre = block.pre;
         blockMap.remove(blockKey);
-        //çº§è”åˆ é™¤
+        //¼¶ÁªÉ¾³ı
         if (size >= MAX_NUM_OF_BLOCKS) {
             Block firstBlock = getFirstBlockCanBeDeleted();
             if (firstBlock != null) deleteBlock(firstBlock.blockKey);
@@ -131,36 +131,36 @@ public class Buffer {
 
 
     /**
-     * æ ¹æ®æ–‡ä»¶åå’Œå—ç¼–å·æŸ¥æ‰¾ç›¸åº”çš„åŒºå—
+     * ¸ù¾İÎÄ¼şÃûºÍ¿é±àºÅ²éÕÒÏàÓ¦µÄÇø¿é
      *
-     * @param filename æ–‡ä»¶å
-     * @param offset   å—ç¼–å·
-     * @return ç›¸åº”åŒºå—
+     * @param filename ÎÄ¼şÃû
+     * @param offset   ¿é±àºÅ
+     * @return ÏàÓ¦Çø¿é
      */
     private static Block getBlock(String filename, int offset) {
-        //å…ˆæŸ¥è¯¢è¿™ä¸ªåŒºå—æ˜¯å¦å·²ç»è°ƒå…¥å†…å­˜
+        //ÏÈ²éÑ¯Õâ¸öÇø¿éÊÇ·ñÒÑ¾­µ÷ÈëÄÚ´æ
         BlockKey blockKey = new BlockKey(filename, offset);
         if (blockMap.containsKey(blockKey)) {
-            //TODO æ˜¯åœ¨æ­¤å¤„moveToTailè¿˜æ˜¯åœ¨Blockä¸­çš„æ¯æ¬¡æ“ä½œéƒ½moveToTail
+            //TODO ÊÇÔÚ´Ë´¦moveToTail»¹ÊÇÔÚBlockÖĞµÄÃ¿´Î²Ù×÷¶¼moveToTail
             Block block = blockMap.get(blockKey);
             moveToTail(block);
             return block;
         }
-        //æ²¡æœ‰è°ƒå…¥å†…å­˜,å¹¶ä¸”ç¼“å†²åŒºå¤§å°æœªæ»¡ï¼Œç›´æ¥æ·»åŠ è¯¥åŒºå—
+        //Ã»ÓĞµ÷ÈëÄÚ´æ,²¢ÇÒ»º³åÇø´óĞ¡Î´Âú£¬Ö±½ÓÌí¼Ó¸ÃÇø¿é
         if (size < MAX_NUM_OF_BLOCKS) {
             return addBlocks(blockKey);
         }
-        //ç¼“å†²åŒºæ»¡äº†ï¼Œæ‰§è¡ŒLRUæ›¿æ¢ç®—æ³•
-        //åˆ é™¤æœ€è¿‘æœ€ä¹…æœªä½¿ç”¨çš„åŒºå—
+        //»º³åÇøÂúÁË£¬Ö´ĞĞLRUÌæ»»Ëã·¨
+        //É¾³ı×î½ü×î¾ÃÎ´Ê¹ÓÃµÄÇø¿é
         Block firstBlock = getFirstBlockCanBeDeleted();
         if (firstBlock != null)
             deleteBlock(firstBlock.blockKey);
-        //é‡æ–°æ·»åŠ åŒºå—
+        //ÖØĞÂÌí¼ÓÇø¿é
         return addBlocks(blockKey);
     }
 
     /**
-     * ä»å¤´å¯»æ‰¾ç¬¬ä¸€ä¸ªæ²¡æœ‰è¢«åŠ é”çš„block
+     * ´ÓÍ·Ñ°ÕÒµÚÒ»¸öÃ»ÓĞ±»¼ÓËøµÄblock
      */
     private static Block getFirstBlockCanBeDeleted() {
         Block next = head.next;
@@ -172,16 +172,16 @@ public class Buffer {
     }
 
     /**
-     * æ ¹æ®æ–‡ä»¶åå’Œå—ç¼–å·æŸ¥æ‰¾ç›¸åº”çš„åŒºå—
+     * ¸ù¾İÎÄ¼şÃûºÍ¿é±àºÅ²éÕÒÏàÓ¦µÄÇø¿é
      *
-     * @param filename æ–‡ä»¶å
-     * @param offset   å—ç¼–å·
-     * @param mode     è¯»å†™æ ‡å¿—
-     * @return ç›¸åº”åŒºå—
+     * @param filename ÎÄ¼şÃû
+     * @param offset   ¿é±àºÅ
+     * @param mode     ¶ÁĞ´±êÖ¾
+     * @return ÏàÓ¦Çø¿é
      */
     public static Block getBlock(String filename, int offset, int mode) {
         Thread thread = Thread.currentThread();
-        //å­˜åœ¨ä¸å½“å‰çº¿ç¨‹å…³è”çš„äº‹åŠ¡
+        //´æÔÚÓëµ±Ç°Ïß³Ì¹ØÁªµÄÊÂÎñ
         if (TransactionMap.getThreadMap().containsKey(thread)) {
             return getBlockTransaction(filename, offset, mode);
         }
@@ -192,7 +192,7 @@ public class Buffer {
         Block block = getBlock(filename, offset);
         Thread thread = Thread.currentThread();
         List<Block> blocks = TransactionMap.getThreadMap().get(thread);
-        //ä¸ç®¡ä»€ä¹ˆæ¨¡å¼ï¼Œåªè¦è·å–è¿‡ï¼Œå°±ç»™ä»–
+        //²»¹ÜÊ²Ã´Ä£Ê½£¬Ö»Òª»ñÈ¡¹ı£¬¾Í¸øËû
         if (blocks.contains(block)) {
             if (mode == WRITE) {
                 if (!block.lock.isWriteLockedByCurrentThread()) {
@@ -208,34 +208,34 @@ public class Buffer {
         }
         if (mode == Constants.READ) {
             block.lock.readLock().lock();
-            //è·å–é”åï¼Œæ·»åŠ è¿›ä¸çº¿ç¨‹ç›¸å…³çš„mapä¸­
+            //»ñÈ¡Ëøºó£¬Ìí¼Ó½øÓëÏß³ÌÏà¹ØµÄmapÖĞ
             blocks.add(block);
             return (Block) block.clone();
         }
         block.lock.writeLock().lock();
-        //å¦‚æœçº¿ç¨‹å˜äº†ï¼Œåˆ™ä¿å­˜é•œåƒ
+        //Èç¹ûÏß³Ì±äÁË£¬Ôò±£´æ¾µÏñ
         if (block.thread != thread) {
             block.setImage();
             block.thread = thread;
         }
-        //è·å–é”åï¼Œæ·»åŠ è¿›ä¸çº¿ç¨‹ç›¸å…³çš„mapä¸­
+        //»ñÈ¡Ëøºó£¬Ìí¼Ó½øÓëÏß³ÌÏà¹ØµÄmapÖĞ
         blocks.add(block);
         return block;
     }
 
     /**
-     * ä»æ–‡ä»¶ä¸­è°ƒå…¥è¯¥åŒºå—åˆ°æŒ‡å®šåŒºå—
+     * ´ÓÎÄ¼şÖĞµ÷Èë¸ÃÇø¿éµ½Ö¸¶¨Çø¿é
      *
-     * @param filename æ–‡ä»¶å
-     * @param offset   åç§»é‡
-     * @param block    æŒ‡å®šåŒºå—
+     * @param filename ÎÄ¼şÃû
+     * @param offset   Æ«ÒÆÁ¿
+     * @param block    Ö¸¶¨Çø¿é
      */
     private static void readFromDisk(String filename, int offset, Block block) {
         RandomAccessFile raf = null;
         try {
-            //rafä¼šè‡ªåŠ¨åˆ›å»ºçˆ¶çº§ç›®å½•
+            //raf»á×Ô¶¯´´½¨¸¸¼¶Ä¿Â¼
             raf = new RandomAccessFile(DB_PATH + filename + RECORD_SUFFIX, "rw");
-            //è¯»å–å†…å®¹ï¼Œæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+            //¶ÁÈ¡ÄÚÈİ£¬¼ì²éÊÇ·ñÔ½½ç
             if (raf.length() >= offset * BLOCK_SIZE + BLOCK_SIZE) {
                 raf.seek(offset * BLOCK_SIZE);
                 raf.read(block.data, 0, BLOCK_SIZE);
@@ -248,7 +248,7 @@ public class Buffer {
     }
 
     /**
-     * å°†blockåŒºå—ä¸­çš„å†…å®¹å†™å›åˆ°æ–‡ä»¶
+     * ½«blockÇø¿éÖĞµÄÄÚÈİĞ´»Øµ½ÎÄ¼ş
      *
      * @param block
      */
@@ -260,7 +260,7 @@ public class Buffer {
         RandomAccessFile raf = null;
         try {
             file = new File(DB_PATH + block.blockKey.filename + RECORD_SUFFIX);
-            //åˆ›å»ºçˆ¶ç›®å½•
+            //´´½¨¸¸Ä¿Â¼
             File parentFile = file.getParentFile();
             if (!parentFile.exists()) parentFile.mkdirs();
             if (!file.exists()) {

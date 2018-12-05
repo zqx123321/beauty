@@ -16,34 +16,34 @@ import static cn.ouctechnology.oodb.constant.Constants.*;
  * @program: oodb
  * @author: ZQX
  * @create: 2018-10-06 13:35
- * @description: »º³åÇø¿é£¬Á´±í½á¹¹µ¥Ôª
+ * @description: ç¼“å†²åŒºå—ï¼Œé“¾è¡¨ç»“æ„å•å…ƒ
  **/
 public class Block implements Cloneable {
-    //»º³åÇø¿éÎªÒ»¸öbyteÊı×é
+    //ç¼“å†²åŒºå—ä¸ºä¸€ä¸ªbyteæ•°ç»„
     byte[] data = new byte[BLOCK_SIZE];
 
-    //Çø¿éË÷Òı
+    //åŒºå—ç´¢å¼•
     BlockKey blockKey = new BlockKey();
-    //±êÖ¾´ËÇø¿éÊÇ·ñº¬ÓĞÎ´Í¬²½µÄÔàÊı¾İ
+    //æ ‡å¿—æ­¤åŒºå—æ˜¯å¦å«æœ‰æœªåŒæ­¥çš„è„æ•°æ®
     boolean dirty = false;
 
-    //´®½ÓË«ÏòÁ´±íµÄÖ¸Õë
+    //ä¸²æ¥åŒå‘é“¾è¡¨çš„æŒ‡é’ˆ
     Block next = null;
     Block pre = null;
 
-    //¿éÄÚÆ«ÒÆµØÖ·
+    //å—å†…åç§»åœ°å€
     int dataOffset = 0;
 
-    //·Ç¹«Æ½µÄ¶ÁĞ´Ëø
+    //éå…¬å¹³çš„è¯»å†™é”
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock(false);
-    //×î½üÒıÓÃÕâ¸öblockµÄÏß³Ì
+    //æœ€è¿‘å¼•ç”¨è¿™ä¸ªblockçš„çº¿ç¨‹
     Thread thread;
-    //block°üº¬µÄÊı¾İ£¬ÓÃÓÚÊÂÎñ»Ø¹ö
+    //blockåŒ…å«çš„æ•°æ®ï¼Œç”¨äºäº‹åŠ¡å›æ»š
     byte[] oldData;
 
 
     /**
-     * ÓÃÓÚ¶Á³ö¸ÃÇø¿é°üº¬µÄÈ«²¿Êı¾İ
+     * ç”¨äºè¯»å‡ºè¯¥åŒºå—åŒ…å«çš„å…¨éƒ¨æ•°æ®
      */
     public byte[] readData() {
         dataOffset = BLOCK_SIZE;
@@ -52,10 +52,10 @@ public class Block implements Cloneable {
 
 
     /**
-     * ½«dataÊı×éÖĞµÄÊı¾İĞ´Èëµ½¸ÃÇø¿éoffsetÆ«ÒÆ´¦
+     * å°†dataæ•°ç»„ä¸­çš„æ•°æ®å†™å…¥åˆ°è¯¥åŒºå—offsetåç§»å¤„
      *
-     * @param data ´ıĞ´ÈëÊı¾İ
-     * @param size ´ıĞ´ÈëÊı¾İ´óĞ¡
+     * @param data å¾…å†™å…¥æ•°æ®
+     * @param size å¾…å†™å…¥æ•°æ®å¤§å°
      */
     public void writeData(byte data[], int size) {
         if (dataOffset + size >= BLOCK_SIZE) {
@@ -68,7 +68,7 @@ public class Block implements Cloneable {
 
 
     /**
-     * ´ÓÇø¿éÖĞµÄÖ¸¶¨Î»ÖÃ¶Á³öÒ»¸öÕûÊı
+     * ä»åŒºå—ä¸­çš„æŒ‡å®šä½ç½®è¯»å‡ºä¸€ä¸ªæ•´æ•°
      */
     public int readInt() {
         int res = ByteUtil.getInt(data, dataOffset);
@@ -77,9 +77,9 @@ public class Block implements Cloneable {
     }
 
     /**
-     * ÔÚÇø¿éÖ¸¶¨Î»ÖÃ´¦Ğ´ÈëÒ»¸öÕûÊı
+     * åœ¨åŒºå—æŒ‡å®šä½ç½®å¤„å†™å…¥ä¸€ä¸ªæ•´æ•°
      *
-     * @param num ´ıĞ´ÈëÕûÊı
+     * @param num å¾…å†™å…¥æ•´æ•°
      */
     public void writeInt(int num) {
         dataOffset = ByteUtil.getBytes(num, data, dataOffset);
@@ -87,7 +87,7 @@ public class Block implements Cloneable {
     }
 
     /**
-     * ´ÓÇø¿éÖĞµÄÖ¸¶¨Î»ÖÃ¶Á³öÒ»¸ö¸¡µãÊı
+     * ä»åŒºå—ä¸­çš„æŒ‡å®šä½ç½®è¯»å‡ºä¸€ä¸ªæµ®ç‚¹æ•°
      */
     public float readFloat() {
         float res = ByteUtil.getFloat(data, dataOffset);
@@ -96,9 +96,9 @@ public class Block implements Cloneable {
     }
 
     /**
-     * ÔÚÇø¿éÖ¸¶¨Î»ÖÃ´¦Ğ´ÈëÒ»¸ö¸¡µãÊı
+     * åœ¨åŒºå—æŒ‡å®šä½ç½®å¤„å†™å…¥ä¸€ä¸ªæµ®ç‚¹æ•°
      *
-     * @param num ´ıĞ´Èë¸¡µãÊı
+     * @param num å¾…å†™å…¥æµ®ç‚¹æ•°
      */
     public void writeFloat(float num) {
         dataOffset = ByteUtil.getBytes(num, data, dataOffset);
@@ -107,26 +107,26 @@ public class Block implements Cloneable {
 
 
     /**
-     * ´ÓÇø¿éÖĞµÄÖ¸¶¨Î»ÖÃ¶Á³öÒ»¸ö³¤¶ÈÎªlengthµÄ×Ö·û´®
+     * ä»åŒºå—ä¸­çš„æŒ‡å®šä½ç½®è¯»å‡ºä¸€ä¸ªé•¿åº¦ä¸ºlengthçš„å­—ç¬¦ä¸²
      *
-     * @param length ×Ö·û´®³¤¶È
+     * @param length å­—ç¬¦ä¸²é•¿åº¦
      * @return
      */
-    public String readString(int length) {//ÓÃlengthÀ´Ö¸¶¨attributeµÄ³¤¶ÈÊÇ¼¸¸ö×Ö½Ú¡£
+    public String readString(int length) {//ç”¨lengthæ¥æŒ‡å®šattributeçš„é•¿åº¦æ˜¯å‡ ä¸ªå­—èŠ‚ã€‚
         String res = ByteUtil.getString(data, dataOffset, length);
-        //¶ÔÓÚcharÀàĞÍÊı¾İ£¬´æ´¢1¸öĞèÒª2×Ö½Ú
+        //å¯¹äºcharç±»å‹æ•°æ®ï¼Œå­˜å‚¨1ä¸ªéœ€è¦2å­—èŠ‚
         dataOffset += 2 * length;
         return res;
     }
 
 
     /**
-     * ÔÚÇø¿éÖ¸¶¨Î»ÖÃ´¦Ğ´ÈëÒ»¸ö×Ö·û´®
+     * åœ¨åŒºå—æŒ‡å®šä½ç½®å¤„å†™å…¥ä¸€ä¸ªå­—ç¬¦ä¸²
      *
-     * @param str    ´ıĞ´Èë×Ö·û´®
-     * @param length ×Ö·û´®³¤¶È
+     * @param str    å¾…å†™å…¥å­—ç¬¦ä¸²
+     * @param length å­—ç¬¦ä¸²é•¿åº¦
      */
-    public void writeString(String str, int length) {//ÓÃlengthÀ´Ö¸¶¨°Ñstring²¹0²¹µ½¼¸¸ö×Ö½Ú£¬
+    public void writeString(String str, int length) {//ç”¨lengthæ¥æŒ‡å®šæŠŠstringè¡¥0è¡¥åˆ°å‡ ä¸ªå­—èŠ‚ï¼Œ
         dataOffset = ByteUtil.getBytes(str, data, dataOffset, length);
         dirty = true;
     }
@@ -179,7 +179,7 @@ public class Block implements Cloneable {
     }
 
     /**
-     * ±£´æ¾µÏñ
+     * ä¿å­˜é•œåƒ
      */
     public void setImage() {
         if (oldData == null) oldData = new byte[BLOCK_SIZE];
@@ -187,7 +187,7 @@ public class Block implements Cloneable {
     }
 
     /**
-     * »Ö¸´¾µÏñ
+     * æ¢å¤é•œåƒ
      */
     public void rollBackImage() {
         System.arraycopy(oldData, 0, data, 0, BLOCK_SIZE);
