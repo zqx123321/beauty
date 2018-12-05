@@ -7,7 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35488d3e-ebb8-4495-8cb4-3df131f3ce8f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <list id="44f83530-9940-46b9-82e8-ce14710a5cfe" name="Revert &quot;travis&quot;" comment="Revert &quot;travis&quot;&#10;&#10;This reverts commit f00fe22" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -168,8 +168,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+            <state relative-caret-position="100">
+              <caret line="4" column="14" lean-forward="true" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -488,7 +488,7 @@
     <property name="SearchEverywhereHistoryKey" value="Sess&#9;FILE&#9;file://D:/杂乱文件终章/oodb/beautiful/src/main/java/cn/ouctechnology/oodb/beauty/session/Session.java&#10;TypeVariableImpl&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/sun/reflect/generics/reflectiveObjects/TypeVariableImpl.class&#10;ParameterizedTy&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/reflect/ParameterizedType.java&#10;ThreadLocal&#9;PSI&#9;JAVA://java.lang.ThreadLocal&#10;Map&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Map.java&#10;String&#9;FILE&#9;jar://C:/Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/java/lang/String.class&#10;Group&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/test/java/cn/ouctechnology/oodb/operator/GroupTest.java&#10;Op&#9;FILE&#9;file://D:/杂乱文件终章/oodb/src/main/java/cn/ouctechnology/oodb/operator&#10;Buffer&#9;PSI&#9;JAVA://cn.ouctechnology.oodb.buffer.Buffer&#10;TerminalNodeImpl&#9;PSI&#9;JAVA://org.antlr.v4.runtime.tree.TerminalNodeImpl" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543997472027" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543997705787" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="extract.method.default.visibility" value="private" />
@@ -829,7 +829,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="761590000" />
+    <option name="totallyTimeSpent" value="761852000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -842,7 +842,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6587031" visible="true" weight="0.24962178" />
       <window_info id="Structure" order="1" sideWeight="0.34129694" side_tool="true" weight="0.3214826" />
@@ -859,7 +858,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.27133107" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.53754264" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.6279864" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5015129" side_tool="true" weight="0.5887372" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.27986348" />
       <window_info anchor="bottom" x="63" y="295" width="1322" height="196" id="Run" order="11" sideWeight="0.49848714" weight="0.49146757" />
@@ -1367,8 +1366,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+        <state relative-caret-position="100">
+          <caret line="4" column="14" lean-forward="true" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
         </state>
       </provider>
     </entry>
