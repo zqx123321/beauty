@@ -1,4 +1,4 @@
-# *简易面向对象数据库Beauty**设计与开发
+# 简易面向对象数据库Beauty设计与开发
 
 ![lotus](media/3f6e7d5b4fca65af69a1463ac956fb5c.png)
 
