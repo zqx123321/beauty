@@ -7,7 +7,6 @@
  <a href="https://www.travis-ci.org/zqx123321/beauty"><img src="https://www.travis-ci.org/zqx123321/beauty.svg?branch=master" alt="Build Status"></a>
 </p>
 
-![lotus](media/3f6e7d5b4fca65af69a1463ac956fb5c.png)
 
 ![](media/d3c6cd0e8e7c0c39f99cc2a946b59c65.png)
 
