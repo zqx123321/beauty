@@ -1,10 +1,12 @@
 # 简易面向对象数据库Beauty设计与开发
 
-[![GitHub license](https://img.shields.io/github/license/zqx123321/beauty.svg)](https://github.com/zqx123321/beauty/blob/master/LICENSE)   [![Build Status](https://www.travis-ci.org/zqx123321/beauty.svg?branch=master)](https://www.travis-ci.org/zqx123321/beauty)
+<p align="center"><img src="media/3f6e7d5b4fca65af69a1463ac956fb5c.png"  /></p>
 
+<p align="center">
+  <a href="https://github.com/zqx123321/beauty/blob/master/LICENSE"><img src="https://img.shields.io/github/license/zqx123321/beauty.svg" alt="GitHub license"></a>
+ <a href="https://www.travis-ci.org/zqx123321/beauty"><img src="https://www.travis-ci.org/zqx123321/beauty.svg?branch=master" alt="Build Status"></a>
+</p>
 
-
-![lotus](media/3f6e7d5b4fca65af69a1463ac956fb5c.png)
 
 ![](media/d3c6cd0e8e7c0c39f99cc2a946b59c65.png)
 
