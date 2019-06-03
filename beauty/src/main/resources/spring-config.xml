@@ -13,7 +13,7 @@
     <!--配置session连接池-->
     <bean id="sessionPool" class="cn.ouctechnology.oodb.beauty.conections.SessionPool">
         <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="initialSize" value="1"/>
+           <property name="initialSize" value="1"/>
         <property name="maxActive" value="3"/>
         <property name="maxIdle" value="1000"/>
     </bean>

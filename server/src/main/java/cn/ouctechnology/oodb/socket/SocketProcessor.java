@@ -108,7 +108,9 @@ public class SocketProcessor implements Runnable {
         Object response;
         try {
             //执行OQL
-            response = OqlEngine.execute(message);
+            synchronized (Server.class) {
+                response = OqlEngine.execute(message);
+            }
             if (response instanceof List) {
                 List<Tuple> resList = (List<Tuple>) response;
                 response = resList.stream().map(Tuple::getValues).collect(Collectors.toList());
